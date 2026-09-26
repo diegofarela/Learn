@@ -18,19 +18,24 @@
         } catch (err) {}
       })();
     </script>
-    <title>Learn</title>
-    <meta name="description" content="Learn — notes and lessons in one place." />
+    <title>Learn — CS concepts, visualized</title>
+    <meta
+      name="description"
+      content="Every major computer science concept, organized and visualized in 3D so the idea sticks."
+    />
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Source+Sans+3:wght@400;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="css/styles.css" />
     <script src="js/env.js"></script>
+    <script src="js/catalog.js"></script>
   </head>
   <body>
+    <div class="page-atmosphere" aria-hidden="true"></div>
     <header class="site-header">
       <div class="nav-inner">
         <a class="brand" href="index.html">Learn</a>
@@ -45,12 +50,22 @@
       </div>
     </header>
 
-    <main>
-      <h1>Learn</h1>
-      <p class="lede">A place for notes and lessons.</p>
+    <main class="hub-main">
+      <header class="hub-hero">
+        <p class="hub-kicker">Computer science atlas</p>
+        <h1>Learn</h1>
+        <p class="lede">
+          Every major CS idea, one interactive visual at a time. Start with
+          <a class="concept-link" href="concepts/stack.html">Stack</a>—then walk
+          the map.
+        </p>
+      </header>
+
+      <div id="catalog-root" class="catalog-root" aria-live="polite"></div>
     </main>
 
     <script src="js/theme.js"></script>
+    <script src="js/hub.js"></script>
     <script src="js/dev-tools.js"></script>
   </body>
 </html>
