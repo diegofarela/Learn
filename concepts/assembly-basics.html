@@ -63,12 +63,27 @@
       <div class="concept-body">
         <p>
           Assembly is a human-readable form of machine instructions: move data between
-          <strong>registers</strong> and memory, do arithmetic, and
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Tiny ultra-fast storage inside the CPU"
+            data-def="Tiny ultra-fast storage inside the CPU"
+            >registers</abbr
+          >
+          and memory, do arithmetic, and
           <code>CALL</code>/<code>RET</code> for subroutines. It sits under high-level
           languages and beside the
           <a class="concept-link" href="instruction-cycle.html">instruction cycle</a>
-          that fetches each opcode—see also the
-          <a class="concept-link" href="call-stack.html">call stack</a>.
+          that fetches each
+          <abbr
+            class="term"
+            tabindex="0"
+            title="The part of an instruction that says which operation to perform"
+            data-def="The part of an instruction that says which operation to perform"
+            >opcode</abbr
+          >—see also the
+          <a class="concept-link" href="call-stack.html">call stack</a>
+          (not the stack ADT page alone).
         </p>
 
         <div class="asm-lab">
@@ -181,6 +196,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/asm.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

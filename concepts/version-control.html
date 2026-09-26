@@ -76,11 +76,28 @@
 
       <div class="concept-body">
         <p>
-          <strong>Version control</strong> stores snapshots (<em>commits</em>)
-          linked to parents—a DAG. Branches are movable labels; a merge commit
-          joins histories. Pair with
+          <strong>Version control</strong> stores snapshots (
+          <abbr
+            class="term"
+            tabindex="0"
+            title="A recorded snapshot of the project with a parent link and message"
+            data-def="A recorded snapshot of the project with a parent link and message"
+            >commits</abbr
+          >)
+          linked to parents—a
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Directed acyclic graph — directed edges, no cycles"
+            data-def="Directed acyclic graph — directed edges, no cycles"
+            >DAG</abbr
+          >.
+          Branches are movable labels; a merge commit joins histories. This is
+          collaboration history, not a database
+          <a class="concept-link" href="wal-replication.html">WAL</a>
+          or backup. Pair with
           <a class="concept-link" href="testing.html">testing</a>
-          before integrating, and keep history readable.
+          before integrating.
         </p>
 
         <div class="vc-lab">
@@ -177,6 +194,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/version-control.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

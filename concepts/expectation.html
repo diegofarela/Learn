@@ -77,13 +77,26 @@
       <div class="concept-body">
         <p>
           <strong>Expectation</strong> is the probability-weighted average of a
-          random variable. <em>Linearity</em> says you can split a sum even when
-          terms depend on each other—the workhorse behind
+          random variable.
+          <abbr
+            class="term"
+            tabindex="0"
+            title="E[X+Y]=E[X]+E[Y] always — even when X and Y are dependent"
+            data-def="E[X+Y]=E[X]+E[Y] always — even when X and Y are dependent"
+            >Linearity</abbr
+          >
+          says you can split a sum even when terms depend on each other—the
+          workhorse behind
           <a class="concept-link" href="balls-bins.html">balls &amp; bins</a>
           analyses and hashing load. Builds on
           <a class="concept-link" href="probability-basics.html"
             >probability basics</a
           >.
+          Distinct from
+          <a class="concept-link" href="amortized-analysis.html"
+            >amortized analysis</a
+          >
+          (deterministic averaging over a sequence of ops).
         </p>
 
         <div class="exp-lab">
@@ -148,6 +161,8 @@
           <a class="concept-link" href="balls-bins.html">balls &amp; bins</a>
           and
           <a class="concept-link" href="hash-tables.html">hash tables</a>.
+          Spread and tails:
+          <a class="concept-link" href="variance-concentration.html">variance &amp; concentration</a>.
         </p>
 
         <h2>From the literature</h2>
@@ -182,6 +197,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/expectation.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

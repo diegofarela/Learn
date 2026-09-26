@@ -76,12 +76,19 @@
 
       <div class="concept-body">
         <p>
-          A <strong>socket</strong> is an endpoint for sending and receiving
-          bytes. A server binds and listens; a client connects; then both
-          <code>send</code> / <code>recv</code>. Under the hood that often
-          means
-          <a class="concept-link" href="tcp-udp.html">TCP or UDP</a>; above it,
-          protocols like
+          A <strong>socket</strong> is a programming endpoint for sending and
+          receiving bytes—the OS API to
+          <a class="concept-link" href="tcp-udp.html">TCP or UDP</a>, not the
+          protocol itself. A server
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Attach the socket to a local address and port"
+            data-def="Attach the socket to a local address and port"
+            >binds</abbr
+          >
+          and listens; a client connects; then both
+          <code>send</code> / <code>recv</code>. Above it, protocols like
           <a class="concept-link" href="http.html">HTTP</a>.
         </p>
 
@@ -190,6 +197,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/sockets.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

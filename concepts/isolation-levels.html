@@ -78,7 +78,10 @@
         <p>
           <strong>Isolation levels</strong> trade concurrency for which
           anomalies concurrent transactions may see: dirty reads, nonrepeatable
-          reads, phantoms. Stricter levels block more. Related:
+          reads, phantoms. Stricter levels block more. This is the ACID “I” on
+          one database—not the same as distributed replica
+          <a class="concept-link" href="consistency-models.html">consistency</a>
+          or CAP’s “C.” Related:
           <a class="concept-link" href="transactions.html">transactions</a>
           and
           <a class="concept-link" href="concurrency.html">concurrency</a>.
@@ -211,6 +214,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/isolation-levels.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

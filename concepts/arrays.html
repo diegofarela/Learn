@@ -79,8 +79,29 @@
       <div class="concept-body">
         <p>
           An <strong>array</strong> packs elements into
-          <em>contiguous</em> memory slots. Given a base address and an index,
-          the machine jumps straight to that cell—
+          <em>contiguous</em>
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Same idea as a memory address cell — consecutive indexed cells, not a new structure"
+            data-def="Same idea as a memory address cell — consecutive indexed cells, not a new structure"
+            >memory slots</abbr
+          >. Given a
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Starting address of the first element — index i lives at base + i × element size"
+            data-def="Starting address of the first element — index i lives at base + i × element size"
+            >base address</abbr
+          >
+          and an index, the machine jumps straight to that
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Same idea as a memory slot — one indexed location in the strip"
+            data-def="Same idea as a memory slot — one indexed location in the strip"
+            >cell</abbr
+          >—
           <abbr
             class="term"
             tabindex="0"
@@ -90,7 +111,8 @@
           >
           random access. That speed is why arrays back
           <a class="concept-link" href="stack.html">stacks</a>, strings, and
-          most “lists” you meet in practice.
+          most “lists” you meet in practice. More on addresses:
+          <a class="concept-link" href="memory-pointers.html">memory &amp; pointers</a>.
         </p>
 
         <div class="array-lab">
@@ -341,6 +363,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/arrays.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

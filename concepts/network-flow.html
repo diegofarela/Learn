@@ -67,11 +67,33 @@
 
       <div class="concept-body">
         <p>
-          In a flow network, each edge has a capacity. <strong>Max flow</strong>
-          pushes as much as possible from source <em>s</em> to sink <em>t</em>
-          without exceeding capacities. Ford–Fulkerson repeatedly finds an
-          <em>augmenting path</em> in the residual graph; Edmonds–Karp picks a
-          shortest path via
+          In a flow network, each edge has a
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Maximum amount of flow that edge may carry"
+            data-def="Maximum amount of flow that edge may carry"
+            >capacity</abbr
+          >.
+          <strong>Max flow</strong> pushes as much as possible from source
+          <em>s</em> to sink <em>t</em> without exceeding capacities.
+          Ford–Fulkerson repeatedly finds an
+          <abbr
+            class="term"
+            tabindex="0"
+            title="A path that can increase flow — also called an augmenting path; same idea"
+            data-def="A path that can increase flow — also called an augmenting path; same idea"
+            >augmenting path</abbr
+          >
+          in the
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Graph of leftover capacities used by max-flow algorithms"
+            data-def="Graph of leftover capacities used by max-flow algorithms"
+            >residual graph</abbr
+          >;
+          Edmonds–Karp picks a shortest path via
           <a class="concept-link" href="bfs.html">BFS</a>. Related graph ideas:
           <a class="concept-link" href="graphs.html">graphs</a>
           and
@@ -190,6 +212,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/network-flow.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

@@ -79,10 +79,10 @@
         <p>
           A <strong>file system</strong> maps names to bytes on disk. Directories
           store name → inode number; each
-          <em>inode</em> holds metadata and pointers to <em>data blocks</em>.
+          <em>inode</em> holds metadata and pointers to <em>data blocks</em>
+          (disk blocks—not virtual-memory
+          <a class="concept-link" href="virtual-memory.html">pages</a>).
           Related:
-          <a class="concept-link" href="virtual-memory.html">virtual memory</a>
-          (pages vs blocks) and
           <a class="concept-link" href="os-processes.html">OS processes</a>
           (open file tables).
         </p>
@@ -213,6 +213,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/file-systems.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Eigenvalues &amp; SVD — Learn</title>
+    <meta name="description" content="Eigenvalues and SVD: stretch axes of a 2D transform and read singular values." />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#ml-basics">ML foundations</a>
+      </p>
+      <h1>Eigenvalues &amp; SVD</h1>
+      <p class="concept-meta">
+        <span class="tag">ML foundations</span>
+        <span>λ · singular values · PCA light</span>
+        <span class="meta-size">λ <strong id="eig-meta">—</strong></span>
+      </p>
+
+      <div class="concept-body">
+        <p>
+          <strong>Eigenvectors</strong> are directions a matrix only scales;
+          <strong>SVD</strong> factors any matrix into orthogonal rotations and
+          axis stretches—the geometry behind PCA and many ML tricks. Continues
+          <a class="concept-link" href="linear-algebra.html">linear algebra</a>
+          toward
+          <a class="concept-link" href="supervised-learning.html">supervised learning</a>.
+        </p>
+
+        <div class="eig-lab">
+          <div class="viz viz-stage" aria-labelledby="eig-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="eig-viz-title">2×2 stretch</p>
+              <span class="eig-badge" id="eig-badge">σ shown</span>
+            </div>
+            <p class="viz-hint">Tune diagonal stretch · unit circle → ellipse · read σ</p>
+            <label class="eig-slider-label">
+              <span>σ₁ = <strong id="eig-s1-val">2.0</strong></span>
+              <input id="eig-s1" type="range" min="5" max="35" value="20" />
+            </label>
+            <label class="eig-slider-label">
+              <span>σ₂ = <strong id="eig-s2-val">0.8</strong></span>
+              <input id="eig-s2" type="range" min="2" max="20" value="8" />
+            </label>
+            <canvas id="eig-canvas" class="eig-canvas" width="420" height="260" aria-label="SVD ellipse"></canvas>
+            <p class="viz-live" id="eig-status" aria-live="polite"></p>
+          </div>
+          <aside class="code-panel" aria-labelledby="eig-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="eig-code-title">SVD</p>
+              <span class="code-panel-lang">math</span>
+            </div>
+            <pre class="code-panel-body" id="eig-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="eig-code-note">A = U Σ Vᵀ — Σ holds singular values.</p>
+          </aside>
+        </div>
+
+        <h2>Eigenvalues</h2>
+        <p>
+          Av = λv. For symmetric matrices, orthogonal eigenbasis and real λ.
+          Powers A<sup>k</sup> grow like λ<sub>max</sub><sup>k</sup> along that direction.
+        </p>
+        <h2>SVD &amp; PCA intuition</h2>
+        <p>
+          Singular values are stretch lengths of the unit circle. PCA keeps the
+          top singular directions of centered data—lossy compression that keeps
+          variance.
+        </p>
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Singular_value_decomposition">
+            <p>
+              “In linear algebra, the singular value decomposition (SVD) is a
+              factorization of a real or complex matrix.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a href="https://en.wikipedia.org/wiki/Singular_value_decomposition" rel="noopener noreferrer" target="_blank"
+              >Wikipedia — Singular value decomposition</a>
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#ml-basics">← All concepts</a>
+        <a class="next" href="linear-algebra.html">Related: Linear algebra →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
+    <script src="../js/eigenvalues-svd.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

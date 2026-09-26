@@ -71,10 +71,30 @@
           A plain
           <a class="concept-link" href="bst.html">binary search tree</a>
           can skew into a linked list if you insert sorted keys. A
-          <strong>self-balancing</strong> BST restores a height invariant after
-          updates. This lab is an <strong>AVL</strong> tree: for every node, the
-          heights of the left and right subtrees differ by at most one.
-          Violations trigger a <em>rotation</em>.
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Tree that restores a height bound after inserts/deletes so search stays fast"
+            data-def="Tree that restores a height bound after inserts/deletes so search stays fast"
+            >self-balancing</abbr
+          >
+          BST restores a height invariant after updates. This lab is an
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Adelson-Velsky and Landis tree — balance factor of every node stays −1, 0, or +1"
+            data-def="Adelson-Velsky and Landis tree — balance factor of every node stays −1, 0, or +1"
+            >AVL</abbr
+          >
+          tree: for every node, the heights of the left and right subtrees
+          differ by at most one. Violations trigger a
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Local rewrite of parent/child links that preserves BST order and shrinks height"
+            data-def="Local rewrite of parent/child links that preserves BST order and shrinks height"
+            >rotation</abbr
+          >.
         </p>
 
         <div class="avl-lab">
@@ -210,6 +230,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/balanced-trees.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

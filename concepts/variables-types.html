@@ -76,7 +76,15 @@
 
       <div class="concept-body">
         <p>
-          A <strong>variable</strong> is a named slot that holds a value. The
+          A <strong>variable</strong> is a named
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Same idea as a memory address cell — the binding location, not a new structure"
+            data-def="Same idea as a memory address cell — the binding location, not a new structure"
+            >slot</abbr
+          >
+          that holds a value. The
           <strong>type</strong> of that value says what you can do with it—add
           numbers, concatenate strings, call methods. Below: mutate the object
           in place vs rebind the name to a new value, and a tiny type tree.
@@ -158,10 +166,18 @@
           <a class="concept-link" href="call-stack.html">call-stack frame</a>
           (think: a sticky note on your desk that says “items → that box”). The
           right column is the <em>value</em>—for objects and arrays, usually a
-          separate block on the <strong>heap</strong> (a warehouse of boxes the
-          program reserved). The arrow is the connection: desk note → warehouse
-          box. Rebind rewrites the note; mutate opens the same box and changes
-          what’s inside. More on addresses and this split:
+          separate block on the
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Allocator heap — dynamic allocation region; not the binary-heap priority structure"
+            data-def="Allocator heap — dynamic allocation region; not the binary-heap priority structure"
+            >heap</abbr
+          >
+          (a warehouse of boxes the program reserved). The arrow is the
+          connection: desk note → warehouse box. Rebind rewrites the note;
+          mutate opens the same box and changes what’s inside. More on
+          addresses and this split:
           <a class="concept-link" href="memory-pointers.html">memory &amp; pointers</a>.
           How arrays grow without stomping neighbors:
           <a class="concept-link" href="arrays.html">arrays</a>.
@@ -232,6 +248,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/variables-types.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

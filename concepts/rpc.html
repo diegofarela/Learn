@@ -77,9 +77,23 @@
       <div class="concept-body">
         <p>
           <strong>RPC</strong> makes a remote call look local: a client
-          <em>stub</em> marshals arguments, the network carries the message, and
-          a server <em>skeleton</em> unmarshals and runs the real procedure.
-          Contrast resource-oriented
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Generated client helper that packs arguments and talks to the remote"
+            data-def="Generated client helper that packs arguments and talks to the remote"
+            >stub</abbr
+          >
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Serialize structured arguments into bytes for the wire"
+            data-def="Serialize structured arguments into bytes for the wire"
+            >marshals</abbr
+          >
+          arguments, the network carries the message, and a server
+          <em>skeleton</em> unmarshals and runs the real procedure. Contrast
+          resource-oriented
           <a class="concept-link" href="rest-apis.html">REST APIs</a>
           (verbs on URLs) and the bytes underneath via
           <a class="concept-link" href="http.html">HTTP</a>
@@ -204,6 +218,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/rpc.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

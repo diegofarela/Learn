@@ -69,8 +69,29 @@
         <p>
           A <strong>consistency model</strong> says which read/write
           histories are legal.
-          <em>Linearizability</em> makes the system look like one copy;
-          <em>eventual</em> consistency allows stale reads until replicas
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Each op appears instantaneously in real-time order — strong shared-object consistency"
+            data-def="Each op appears instantaneously in real-time order — strong shared-object consistency"
+            >Linearizability</abbr
+          >
+          makes the system look like one copy;
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Replicas converge if updates stop — intermediate reads may be stale"
+            data-def="Replicas converge if updates stop — intermediate reads may be stale"
+            >eventual consistency</abbr
+          >
+          allows stale reads until
+          <abbr
+            class="term"
+            tabindex="0"
+            title="A copy of data kept for durability or scale"
+            data-def="A copy of data kept for durability or scale"
+            >replicas</abbr
+          >
           catch up—trade-offs also framed by
           <a class="concept-link" href="cap-theorem.html">CAP</a>
           and enforced by
@@ -183,6 +204,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/consistency-models.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

@@ -59,7 +59,16 @@
       <h1>Context-free grammars</h1>
       <p class="concept-meta">
         <span class="tag">Theory</span>
-        <span>productions · derivation · parse tree</span>
+        <span>
+          productions · derivation ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Tree showing which productions built the string"
+            data-def="Tree showing which productions built the string"
+            >parse tree</abbr
+          >
+        </span>
         <span class="meta-size"
           >step <strong id="cfg-step">0</strong>/<span id="cfg-total">0</span></span
         >
@@ -67,13 +76,22 @@
 
       <div class="concept-body">
         <p>
-          A <strong>context-free grammar (CFG)</strong> rewrites a nonterminal
+          A <strong>context-free grammar (CFG)</strong> rewrites a
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Symbol that can be replaced by a production — not a concrete character"
+            data-def="Symbol that can be replaced by a production — not a concrete character"
+            >nonterminal</abbr
+          >
           no matter what surrounds it. Derivations build nested structure —
           the same idea a
           <a class="concept-link" href="compilers.html">parser</a>
           turns into an AST. Regular languages need only
-          <a class="concept-link" href="finite-automata.html">finite automata</a>;
-          CFGs sit one level higher.
+          <a class="concept-link" href="finite-automata.html">finite automata</a>
+          /
+          <a class="concept-link" href="regex.html">regex</a>;
+          CFGs sit one level higher (balanced nesting).
         </p>
 
         <div class="cfg-lab">
@@ -197,6 +215,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/cfgs.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

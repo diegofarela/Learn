@@ -79,12 +79,29 @@
           Common web flaws share a theme: the app trusts the wrong input.
           Below are <strong>labeled simulations</strong>—conceptual diagrams of
           what goes wrong, not recipes or payloads that attack real systems.
+          Classes include
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Cross-site scripting — untrusted input runs as script in another user’s browser"
+            data-def="Cross-site scripting — untrusted input runs as script in another user’s browser"
+            >XSS</abbr
+          >,
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Cross-site request forgery — tricking a logged-in browser into a unwanted request"
+            data-def="Cross-site request forgery — tricking a logged-in browser into a unwanted request"
+            >CSRF</abbr
+          >, and injection.
           Pair with a
           <a class="concept-link" href="threat-models.html">threat model</a>,
           solid
           <a class="concept-link" href="auth.html">auth</a>, and
           <a class="concept-link" href="http.html">HTTP</a>
-          awareness.
+          awareness—
+          <a class="concept-link" href="tls-https.html">HTTPS</a>
+          encrypts the wire but does not fix XSS in your HTML.
         </p>
 
         <div class="wv-lab">
@@ -183,6 +200,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/web-vulnerabilities.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

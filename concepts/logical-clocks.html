@@ -70,7 +70,14 @@
           Wall clocks drift, so distributed systems use
           <strong>logical clocks</strong>. A Lamport clock ticks on local
           events and on message send/receive so
-          <em>happens-before</em> implies a smaller timestamp—useful beside
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Causal order: A happens-before B if A can influence B (also written → )"
+            data-def="Causal order: A happens-before B if A can influence B (also written → )"
+            >happens-before</abbr
+          >
+          implies a smaller timestamp—useful beside
           <a class="concept-link" href="consistency-models.html">consistency models</a>
           and
           <a class="concept-link" href="os-processes.html">processes</a>
@@ -201,6 +208,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/logical-clocks.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

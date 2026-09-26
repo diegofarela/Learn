@@ -82,9 +82,23 @@
           (or
           <a class="concept-link" href="threads-processes.html">thread</a>)
           runs next on the CPU.
-          <strong>FCFS</strong> runs jobs to completion in arrival order;
-          <strong>Round Robin</strong> slices time into a quantum so no job
-          monopolizes the CPU. Both feed the same ready
+          <abbr
+            class="term"
+            tabindex="0"
+            title="First-Come, First-Served — also called FCFS / FIFO scheduling; run in arrival order"
+            data-def="First-Come, First-Served — also called FCFS / FIFO scheduling; run in arrival order"
+            >FCFS</abbr
+          >
+          runs jobs to completion in arrival order;
+          <strong>Round Robin</strong> slices time into a
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Fixed time slice each ready job may run before yielding"
+            data-def="Fixed time slice each ready job may run before yielding"
+            >quantum</abbr
+          >
+          so no job monopolizes the CPU. Both feed the same ready
           <a class="concept-link" href="queue.html">queue</a>
           idea—different selection rules.
         </p>
@@ -203,6 +217,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/scheduling.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

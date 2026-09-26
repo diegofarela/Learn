@@ -76,11 +76,16 @@
 
       <div class="concept-body">
         <p>
-          Networks are built as a <strong>stack</strong>: each layer offers a
-          service to the one above and uses the one below. Toggle TCP/IP (4) or
-          OSI (7), click a layer for its job. Application traffic includes
+          Networks are built as a <strong>protocol stack</strong>—layered
+          services, not the LIFO
+          <a class="concept-link" href="stack.html">stack</a>
+          data structure. Each layer offers a service to the one above and uses
+          the one below. Toggle TCP/IP (4) or OSI (7), click a layer for its job.
+          Application traffic includes
           <a class="concept-link" href="http.html">HTTP</a> and
-          <a class="concept-link" href="dns.html">DNS</a>.
+          <a class="concept-link" href="dns.html">DNS</a>;
+          transport is usually
+          <a class="concept-link" href="tcp-udp.html">TCP or UDP</a>.
         </p>
 
         <div class="osi-lab">
@@ -171,6 +176,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/osi-tcpip.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

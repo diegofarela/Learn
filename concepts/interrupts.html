@@ -80,11 +80,25 @@
           An <strong>interrupt</strong> lets hardware pause the CPU when a
           device needs attention—disk done, network packet, timer tick. The
           CPU saves state, runs an
-          <em>ISR</em>, then returns to the interrupted work. Contrast
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Interrupt Service Routine — kernel handler for a hardware interrupt (also called interrupt handler — same idea)"
+            data-def="Interrupt Service Routine — kernel handler for a hardware interrupt (also called interrupt handler — same idea)"
+            >ISR</abbr
+          >,
+          then returns to the interrupted work. Contrast
           <a class="concept-link" href="syscalls.html">system calls</a>
           (software-requested) and
           <a class="concept-link" href="scheduling.html">CPU scheduling</a>
-          (timer IRQs enable preemption).
+          (timer IRQs enable
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Scheduler forcibly switches tasks without them yielding"
+            data-def="Scheduler forcibly switches tasks without them yielding"
+            >preemption</abbr
+          >).
         </p>
 
         <div class="irq-lab">
@@ -199,6 +213,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/interrupts.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

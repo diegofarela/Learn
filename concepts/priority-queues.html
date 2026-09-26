@@ -65,13 +65,20 @@
 
       <div class="concept-body">
         <p>
-          A <strong>priority queue</strong> is an abstract data type: each item
-          carries a priority, and you always serve the most important one next
-          (highest or lowest, depending on the convention). A plain
+          A <strong>priority queue</strong> is an
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Abstract Data Type — the interface and behavior, not a specific layout in memory"
+            data-def="Abstract Data Type — the interface and behavior, not a specific layout in memory"
+            >ADT</abbr
+          >: each item carries a priority, and you always serve the most important
+          one next (highest or lowest, depending on the convention). A plain
           <a class="concept-link" href="queue.html">queue</a>
           is FIFO; a priority queue ignores arrival order when priorities
           differ. Under the hood it is often a
-          <a class="concept-link" href="heaps.html">binary heap</a>.
+          <a class="concept-link" href="heaps.html">binary heap</a>
+          (the priority tree—not the memory-allocation heap).
         </p>
 
         <div class="pq-lab">
@@ -232,6 +239,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/priority-queues.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

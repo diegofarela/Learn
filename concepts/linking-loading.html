@@ -77,11 +77,27 @@
       <div class="concept-body">
         <p>
           Compilers emit <strong>object files</strong> with unresolved symbols.
-          The <em>linker</em> resolves them into one executable; the
-          <em>loader</em> maps segments (<code>.text</code>, <code>.data</code>,
-          …) into a process. Related:
-          <a class="concept-link" href="compilers.html">compilers</a>,
-          <a class="concept-link" href="os-processes.html">OS processes</a>, and
+          The
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Combines object files and resolves symbols into one executable or library"
+            data-def="Combines object files and resolves symbols into one executable or library"
+            >linker</abbr
+          >
+          resolves them into one executable; the
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Maps the executable’s segments into a process address space to start running"
+            data-def="Maps the executable’s segments into a process address space to start running"
+            >loader</abbr
+          >
+          maps segments (<code>.text</code>, <code>.data</code>,
+          …) into a
+          <a class="concept-link" href="os-processes.html">process</a>. Related:
+          <a class="concept-link" href="compilers.html">compilers</a>
+          and
           <a class="concept-link" href="virtual-memory.html">virtual memory</a>.
         </p>
 
@@ -195,6 +211,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/linking-loading.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

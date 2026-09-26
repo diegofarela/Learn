@@ -76,10 +76,19 @@
 
       <div class="concept-body">
         <p>
-          <strong>DNS</strong> turns human names into addresses. Your stub
-          asks a recursive resolver; that resolver walks root → TLD →
-          authoritative until it finds an A/AAAA record. Step the lookup below,
-          then see how browsers use the answer in
+          <strong>DNS</strong> turns human names into addresses—a distributed
+          lookup system, not
+          <a class="concept-link" href="encoding.html">character encoding</a>.
+          Your stub asks a
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Resolver that queries other DNS servers on your behalf until it gets an answer"
+            data-def="Resolver that queries other DNS servers on your behalf until it gets an answer"
+            >recursive resolver</abbr
+          >; that resolver walks root → TLD → authoritative until it finds an
+          A/AAAA record. Step the lookup below, then see how browsers use the
+          answer in
           <a class="concept-link" href="http.html">HTTP</a> on the
           <a class="concept-link" href="osi-tcpip.html">network stack</a>.
         </p>
@@ -204,6 +213,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/dns.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

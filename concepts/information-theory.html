@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Information &amp; entropy — Learn</title>
+    <meta name="description" content="Shannon entropy and bits of surprise: tune a biased coin and watch entropy peak at 1/2." />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#probability">Probability for CS</a>
+      </p>
+      <h1>Information &amp; entropy</h1>
+      <p class="concept-meta">
+        <span class="tag">Probability for CS</span>
+        <span>entropy · bits · surprise</span>
+        <span class="meta-size">H <strong id="ent-meta">—</strong> bits</span>
+      </p>
+
+      <div class="concept-body">
+        <p>
+          <strong>Entropy</strong> measures average surprise of a random source—
+          how many fair-coin bits you need in the ideal case. It shows up in
+          compression, decision trees, and ML feature criteria. Built from
+          <a class="concept-link" href="probability-basics.html">probability</a>
+          and logging unexpected events.
+        </p>
+
+        <div class="ent-lab">
+          <div class="viz viz-stage" aria-labelledby="ent-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="ent-viz-title">Biased coin entropy</p>
+              <span class="ent-badge" id="ent-badge">p=0.5</span>
+            </div>
+            <p class="viz-hint">Slide P(heads) · entropy peaks at fair coin</p>
+            <label class="ent-slider-label">
+              <span>P(H) = <strong id="ent-p-val">0.50</strong></span>
+              <input id="ent-p" type="range" min="1" max="99" value="50" />
+            </label>
+            <svg id="ent-chart" class="ent-chart" viewBox="0 0 420 160" xmlns="http://www.w3.org/2000/svg"
+              role="img" aria-label="Entropy curve"></svg>
+            <p class="viz-live" id="ent-status" aria-live="polite"></p>
+          </div>
+          <aside class="code-panel" aria-labelledby="ent-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="ent-code-title">Definition</p>
+              <span class="code-panel-lang">math</span>
+            </div>
+            <pre class="code-panel-body" id="ent-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="ent-code-note">H = −Σ p log₂ p (0 log 0 := 0).</p>
+          </aside>
+        </div>
+
+        <h2>Bits of surprise</h2>
+        <p>
+          Self-information of event p is −log₂ p. Entropy averages that.
+          Cross-entropy and KL divergence compare distributions—training
+          classifiers often minimizes cross-entropy loss.
+        </p>
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Entropy_(information_theory)">
+            <p>
+              “In information theory, the entropy of a random variable is the
+              average level of 'information', 'surprise', or 'uncertainty'
+              inherent to the variable's possible outcomes.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a href="https://en.wikipedia.org/wiki/Entropy_(information_theory)" rel="noopener noreferrer" target="_blank"
+              >Wikipedia — Entropy (information theory)</a>
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#probability">← All concepts</a>
+        <a class="next" href="probability-basics.html">Related: Probability basics →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
+    <script src="../js/information-theory.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

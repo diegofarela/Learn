@@ -59,7 +59,16 @@
       <h1>Decidability</h1>
       <p class="concept-meta">
         <span class="tag">Theory</span>
-        <span>halting · undecidable · postcard</span>
+        <span>
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Decide whether an arbitrary program eventually stops"
+            data-def="Decide whether an arbitrary program eventually stops"
+            >halting</abbr
+          >
+          · undecidable · postcard
+        </span>
         <span class="meta-size"
           >trace <strong id="dec-ticks">0</strong></span
         >
@@ -68,11 +77,29 @@
       <div class="concept-body">
         <p>
           Some yes/no questions about programs have <strong>no algorithm</strong>
-          that always answers correctly and finishes. The classic example is the
-          <em>halting problem</em>: will this program stop, or loop forever?
-          You can simulate for a while — but “forever” is not something a
-          finite tracer can certify. Related hardness ideas live in
-          <a class="concept-link" href="p-vs-np.html">P vs NP</a>.
+          that always answers correctly and finishes—they are
+          <abbr
+            class="term"
+            tabindex="0"
+            title="No algorithm always answers correctly and terminates for every input"
+            data-def="No algorithm always answers correctly and terminates for every input"
+            >undecidable</abbr
+          >.
+          The classic example is the
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Decide whether an arbitrary program eventually stops on a given input"
+            data-def="Decide whether an arbitrary program eventually stops on a given input"
+            >halting problem</abbr
+          >:
+          will this program stop, or loop forever? You can simulate for a while
+          — but “forever” is not something a finite tracer can certify.
+          The underlying model is a
+          <a class="concept-link" href="turing-machines.html">Turing machine</a>.
+          Undecidability is a different axis from
+          <a class="concept-link" href="p-vs-np.html">P vs NP</a>
+          hardness (which assumes an algorithm exists and asks about cost).
         </p>
 
         <div class="dec-lab">
@@ -206,6 +233,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/decidability.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

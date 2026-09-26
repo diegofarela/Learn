@@ -76,13 +76,30 @@
 
       <div class="concept-body">
         <p>
-          <strong>Bias</strong> is error from a too-simple model (underfit);
-          <strong>variance</strong> is sensitivity to the particular sample
-          (overfit). Slide polynomial degree on noisy points to see the
-          tradeoff. Fits use ideas from
+          <strong>Bias</strong> is error from a too-simple model (
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Model too simple to capture the true pattern — high bias"
+            data-def="Model too simple to capture the true pattern — high bias"
+            >underfit</abbr
+          >);
+          <strong>variance</strong> is sensitivity to the particular sample (
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Model fits noise in the training sample — high variance"
+            data-def="Model fits noise in the training sample — high variance"
+            >overfit</abbr
+          >).
+          In stats “variance” also means spread of a random variable—here it
+          means model sensitivity. Slide polynomial degree on noisy points to
+          see the tradeoff. Fits use ideas from
           <a class="concept-link" href="linear-algebra.html">linear algebra</a>;
           training often uses
           <a class="concept-link" href="gradient-descent.html">gradient descent</a>.
+          The labeled-data setting is
+          <a class="concept-link" href="supervised-learning.html">supervised learning</a>.
         </p>
 
         <div class="bv-lab">
@@ -168,6 +185,10 @@
 
     <script src="../js/theme.js"></script>
     <script src="../js/bias-variance.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

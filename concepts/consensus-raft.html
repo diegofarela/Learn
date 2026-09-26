@@ -67,8 +67,15 @@
 
       <div class="concept-body">
         <p>
-          <strong>Raft</strong> elects one leader that appends to a replicated
-          log; followers match that log so the cluster agrees on one history—key
+          <strong>Raft</strong> elects one leader that appends to a
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Replicated log — same ordered commands on each replica; the consensus history"
+            data-def="Replicated log — same ordered commands on each replica; the consensus history"
+            >replicated log</abbr
+          >;
+          followers match that log so the cluster agrees on one history—key
           for strong
           <a class="concept-link" href="consistency-models.html">consistency</a>
           and surviving
@@ -196,6 +203,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/consensus-raft.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

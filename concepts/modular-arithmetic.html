@@ -79,13 +79,23 @@
       <div class="concept-body">
         <p>
           <strong>Modular arithmetic</strong> wraps integers when they pass
-          the modulus—like hours on a clock. Congruences power hashing,
+          the modulus—like hours on a clock.
+          <abbr
+            class="term"
+            tabindex="0"
+            title="a ≡ b (mod n) means n divides (a − b)"
+            data-def="a ≡ b (mod n) means n divides (a − b)"
+            >Congruences</abbr
+          >
+          power hashing,
           <a class="concept-link" href="bit-manipulation.html"
             >bit tricks</a
           >,
-          <a class="concept-link" href="hashing-crypto.html">crypto hashes</a>,
-          and
+          <a class="concept-link" href="hashing-crypto.html">crypto hashes</a>
+          (different “hash” goal than table buckets), and
           <a class="concept-link" href="combinatorics.html">counting mod p</a>.
+          Not the same as floating-point remainder quirks in
+          <a class="concept-link" href="floating-point.html">IEEE floats</a>.
         </p>
 
         <div class="mod-lab">
@@ -212,6 +222,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/modular-arithmetic.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

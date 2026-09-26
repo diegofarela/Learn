@@ -68,10 +68,26 @@
       <div class="concept-body">
         <p>
           A <strong>process</strong> is an OS-level program instance with its own
-          address space. A <strong>thread</strong> is a schedulable path of
-          execution <em>inside</em> a process—threads share heap and globals but
-          keep private stacks. Switch the view to compare one multi-threaded
-          process vs two isolated processes. See
+          <abbr
+            class="term"
+            tabindex="0"
+            title="The virtual memory range a process can name — isolated from other processes"
+            data-def="The virtual memory range a process can name — isolated from other processes"
+            >address space</abbr
+          >.
+          A <strong>thread</strong> is a schedulable path of execution
+          <em>inside</em> a process—threads share the
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Memory heap — dynamic allocation region shared by threads of one process; not the binary-heap data structure"
+            data-def="Memory heap — dynamic allocation region shared by threads of one process; not the binary-heap data structure"
+            >heap</abbr
+          >
+          and globals but keep private
+          <a class="concept-link" href="call-stack.html">call stacks</a>.
+          Switch the view to compare one multi-threaded process vs two isolated
+          processes. See
           <a class="concept-link" href="os-processes.html">OS processes</a>,
           <a class="concept-link" href="concurrency.html">concurrency</a>,
           <a class="concept-link" href="parallelism.html">parallelism</a>,
@@ -201,6 +217,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/threads-processes.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

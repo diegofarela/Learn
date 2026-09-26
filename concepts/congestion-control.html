@@ -77,9 +77,24 @@
       <div class="concept-body">
         <p>
           <strong>Congestion control</strong> keeps senders from flooding the
-          path. TCP’s classic story: grow the congestion window (<code>cwnd</code>)
-          additively, cut it multiplicatively when loss signals overload—the
-          AIMD “sawtooth.” Built on
+          path—about shared network capacity, not
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Slowing producers when a consumer or buffer cannot keep up"
+            data-def="Slowing producers when a consumer or buffer cannot keep up"
+            >backpressure</abbr
+          >
+          inside one app alone. TCP’s classic story: grow the
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Congestion window — how many unacked bytes the sender may have in flight"
+            data-def="Congestion window — how many unacked bytes the sender may have in flight"
+            >congestion window</abbr
+          >
+          (<code>cwnd</code>) additively, cut it multiplicatively when loss
+          signals overload—the AIMD “sawtooth.” Built on
           <a class="concept-link" href="tcp-udp.html">TCP</a>; loss shows up as
           missing ACKs on the
           <a class="concept-link" href="osi-tcpip.html">transport layer</a>.
@@ -179,6 +194,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/congestion-control.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

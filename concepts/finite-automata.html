@@ -59,7 +59,16 @@
       <h1>Finite automata</h1>
       <p class="concept-meta">
         <span class="tag">Theory</span>
-        <span>states · alphabet · accept / reject</span>
+        <span>
+          states · alphabet ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Deterministic finite automaton — one next state per symbol"
+            data-def="Deterministic finite automaton — one next state per symbol"
+            >DFA</abbr
+          >
+        </span>
         <span class="meta-size"
           >char <strong id="fa-pos">0</strong>/<span id="fa-len">0</span></span
         >
@@ -71,9 +80,13 @@
           symbol at a time and moves between a finite set of states. If it ends
           in an accepting state, the string is in the language. Related:
           <a class="concept-link" href="regex.html">regular expressions</a>
-          describe the same class of languages, and
+          describe the same class of languages (in theory), and
           <a class="concept-link" href="compilers.html">compilers</a>
-          use automata-like scanners in the lexer.
+          use automata-like scanners in the lexer. Unlimited memory needs
+          <a class="concept-link" href="turing-machines.html">Turing machines</a>.
+          Nested structure (balanced parens) needs
+          <a class="concept-link" href="cfgs.html">context-free grammars</a>,
+          not plain finite memory.
         </p>
 
         <div class="fa-lab">
@@ -209,6 +222,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/finite-automata.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

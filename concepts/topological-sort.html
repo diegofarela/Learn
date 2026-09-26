@@ -67,10 +67,24 @@
 
       <div class="concept-body">
         <p>
-          A <strong>topological order</strong> of a directed acyclic
-          <a class="concept-link" href="graphs.html">graph</a>
-          lists every node before the nodes that depend on it. Kahn’s algorithm
-          repeatedly peels off indegree-zero nodes — the same frontier idea as
+          A <strong>topological order</strong> of a
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Directed acyclic graph — directed edges, no cycles (also called a DAG)"
+            data-def="Directed acyclic graph — directed edges, no cycles (also called a DAG)"
+            >DAG</abbr
+          >
+          (<a class="concept-link" href="graphs.html">graph</a>
+          with directed edges and no cycles) lists every node before the nodes
+          that depend on it. Kahn’s algorithm repeatedly peels off
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Number of incoming edges still pointing at a node"
+            data-def="Number of incoming edges still pointing at a node"
+            >indegree</abbr
+          >-zero nodes — the same frontier idea as
           <a class="concept-link" href="bfs.html">BFS</a>, but driven by remaining
           prerequisites.
         </p>
@@ -201,6 +215,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/topological-sort.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

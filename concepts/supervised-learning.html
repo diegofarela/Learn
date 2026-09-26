@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Supervised learning — Learn</title>
+    <meta name="description" content="Supervised learning: train on labeled examples, pick a loss, and watch under/overfit on a 1D fit." />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#ml-basics">ML foundations</a>
+      </p>
+      <h1>Supervised learning</h1>
+      <p class="concept-meta">
+        <span class="tag">ML foundations</span>
+        <span>labels · loss · generalization</span>
+        <span class="meta-size">degree <strong id="sl-meta">2</strong></span>
+      </p>
+
+      <div class="concept-body">
+        <p>
+          <strong>Supervised learning</strong> fits a model from input→label
+          pairs, then predicts on new inputs. Choose a hypothesis class, a
+          <abbr class="term" tabindex="0" title="Penalty for bad predictions — e.g. squared error or cross-entropy"
+            data-def="Penalty for bad predictions — e.g. squared error or cross-entropy">loss</abbr>,
+          and optimize (often with
+          <a class="concept-link" href="gradient-descent.html">gradient descent</a>).
+          <a class="concept-link" href="bias-variance.html">Bias–variance</a>
+          explains under/overfit.
+        </p>
+
+        <div class="sl-lab">
+          <div class="viz viz-stage" aria-labelledby="sl-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="sl-viz-title">Fit noisy points</p>
+              <span class="sl-badge" id="sl-badge">deg 2</span>
+            </div>
+            <p class="viz-hint">Change polynomial degree · train loss vs held-out points</p>
+            <label class="sl-slider-label">
+              <span>degree = <strong id="sl-deg-val">2</strong></span>
+              <input id="sl-deg" type="range" min="1" max="9" value="2" />
+            </label>
+            <canvas id="sl-canvas" class="sl-canvas" width="420" height="260" aria-label="Curve fit"></canvas>
+            <div class="viz-controls">
+              <button type="button" class="viz-btn" id="sl-noise">Resample noise</button>
+            </div>
+            <p class="viz-live" id="sl-status" aria-live="polite"></p>
+          </div>
+          <aside class="code-panel" aria-labelledby="sl-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="sl-code-title">Objective</p>
+              <span class="code-panel-lang">math</span>
+            </div>
+            <pre class="code-panel-body" id="sl-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="sl-code-note">Squared loss on train; watch test error rise when degree is huge.</p>
+          </aside>
+        </div>
+
+        <h2>The loop</h2>
+        <p>
+          Split data → fit on train → evaluate on held-out test. Classification
+          vs regression is about label type; both are supervised.
+        </p>
+        <h2>Loss &amp; regularization</h2>
+        <p>
+          Loss measures train fit; regularization (weight decay, early stop)
+          trades train loss for better generalization—same story as high
+          variance in bias–variance.
+        </p>
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Supervised_learning">
+            <p>
+              “Supervised learning is a paradigm in machine learning where an
+              algorithm learns to map input data to a known output label.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a href="https://en.wikipedia.org/wiki/Supervised_learning" rel="noopener noreferrer" target="_blank"
+              >Wikipedia — Supervised learning</a>
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#ml-basics">← All concepts</a>
+        <a class="next" href="bias-variance.html">Next up: Bias–variance →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
+    <script src="../js/supervised-learning.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

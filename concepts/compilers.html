@@ -68,13 +68,35 @@
       <div class="concept-body">
         <p>
           A <strong>compiler</strong> turns source text into a lower form
-          (bytecode or machine code) through stages: lexing, parsing, then
-          codegen. An <em>interpreter</em> may walk the AST or bytecode at run
-          time instead. Related:
+          (
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Portable intermediate instructions executed by a VM — not necessarily native machine code"
+            data-def="Portable intermediate instructions executed by a VM — not necessarily native machine code"
+            >bytecode</abbr
+          >
+          or machine code) through stages:
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Lexing / scanning — split source into tokens (also called tokenization — same idea)"
+            data-def="Lexing / scanning — split source into tokens (also called tokenization — same idea)"
+            >lexing</abbr
+          >,
+          parsing, then codegen. An <em>interpreter</em> may walk the
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Abstract Syntax Tree — tree form of the program’s structure after parsing"
+            data-def="Abstract Syntax Tree — tree form of the program’s structure after parsing"
+            >AST</abbr
+          >
+          or bytecode at run time instead. Related:
           <a class="concept-link" href="call-stack.html">call stack</a>
           (runtime frames) and
-          <a class="concept-link" href="recursion.html">recursion</a>
-          (AST walks).
+          <a class="concept-link" href="linking-loading.html">linking &amp; loading</a>
+          (objects → process).
         </p>
 
         <div class="comp-lab">
@@ -197,6 +219,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/compilers.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

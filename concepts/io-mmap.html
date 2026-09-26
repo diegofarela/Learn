@@ -78,8 +78,22 @@
         <p>
           Programs move file bytes with <strong>buffered I/O</strong>
           (<code>read</code>/<code>write</code> into a user buffer) or with
-          <strong>mmap</strong>, which maps file pages into the address space so
-          loads/stores touch the file via the page cache. Related:
+          <strong>mmap</strong>, which maps file
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Virtual-memory pages mapped to file contents — same page idea as virtual memory"
+            data-def="Virtual-memory pages mapped to file contents — same page idea as virtual memory"
+            >pages</abbr
+          >
+          into the address space so loads/stores touch the file via the
+          <abbr
+            class="term"
+            tabindex="0"
+            title="OS cache of recently used file blocks/pages in RAM"
+            data-def="OS cache of recently used file blocks/pages in RAM"
+            >page cache</abbr
+          >. Related:
           <a class="concept-link" href="virtual-memory.html">virtual memory</a>,
           <a class="concept-link" href="syscalls.html">system calls</a>, and
           <a class="concept-link" href="file-systems.html">file systems</a>.
@@ -203,6 +217,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/io-mmap.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

@@ -77,11 +77,20 @@
       <div class="concept-body">
         <p>
           A <strong>threat model</strong> asks: what do we protect, who might
-          attack, and how can they get in? Checking items below builds a
-          lightweight model for a toy web app—then map defenses via
+          attack (
+          <abbr
+            class="term"
+            tabindex="0"
+            title="The modeled attacker in a security discussion"
+            data-def="The modeled attacker in a security discussion"
+            >adversary</abbr
+          >),
+          and how can they get in? It decides which controls matter—then map
+          defenses via
           <a class="concept-link" href="auth.html">auth</a>,
           <a class="concept-link" href="encryption.html">encryption</a>, and
-          <a class="concept-link" href="web-vulnerabilities.html">web vulnerabilities</a>.
+          <a class="concept-link" href="web-vulnerabilities.html">web vulnerabilities</a>
+          (concrete bug classes).
         </p>
 
         <div class="tm-lab">
@@ -188,6 +197,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/threat-models.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

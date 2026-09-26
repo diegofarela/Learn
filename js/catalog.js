@@ -275,6 +275,18 @@ window.__LEARN_CATALOG__ = {
           status: "ready"
         },
         {
+          id: "recurrences",
+          name: "Recurrences & Master theorem",
+          hint: "Solve T(n)=aT(n/b)+f(n)",
+          status: "ready"
+        },
+        {
+          id: "randomized-algorithms",
+          name: "Randomized algorithms",
+          hint: "Coins inside the algorithm",
+          status: "ready"
+        },
+        {
           id: "online-algorithms",
           name: "Online algorithms",
           hint: "Decide without seeing the future",
@@ -589,6 +601,7 @@ window.__LEARN_CATALOG__ = {
         { id: "sets-relations-functions", name: "Sets, relations & functions", hint: "The language of discrete structures", status: "ready" },
         { id: "combinatorics", name: "Combinatorics", hint: "Counting without listing", status: "ready" },
         { id: "modular-arithmetic", name: "Modular arithmetic", hint: "Clock math, remainders", status: "ready" },
+        { id: "proof-techniques", name: "Proof techniques", hint: "Direct, contradiction, diagonalization", status: "ready" },
         { id: "graph-theory-math", name: "Graph theory (math)", hint: "Paths, cuts, connectivity proofs", status: "ready" }
       ]
     },
@@ -598,6 +611,10 @@ window.__LEARN_CATALOG__ = {
       concepts: [
         { id: "probability-basics", name: "Probability basics", hint: "Events, independence, Bayes light", status: "ready" },
         { id: "expectation", name: "Expectation", hint: "Linearity — the workhorse", status: "ready" },
+        { id: "conditional-probability", name: "Conditional probability & Bayes", hint: "Update beliefs with evidence", status: "ready" },
+        { id: "variance-concentration", name: "Variance & concentration", hint: "Spread, Chebyshev, tails", status: "ready" },
+        { id: "markov-chains", name: "Markov chains", hint: "Memoryless random walks", status: "ready" },
+        { id: "information-theory", name: "Information & entropy", hint: "Bits of surprise", status: "ready" },
         { id: "balls-bins", name: "Balls & bins", hint: "Collisions, birthday paradox", status: "ready" }
       ]
     },
@@ -621,6 +638,12 @@ window.__LEARN_CATALOG__ = {
           id: "decidability",
           name: "Decidability",
           hint: "What algorithms can never settle",
+          status: "ready"
+        },
+        {
+          id: "turing-machines",
+          name: "Turing machines",
+          hint: "Tape, states, the universal model",
           status: "ready"
         },
         {
@@ -756,6 +779,18 @@ window.__LEARN_CATALOG__ = {
           status: "ready"
         },
         {
+          id: "eigenvalues-svd",
+          name: "Eigenvalues & SVD",
+          hint: "Stretch axes, PCA geometry",
+          status: "ready"
+        },
+        {
+          id: "supervised-learning",
+          name: "Supervised learning",
+          hint: "Labels, loss, generalization",
+          status: "ready"
+        },
+        {
           id: "bias-variance",
           name: "Bias–variance",
           hint: "Underfit vs overfit",
@@ -791,6 +826,121 @@ window.__LEARN_CATALOG__ = {
   window.__LEARN_CATALOG__.byId = byId;
   window.__LEARN_CATALOG__.hrefFor = hrefFor;
 })();
+
+window.__LEARN_PATHS__ = [
+  {
+    id: "stanford-mscs-readiness",
+    label: "Stanford MSCS readiness",
+    blurb:
+      "Undergraduate-through-early-grad foundations that Stanford's MS in Computer Science typically assumes (logic/automata, calculus-based probability, rigorous algorithms, computer organization, OS/systems). Orientation by theme—not a roster of required course numbers.",
+    stages: [
+      {
+        name: "Foundations & proofs",
+        ids: [
+          "proof-techniques",
+          "induction-invariants",
+          "sets-relations-functions",
+          "combinatorics",
+          "boolean-logic",
+          "modular-arithmetic"
+        ]
+      },
+      {
+        name: "Theory of computation",
+        ids: [
+          "finite-automata",
+          "regex",
+          "cfgs",
+          "turing-machines",
+          "decidability",
+          "p-vs-np"
+        ]
+      },
+      {
+        name: "Algorithms & complexity math",
+        ids: [
+          "big-o",
+          "recurrences",
+          "divide-conquer",
+          "sorting",
+          "graph-theory-math",
+          "bfs",
+          "dfs",
+          "shortest-paths",
+          "dynamic-programming",
+          "greedy",
+          "amortized-analysis",
+          "randomized-algorithms",
+          "network-flow"
+        ]
+      },
+      {
+        name: "Systems & architecture",
+        ids: [
+          "binary-bits",
+          "memory-pointers",
+          "assembly-basics",
+          "instruction-cycle",
+          "call-stack",
+          "linking-loading",
+          "compilers",
+          "os-processes",
+          "threads-processes",
+          "synchronization",
+          "virtual-memory",
+          "caching",
+          "file-systems",
+          "syscalls"
+        ]
+      },
+      {
+        name: "Networks & distributed",
+        ids: [
+          "osi-tcpip",
+          "tcp-udp",
+          "sockets",
+          "http",
+          "failures-timeouts",
+          "consistency-models",
+          "consensus-raft",
+          "cap-theorem"
+        ]
+      },
+      {
+        name: "Probability & ML math",
+        ids: [
+          "probability-basics",
+          "conditional-probability",
+          "expectation",
+          "variance-concentration",
+          "balls-bins",
+          "markov-chains",
+          "information-theory",
+          "linear-algebra",
+          "eigenvalues-svd",
+          "gradient-descent",
+          "supervised-learning",
+          "bias-variance"
+        ]
+      },
+      {
+        name: "Data, security, software habits",
+        ids: [
+          "relational",
+          "sql",
+          "transactions",
+          "indexes",
+          "encryption",
+          "auth",
+          "threat-models",
+          "testing",
+          "version-control",
+          "type-systems"
+        ]
+      }
+    ]
+  }
+];
 
 (function bootSideNavCollapse() {
   try {

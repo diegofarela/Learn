@@ -67,8 +67,22 @@
         <p>
           A <strong>binary heap</strong> is a complete
           <a class="concept-link" href="binary-trees.html">binary tree</a>
-          stored in an array, with a priority rule at every node. This demo is a
-          <strong>min-heap</strong>: the smallest key sits at the root, and each
+          stored in an array, with a priority rule at every node—not the
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Memory heap — the runtime region for dynamic allocations (malloc/new); unrelated naming to this data structure"
+            data-def="Memory heap — the runtime region for dynamic allocations (malloc/new); unrelated naming to this data structure"
+            >heap</abbr
+          >
+          memory region. This demo is a
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Heap where each parent is ≤ its children — smallest key at the root"
+            data-def="Heap where each parent is ≤ its children — smallest key at the root"
+            >min-heap</abbr
+          >: the smallest key sits at the root, and each
           parent is ≤ its children. Priority queues are often implemented as heaps
           — see
           <a class="concept-link" href="priority-queues.html">priority queues</a>.
@@ -142,7 +156,15 @@
 
         <h2>Tree shape, array guts</h2>
         <p>
-          A heap is always a <strong>complete</strong> binary tree: levels fill
+          A heap is always a
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Levels filled left to right — no gaps before the last level; maps cleanly onto an array"
+            data-def="Levels filled left to right — no gaps before the last level; maps cleanly onto an array"
+            >complete</abbr
+          >
+          binary tree: levels fill
           left to right. That shape maps cleanly onto an array: for index
           <em>i</em>, parent is ⌊(<em>i</em>−1)/2⌋, children are 2<em>i</em>+1 and
           2<em>i</em>+2. No pointers required—the demo shows both views of the
@@ -252,6 +274,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/heaps.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

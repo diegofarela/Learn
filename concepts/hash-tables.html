@@ -80,9 +80,29 @@
           A <strong>hash table</strong> maps keys to values by computing an
           <em>index</em> into an
           <a class="concept-link" href="arrays.html">array</a>
-          of <strong>buckets</strong>. Hash the key, land in a slot, store or
-          find the pair there. When two keys land in the same bucket, this demo
-          uses <strong>separate chaining</strong>—a short
+          of
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Same idea as an array slot — an index where entries for that hash land; not a new structure"
+            data-def="Same idea as an array slot — an index where entries for that hash land; not a new structure"
+            >buckets</abbr
+          >. Hash the key, land in a
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Same idea as a bucket — one array index in the table"
+            data-def="Same idea as a bucket — one array index in the table"
+            >slot</abbr
+          >, store or find the pair there. When two keys land in the same
+          bucket, this demo uses
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Collision strategy: keep a short linked list (or similar) of entries at that bucket"
+            data-def="Collision strategy: keep a short linked list (or similar) of entries at that bucket"
+            >separate chaining</abbr
+          >—a short
           <a class="concept-link" href="linked-lists.html">linked list</a>
           hanging off that index.
         </p>
@@ -185,7 +205,13 @@
         <h2>Collisions</h2>
         <p>
           Different keys can hash to the same index. That is a
-          <strong>collision</strong>. With <em>separate chaining</em>, the
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Two keys map to the same bucket index — resolved by chaining or probing"
+            data-def="Two keys map to the same bucket index — resolved by chaining or probing"
+            >collision</abbr
+          >. With <em>separate chaining</em>, the
           bucket becomes a
           <a class="concept-link" href="linked-lists.html">linked list</a>
           (or similar chain) of key–value pairs. Lookup walks that short chain
@@ -194,7 +220,14 @@
 
         <h2>Load factor</h2>
         <p>
-          <strong>Load factor</strong> α = n / N (entries divided by buckets).
+          <abbr
+            class="term"
+            tabindex="0"
+            title="α = n / N — entries divided by buckets; high α means longer chains and slower lookups"
+            data-def="α = n / N — entries divided by buckets; high α means longer chains and slower lookups"
+            >Load factor</abbr
+          >
+          α = n / N (entries divided by buckets).
           As α grows, chains get longer and average cost creeps up. Tables
           often <em>resize</em> (rehash into a larger array) when α crosses a
           threshold so operations stay near constant time.
@@ -309,6 +342,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/hash-tables.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

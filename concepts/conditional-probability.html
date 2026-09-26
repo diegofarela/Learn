@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Conditional probability &amp; Bayes — Learn</title>
+    <meta name="description" content="Conditional probability and Bayes: update beliefs when evidence arrives, with a live disease-test example." />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#probability">Probability for CS</a>
+      </p>
+      <h1>Conditional probability &amp; Bayes</h1>
+      <p class="concept-meta">
+        <span class="tag">Probability for CS</span>
+        <span>P(A|B) · Bayes · base rates</span>
+        <span class="meta-size">P(D|+) <strong id="bayes-meta">—</strong></span>
+      </p>
+
+      <div class="concept-body">
+        <p>
+          <strong>Conditional probability</strong> answers “given that B happened,
+          how likely is A?” Bayes’ rule flips evidence and hypothesis—the
+          backbone of spam filters, medical tests, and ML inference. Builds on
+          <a class="concept-link" href="probability-basics.html">probability basics</a>
+          and pairs with
+          <a class="concept-link" href="expectation.html">expectation</a>.
+        </p>
+
+        <div class="bayes-lab">
+          <div class="viz viz-stage" aria-labelledby="bayes-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="bayes-viz-title">Test · rare disease</p>
+              <span class="bayes-badge" id="bayes-badge">1000 people</span>
+            </div>
+            <p class="viz-hint">Tune prevalence &amp; false-positive rate · watch posterior</p>
+            <label class="bayes-slider-label">
+              <span>prevalence <strong id="bayes-prev-val">1%</strong></span>
+              <input id="bayes-prev" type="range" min="1" max="30" value="1" />
+            </label>
+            <label class="bayes-slider-label">
+              <span>false positive rate <strong id="bayes-fpr-val">5%</strong></span>
+              <input id="bayes-fpr" type="range" min="1" max="20" value="5" />
+            </label>
+            <div id="bayes-pop" class="bayes-pop" role="img" aria-label="Population grid"></div>
+            <p class="viz-live" id="bayes-status" aria-live="polite"></p>
+          </div>
+          <aside class="code-panel" aria-labelledby="bayes-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="bayes-code-title">Bayes</p>
+              <span class="code-panel-lang">math</span>
+            </div>
+            <pre class="code-panel-body" id="bayes-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="bayes-code-note">Sensitivity fixed at 99% in this demo.</p>
+          </aside>
+        </div>
+
+        <h2>Definition</h2>
+        <p>
+          <code>P(A|B) = P(A∩B) / P(B)</code> when P(B) &gt; 0. Independence means
+          <code>P(A|B) = P(A)</code>.
+        </p>
+        <h2>Bayes’ rule</h2>
+        <p>
+          <code>P(H|E) = P(E|H) P(H) / P(E)</code>. The denominator expands by
+          total probability. Base rates matter: a positive test for a rare event
+          is often still mostly false positives.
+        </p>
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Bayes%27_theorem">
+            <p>
+              “Bayes' theorem describes the probability of an event, based on
+              prior knowledge of conditions that might be related to the event.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a href="https://en.wikipedia.org/wiki/Bayes%27_theorem" rel="noopener noreferrer" target="_blank"
+              >Wikipedia — Bayes' theorem</a>
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#probability">← All concepts</a>
+        <a class="next" href="expectation.html">Next up: Expectation →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
+    <script src="../js/conditional-probability.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

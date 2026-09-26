@@ -69,8 +69,13 @@
         <p>
           In a partitioned network you can’t keep full
           <strong>consistency</strong> and full
-          <strong>availability</strong> at once. Systems choose a corner of the
-          triangle—relevant when comparing
+          <strong>availability</strong> at once. CAP’s “C” is a distributed
+          guarantee (roughly: every read sees the latest write)—not the same as
+          ACID
+          <a class="concept-link" href="isolation-levels.html">isolation</a>
+          or the finer
+          <a class="concept-link" href="consistency-models.html">consistency models</a>.
+          Systems choose a corner of the triangle—relevant when comparing
           <a class="concept-link" href="relational.html">relational</a>
           /
           <a class="concept-link" href="transactions.html">ACID</a>
@@ -215,6 +220,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/cap-theorem.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

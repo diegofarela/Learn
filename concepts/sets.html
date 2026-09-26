@@ -74,9 +74,24 @@
 
       <div class="concept-body">
         <p>
-          A <strong>set</strong> stores <em>distinct</em> values—membership,
-          not order or multiplicity. Ask “is x in S?”; add and remove change
-          who belongs. Under the hood, languages often implement sets with
+          A <strong>set</strong> stores <em>distinct</em> values—
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Whether an element belongs to the set — yes or no, not how many times"
+            data-def="Whether an element belongs to the set — yes or no, not how many times"
+            >membership</abbr
+          >,
+          not order or
+          <abbr
+            class="term"
+            tabindex="0"
+            title="How many times a value appears — sets ignore this and keep each value once"
+            data-def="How many times a value appears — sets ignore this and keep each value once"
+            >multiplicity</abbr
+          >.
+          Ask “is x in S?”; add and remove change who belongs. Under the hood,
+          languages often implement sets with
           <a class="concept-link" href="hash-tables.html">hash tables</a>
           (or trees) so membership stays near constant time.
         </p>
@@ -215,6 +230,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/sets.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

@@ -76,10 +76,24 @@
       <div class="concept-body">
         <p>
           A <strong>linked list</strong> is a chain of
-          <em>nodes</em>. Each node holds a value and a
-          <strong>next</strong> pointer to its neighbor. Order lives in the
-          links—not in contiguous addresses—so you can splice at the head in
-          constant time, but finding the <em>k</em>-th item costs a walk.
+          <abbr
+            class="term"
+            tabindex="0"
+            title="A small record: value plus a link to the next node — not an array slot"
+            data-def="A small record: value plus a link to the next node — not an array slot"
+            >nodes</abbr
+          >. Each node holds a value and a
+          <strong>next</strong>
+          <a class="concept-link" href="memory-pointers.html">pointer</a>
+          to its neighbor. Order lives in the links—not in
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Neighboring memory addresses like an array strip — lists scatter nodes instead"
+            data-def="Neighboring memory addresses like an array strip — lists scatter nodes instead"
+            >contiguous addresses</abbr
+          >—so you can splice at the head in constant time, but finding the
+          <em>k</em>-th item costs a walk.
         </p>
 
         <div class="ll-lab">
@@ -271,6 +285,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/linked-lists.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

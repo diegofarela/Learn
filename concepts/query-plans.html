@@ -76,11 +76,19 @@
 
       <div class="concept-body">
         <p>
-          A <strong>query plan</strong> is the operator tree the optimizer
-          chooses to run your SQL—scans, filters, joins—with estimated costs.
-          Indexes change which plan wins. Related:
-          <a class="concept-link" href="sql.html">SQL</a>,
-          <a class="concept-link" href="indexes.html">indexes</a>, and
+          A <strong>query plan</strong> is the
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Engine component that picks an efficient operator tree for a SQL statement"
+            data-def="Engine component that picks an efficient operator tree for a SQL statement"
+            >optimizer</abbr
+          >’s operator tree for your SQL—scans, filters, joins—with estimated
+          costs. SQL stays declarative; the plan is procedural.
+          <a class="concept-link" href="indexes.html">Indexes</a>
+          change which plan wins. Related:
+          <a class="concept-link" href="sql.html">SQL</a>
+          and
           <a class="concept-link" href="relational.html">relational model</a>.
         </p>
 
@@ -202,6 +210,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/query-plans.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

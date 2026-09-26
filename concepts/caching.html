@@ -80,8 +80,22 @@
         <p>
           A <strong>cache</strong> is a small, fast store in front of a larger,
           slower one (here: RAM). Look in the cache first—a
-          <em>hit</em> is cheap; a <em>miss</em> fetches from RAM and usually
-          installs a copy. When the cache is full,
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Requested data was already in the cache"
+            data-def="Requested data was already in the cache"
+            >hit</abbr
+          >
+          is cheap; a
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Requested data was not in the cache — fetch from the slower store"
+            data-def="Requested data was not in the cache — fetch from the slower store"
+            >miss</abbr
+          >
+          fetches from RAM and usually installs a copy. When the cache is full,
           <strong>LRU</strong> drops the least recently used line. Related:
           <a class="concept-link" href="virtual-memory.html">virtual memory</a>
           (pages as another layer) and
@@ -223,6 +237,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/caching.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

@@ -69,7 +69,15 @@
         <p>
           In a network you cannot tell a slow node from a dead one—so you set a
           <strong>timeout</strong>, then <strong>retry</strong> or fail over.
-          That pairs with
+          A
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Network partition — some nodes cannot reach others; both sides may still be alive"
+            data-def="Network partition — some nodes cannot reach others; both sides may still be alive"
+            >partition</abbr
+          >
+          can look the same from one side. That pairs with
           <a class="concept-link" href="cap-theorem.html">CAP</a>
           trade-offs,
           <a class="concept-link" href="idempotency-retries.html">idempotent retries</a>,
@@ -201,6 +209,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/failures-timeouts.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

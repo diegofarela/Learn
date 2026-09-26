@@ -77,8 +77,24 @@
       <div class="concept-body">
         <p>
           A <strong>write-ahead log</strong> records changes before they hit
-          data pages—so crashes can redo/undo safely. Replicas often ship or
-          stream that log to stay in sync. Related:
+          data pages—so crashes can
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Replay committed log entries to restore durable state after a crash"
+            data-def="Replay committed log entries to restore durable state after a crash"
+            >redo</abbr
+          >/<abbr
+            class="term"
+            tabindex="0"
+            title="Roll back incomplete transactions using the log"
+            data-def="Roll back incomplete transactions using the log"
+            >undo</abbr
+          >
+          safely. Replicas often ship or stream that log to stay in sync
+          (recovery machinery, not
+          <a class="concept-link" href="version-control.html">version control</a>
+          history). Related:
           <a class="concept-link" href="transactions.html">transactions</a>,
           <a class="concept-link" href="isolation-levels.html">isolation levels</a>,
           and
@@ -198,6 +214,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/wal-replication.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

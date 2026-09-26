@@ -76,9 +76,26 @@
 
       <div class="concept-body">
         <p>
-          <strong>Gradient descent</strong> minimizes a loss by repeatedly
-          stepping opposite the slope. Tune the learning rate below—too large
-          and you overshoot; too small and you crawl. Uses
+          <strong>Gradient descent</strong> minimizes a
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Numeric penalty for a bad prediction — the objective we minimize"
+            data-def="Numeric penalty for a bad prediction — the objective we minimize"
+            >loss</abbr
+          >
+          by repeatedly stepping opposite the slope. Tune the
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Step size for each gradient update"
+            data-def="Step size for each gradient update"
+            >learning rate</abbr
+          >
+          below—too large and you overshoot; too small and you crawl. Local
+          search along a slope, not discrete
+          <a class="concept-link" href="backtracking.html">backtracking</a>
+          over choices. Uses
           <a class="concept-link" href="linear-algebra.html">vector / calculus</a>
           ideas; interacts with
           <a class="concept-link" href="bias-variance.html">bias–variance</a>
@@ -171,6 +188,10 @@
 
     <script src="../js/theme.js"></script>
     <script src="../js/gradient-descent.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

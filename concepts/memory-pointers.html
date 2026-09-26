@@ -83,8 +83,23 @@
           <code>*p</code> follows that address to read or write. Names often
           live in small
           <a class="concept-link" href="call-stack.html">call-stack</a>
-          slots; bigger or longer-lived objects live on the heap—both are just
-          addressable memory (see Stack vs heap below).
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Same idea as a memory address cell — a place a value lives, not a new structure"
+            data-def="Same idea as a memory address cell — a place a value lives, not a new structure"
+            >slots</abbr
+          >; bigger or longer-lived objects live on the
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Memory heap — dynamic allocation region; not the binary-heap data structure on the Heaps page"
+            data-def="Memory heap — dynamic allocation region; not the binary-heap data structure on the Heaps page"
+            >heap</abbr
+          >—both are just addressable memory (see Stack vs heap below). The
+          addresses a program sees are often
+          <a class="concept-link" href="virtual-memory.html">virtual memory</a>
+          pages; a pointer still just holds one of those addresses.
         </p>
 
         <div class="mem-lab">
@@ -228,7 +243,9 @@
         <h2>Stack vs heap</h2>
         <p>
           Two neighborhoods in the same city of addresses—not two different
-          kinds of RAM chip.
+          kinds of RAM chip, and not the
+          <a class="concept-link" href="heaps.html">binary heap</a>
+          priority structure (unrelated naming).
         </p>
         <ul class="op-list">
           <li>
@@ -333,6 +350,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/memory-pointers.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

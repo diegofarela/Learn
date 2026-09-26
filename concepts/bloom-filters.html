@@ -76,10 +76,23 @@
 
       <div class="concept-body">
         <p>
-          A <strong>Bloom filter</strong> is a compact probabilistic set: add
-          hashes bits into an array. Query answers <em>definitely not</em> or
-          <em>maybe</em> — never a false negative, but possible false positives.
-          Related:
+          A <strong>Bloom filter</strong> is a compact
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Answers can be wrong in a controlled way — here: false positives, never false negatives"
+            data-def="Answers can be wrong in a controlled way — here: false positives, never false negatives"
+            >probabilistic</abbr
+          >
+          set: add hashes bits into an array. Query answers <em>definitely not</em> or
+          <em>maybe</em> — never a
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Saying an item is absent when it was actually added — Bloom filters avoid this"
+            data-def="Saying an item is absent when it was actually added — Bloom filters avoid this"
+            >false negative</abbr
+          >, but possible false positives. Related:
           <a class="concept-link" href="hash-tables.html">hash tables</a>
           and
           <a class="concept-link" href="sets.html">sets</a>.
@@ -198,6 +211,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/bloom-filters.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

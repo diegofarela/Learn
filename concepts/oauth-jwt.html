@@ -78,11 +78,22 @@
       <div class="concept-body">
         <p>
           <strong>OAuth 2</strong> lets an app get limited access without your
-          password—often via the authorization-code flow.
+          password—often via the authorization-code flow (delegation, not a
+          replacement for knowing
+          <a class="concept-link" href="auth.html">authn vs authz</a>).
           <strong>JWTs</strong> are a common token shape: three Base64url
-          parts (header.payload.signature). Builds on
-          <a class="concept-link" href="auth.html">authentication</a>; tokens
-          should ride
+          parts (header.payload.signature). Base64 is
+          <a class="concept-link" href="encoding.html">encoding</a>, not
+          secrecy—JWTs are usually
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Integrity check with a secret/key so claims cannot be forged unnoticed"
+            data-def="Integrity check with a secret/key so claims cannot be forged unnoticed"
+            >signed</abbr
+          >, not
+          <a class="concept-link" href="encryption.html">encrypted</a>
+          by default. Tokens should ride
           <a class="concept-link" href="tls-https.html">HTTPS</a>.
         </p>
 
@@ -190,6 +201,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/oauth-jwt.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

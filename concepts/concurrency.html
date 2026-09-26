@@ -68,8 +68,15 @@
       <div class="concept-body">
         <p>
           <strong>Concurrency</strong> means dealing with many tasks at once—their
-          progress can <em>interleave</em> on one core via time-slicing. That is
-          not the same as
+          progress can
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Tasks take turns on one core so their steps mix in time (time-slicing)"
+            data-def="Tasks take turns on one core so their steps mix in time (time-slicing)"
+            >interleave</abbr
+          >
+          on one core via time-slicing. That is not the same as
           <a class="concept-link" href="parallelism.html">parallelism</a>, where
           work truly runs simultaneously on multiple cores. Concurrency often uses
           <a class="concept-link" href="threads-processes.html">threads</a>
@@ -190,6 +197,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/concurrency.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

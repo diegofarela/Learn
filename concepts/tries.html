@@ -68,8 +68,16 @@
 
       <div class="concept-body">
         <p>
-          A <strong>trie</strong> (prefix tree) stores strings character by
-          character. Shared prefixes share a path from the root—so
+          A <strong>trie</strong>
+          (<abbr
+            class="term"
+            tabindex="0"
+            title="Tree keyed by successive characters — shared prefixes share a path from the root"
+            data-def="Tree keyed by successive characters — shared prefixes share a path from the root"
+            >prefix tree</abbr
+          >)
+          stores strings character by character. Shared prefixes share a path
+          from the root—so
           <code>cat</code> and <code>car</code> diverge only at the last letter.
           That makes prefix search and autocomplete natural: walk the prefix,
           then collect everything below.
@@ -220,6 +228,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/tries.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

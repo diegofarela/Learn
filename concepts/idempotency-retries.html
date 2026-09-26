@@ -70,10 +70,24 @@
           Retries after
           <a class="concept-link" href="failures-timeouts.html">timeouts</a>
           mean the server may see the <strong>same request twice</strong>. An
-          <em>idempotency key</em> makes “charge $10” safe to repeat—same idea
-          as carefully designed
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Client-supplied token so duplicate requests apply the effect only once"
+            data-def="Client-supplied token so duplicate requests apply the effect only once"
+            >idempotency key</abbr
+          >
+          makes “charge $10” safe to repeat—same idea as carefully designed
           <a class="concept-link" href="http.html">HTTP</a>
-          methods and exactly-once illusions over at-least-once delivery.
+          methods and exactly-once illusions over
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Delivery may duplicate; will not silently drop after ack semantics"
+            data-def="Delivery may duplicate; will not silently drop after ack semantics"
+            >at-least-once</abbr
+          >
+          delivery.
         </p>
 
         <div class="idem-lab">
@@ -204,6 +218,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/idempotency-retries.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

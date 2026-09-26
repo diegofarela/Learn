@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Variance &amp; concentration — Learn</title>
+    <meta name="description" content="Variance, standard deviation, and Chebyshev: why averages concentrate and how tails bound." />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#probability">Probability for CS</a>
+      </p>
+      <h1>Variance &amp; concentration</h1>
+      <p class="concept-meta">
+        <span class="tag">Probability for CS</span>
+        <span>Var · σ · Chebyshev</span>
+        <span class="meta-size">σ <strong id="var-meta">—</strong></span>
+      </p>
+
+      <div class="concept-body">
+        <p>
+          <strong>Variance</strong> measures spread around the mean;
+          <strong>concentration</strong> says sample averages settle near
+          <a class="concept-link" href="expectation.html">expectation</a>.
+          Chebyshev needs only variance; Chernoff/Hoeffding give sharper
+          exponential tails when variables are bounded—standard CS109-style tools.
+        </p>
+
+        <div class="var-lab">
+          <div class="viz viz-stage" aria-labelledby="var-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="var-viz-title">Sample mean of coin flips</p>
+              <span class="var-badge" id="var-badge">n=20</span>
+            </div>
+            <p class="viz-hint">Increase n · watch mean hug 0.5 · Chebyshev bound</p>
+            <label class="var-slider-label">
+              <span>samples n = <strong id="var-n-val">20</strong></span>
+              <input id="var-n" type="range" min="5" max="200" value="20" />
+            </label>
+            <div id="var-bars" class="var-bars" role="img" aria-label="Recent sample means"></div>
+            <div class="viz-controls">
+              <button type="button" class="viz-btn viz-btn-primary" id="var-sample">Sample batch</button>
+              <button type="button" class="viz-btn viz-btn-ghost" id="var-reset">Clear</button>
+            </div>
+            <p class="viz-live" id="var-status" aria-live="polite"></p>
+          </div>
+          <aside class="code-panel" aria-labelledby="var-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="var-code-title">Bounds</p>
+              <span class="code-panel-lang">math</span>
+            </div>
+            <pre class="code-panel-body" id="var-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="var-code-note">Fair coin: Var(X̄)=p(1-p)/n = 0.25/n.</p>
+          </aside>
+        </div>
+
+        <h2>Variance</h2>
+        <p>
+          <code>Var(X) = E[(X−μ)²] = E[X²]−μ²</code>. For independent summands,
+          variances add. Standard deviation σ = √Var.
+        </p>
+        <h2>Chebyshev</h2>
+        <p>
+          <code>P(|X−μ| ≥ t) ≤ Var(X)/t²</code>. Weak but assumption-light—enough
+          to prove weak laws of large numbers. Sharper tools exist when you have
+          boundedness or moment-generating functions.
+        </p>
+        <p>
+          Used in hashing load,
+          <a class="concept-link" href="balls-bins.html">balls &amp; bins</a>,
+          and randomized algorithm analysis.
+        </p>
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Chebyshev%27s_inequality">
+            <p>
+              “Chebyshev's inequality guarantees that, for a wide class of
+              probability distributions, no more than a certain fraction of
+              values can be more than a certain distance from the mean.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a href="https://en.wikipedia.org/wiki/Chebyshev%27s_inequality" rel="noopener noreferrer" target="_blank"
+              >Wikipedia — Chebyshev's inequality</a>
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#probability">← All concepts</a>
+        <a class="next" href="balls-bins.html">Next up: Balls &amp; bins →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
+    <script src="../js/variance-concentration.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

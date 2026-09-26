@@ -69,10 +69,31 @@
         <p>
           <strong>Pipelining</strong> overlaps stages of the
           <a class="concept-link" href="instruction-cycle.html">instruction cycle</a>
-          so several instructions are in flight at once. Data hazards may
-          <em>stall</em> or be fixed by <em>forwarding</em>—similar tension to
-          waiting vs overlapping work in
-          <a class="concept-link" href="os-processes.html">process scheduling</a>.
+          so several instructions are in flight at once. Data
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Pipeline conflict (data/control/structural) that risks wrong results or stalls"
+            data-def="Pipeline conflict (data/control/structural) that risks wrong results or stalls"
+            >hazards</abbr
+          >
+          may
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Pipeline bubble — a stage waits"
+            data-def="Pipeline bubble — a stage waits"
+            >stall</abbr
+          >
+          or be fixed by
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Bypassing results to a later stage to reduce pipeline stalls (also called bypassing — same idea)"
+            data-def="Bypassing results to a later stage to reduce pipeline stalls (also called bypassing — same idea)"
+            >forwarding</abbr
+          >—similar tension to waiting vs overlapping work in
+          <a class="concept-link" href="scheduling.html">CPU scheduling</a>.
         </p>
 
         <div class="pipe-lab">
@@ -204,6 +225,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/pipelining.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

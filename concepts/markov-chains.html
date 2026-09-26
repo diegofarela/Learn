@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Markov chains — Learn</title>
+    <meta name="description" content="Markov chains: memoryless transitions on a small state graph with a live walk." />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#probability">Probability for CS</a>
+      </p>
+      <h1>Markov chains</h1>
+      <p class="concept-meta">
+        <span class="tag">Probability for CS</span>
+        <span>states · P · stationary</span>
+        <span class="meta-size">t = <strong id="mc-meta">0</strong></span>
+      </p>
+
+      <div class="concept-body">
+        <p>
+          A <strong>Markov chain</strong> is a random walk on states where the
+          next step depends only on the present—not the full past
+          (<em>memoryless</em>). PageRank, MCMC, and many CS109 examples are
+          chains. Needs
+          <a class="concept-link" href="conditional-probability.html">conditional probability</a>
+          and matrix intuition from
+          <a class="concept-link" href="linear-algebra.html">linear algebra</a>.
+        </p>
+
+        <div class="mc-lab">
+          <div class="viz viz-stage" aria-labelledby="mc-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="mc-viz-title">3-state weather chain</p>
+              <span class="mc-badge" id="mc-badge">Sun</span>
+            </div>
+            <p class="viz-hint">Step · watch probability mass flow · approach π</p>
+            <div id="mc-graph" class="mc-graph" role="img" aria-label="Markov chain states"></div>
+            <div id="mc-bars" class="mc-bars" aria-hidden="true"></div>
+            <div class="viz-controls">
+              <button type="button" class="viz-btn viz-btn-primary" id="mc-step">Step</button>
+              <button type="button" class="viz-btn" id="mc-run">Run 10</button>
+              <button type="button" class="viz-btn viz-btn-ghost" id="mc-reset">Reset</button>
+            </div>
+            <p class="viz-live" id="mc-status" aria-live="polite"></p>
+          </div>
+          <aside class="code-panel" aria-labelledby="mc-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="mc-code-title">Update</p>
+              <span class="code-panel-lang">math</span>
+            </div>
+            <pre class="code-panel-body" id="mc-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="mc-code-note">π = πP for stationary distribution.</p>
+          </aside>
+        </div>
+
+        <h2>Transition matrix</h2>
+        <p>
+          Rows (or columns, by convention) sum to 1. Distribution row vector
+          μ<sub>t+1</sub> = μ<sub>t</sub> P. Irreducible aperiodic finite chains
+          converge to a unique stationary π.
+        </p>
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Markov_chain">
+            <p>
+              “A Markov chain or Markov process is a stochastic model describing
+              a sequence of possible events in which the probability of each
+              event depends only on the state attained in the previous event.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a href="https://en.wikipedia.org/wiki/Markov_chain" rel="noopener noreferrer" target="_blank"
+              >Wikipedia — Markov chain</a>
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#probability">← All concepts</a>
+        <a class="next" href="conditional-probability.html">Related: Bayes →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
+    <script src="../js/markov-chains.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

@@ -77,9 +77,24 @@
 
       <div class="concept-body">
         <p>
-          A <strong>system call</strong> is how user code asks the OS for
-          privileged work—open a file, read bytes, write to a socket. The CPU
-          traps into <em>kernel mode</em>, the kernel runs the handler, then
+          A <strong>system call</strong> is how
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Where normal apps run with restricted privileges (also called user mode — same idea)"
+            data-def="Where normal apps run with restricted privileges (also called user mode — same idea)"
+            >user space</abbr
+          >
+          asks the OS for privileged work—open a file, read bytes, write to a
+          socket. The CPU
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Controlled transfer into the kernel (software interrupt / syscall instruction)"
+            data-def="Controlled transfer into the kernel (software interrupt / syscall instruction)"
+            >traps</abbr
+          >
+          into <em>kernel mode</em>, the kernel runs the handler, then
           returns. Related:
           <a class="concept-link" href="os-processes.html">OS processes</a>,
           <a class="concept-link" href="interrupts.html">interrupts</a>, and
@@ -201,6 +216,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/syscalls.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

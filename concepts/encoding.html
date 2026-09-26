@@ -78,9 +78,16 @@
         <p>
           Text is not stored as letters—it is stored as
           <strong>numbers</strong>, then encoded as bytes. Type a character
-          below to see its Unicode code point and the UTF-8 byte sequence
-          machines actually send. For how those numbers are written in binary
-          and hex, see
+          below to see its Unicode
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Integer ID for a character in Unicode (e.g. U+0041 for A) — not the on-wire bytes yet"
+            data-def="Integer ID for a character in Unicode (e.g. U+0041 for A) — not the on-wire bytes yet"
+            >code point</abbr
+          >
+          and the UTF-8 byte sequence machines actually send. For how those
+          numbers are written in binary and hex, see
           <a class="concept-link" href="number-systems.html">number systems</a>.
         </p>
 
@@ -145,9 +152,23 @@
 
         <h2>ASCII, then Unicode</h2>
         <p>
-          Early systems mapped Latin letters to 0–127 (ASCII). Unicode assigns
-          a unique <em>code point</em> to every character worldwide—still just
-          an integer, like
+          Early systems mapped Latin letters to 0–127
+          (<abbr
+            class="term"
+            tabindex="0"
+            title="American Standard Code for Information Interchange — classic 7-bit character set"
+            data-def="American Standard Code for Information Interchange — classic 7-bit character set"
+            >ASCII</abbr
+          >).
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Universal character set — every character gets a unique code point"
+            data-def="Universal character set — every character gets a unique code point"
+            >Unicode</abbr
+          >
+          assigns a unique <em>code point</em> to every character worldwide—still
+          just an integer, like
           <code>U+0041</code> for <code>A</code>.
         </p>
 
@@ -201,6 +222,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/encoding.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

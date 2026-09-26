@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Turing machines — Learn</title>
+    <meta name="description" content="Turing machines: step a simple TM on a tape—states, head moves, and accept/reject." />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#theory">Theory of computation</a>
+      </p>
+      <h1>Turing machines</h1>
+      <p class="concept-meta">
+        <span class="tag">Theory</span>
+        <span>tape · state · transition</span>
+        <span class="meta-size">step <strong id="ture-meta">0</strong></span>
+      </p>
+
+      <div class="concept-body">
+        <p>
+          A <strong>Turing machine</strong> is the standard unlimited model of
+          computation: finite control, a read/write tape, and a head that moves
+          left/right.
+          <a class="concept-link" href="finite-automata.html">Finite automata</a>
+          only move right and cannot rewrite; TMs can simulate any algorithm and
+          underpin
+          <a class="concept-link" href="decidability.html">decidability</a>
+          and complexity (
+          <a class="concept-link" href="p-vs-np.html">P vs NP</a>).
+        </p>
+
+        <div class="ture-lab">
+          <div class="viz viz-stage" aria-labelledby="ture-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="ture-viz-title">TM · flip 0↔1 then halt</p>
+              <span class="ture-badge" id="ture-badge">ready</span>
+            </div>
+            <p class="viz-hint">Step · head writes and moves · accept when done</p>
+            <label class="ture-input-label">
+              <span>tape input (0/1)</span>
+              <input id="ture-input" type="text" value="0110" autocomplete="off" spellcheck="false"
+                aria-label="Binary tape input" />
+            </label>
+            <div id="ture-tape" class="ture-tape" role="img" aria-label="Turing machine tape"></div>
+            <p class="ture-state" id="ture-state">state q₀ · head at 0</p>
+            <div class="viz-controls">
+              <button type="button" class="viz-btn viz-btn-primary" id="ture-step">Step</button>
+              <button type="button" class="viz-btn" id="ture-run">Run</button>
+              <button type="button" class="viz-btn viz-btn-ghost" id="ture-reset">Reset</button>
+            </div>
+            <p class="viz-live" id="ture-status" aria-live="polite">Load a binary string and step the flipper TM.</p>
+          </div>
+          <aside class="code-panel" aria-labelledby="ture-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="ture-code-title">Transition</p>
+              <span class="code-panel-lang">δ</span>
+            </div>
+            <pre class="code-panel-body" id="ture-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="ture-code-note">δ(q, symbol) → (q′, write, L|R)</p>
+          </aside>
+        </div>
+
+        <h2>What a TM has</h2>
+        <p>
+          Finite states, a tape alphabet (with blank), a transition function, a
+          start state, and accept/reject states. Configurations are
+          (state, tape contents, head position).
+        </p>
+        <h2>Why it matters</h2>
+        <p>
+          Church–Turing thesis: anything intuitively computable is TM-computable.
+          Limits of TMs are limits of algorithms—halting is undecidable; time
+          bounds define complexity classes.
+        </p>
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Turing_machine">
+            <p>
+              “A Turing machine is a mathematical model of computation describing
+              an abstract machine that manipulates symbols on a strip of tape
+              according to a table of rules.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a href="https://en.wikipedia.org/wiki/Turing_machine" rel="noopener noreferrer" target="_blank"
+              >Wikipedia — Turing machine</a>
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#theory">← All concepts</a>
+        <a class="next" href="decidability.html">Next up: Decidability →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
+    <script src="../js/turing-machines.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Recurrences &amp; Master theorem — Learn</title>
+    <meta name="description" content="Solve divide-and-conquer recurrences with the Master theorem: compare f(n) to n^{log_b a}." />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#algorithms">Algorithms</a>
+      </p>
+      <h1>Recurrences &amp; Master theorem</h1>
+      <p class="concept-meta">
+        <span class="tag">Algorithms</span>
+        <span>T(n)=aT(n/b)+f(n) · cases</span>
+        <span class="meta-size">case <strong id="rec-meta">2</strong></span>
+      </p>
+
+      <div class="concept-body">
+        <p>
+          Many
+          <a class="concept-link" href="divide-conquer.html">divide &amp; conquer</a>
+          algorithms satisfy <code>T(n) = a T(n/b) + f(n)</code>. The
+          <strong>Master theorem</strong> compares <code>f(n)</code> to
+          <code>n<sup>log<sub>b</sub> a</sup></code> and reads off Θ growth—core
+          homework fluency for rigorous algorithms coursework.
+        </p>
+
+        <div class="rec-lab">
+          <div class="viz viz-stage" aria-labelledby="rec-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="rec-viz-title">Master theorem picker</p>
+              <span class="rec-badge" id="rec-badge">case 2</span>
+            </div>
+            <p class="viz-hint">Pick a classic recurrence · see case and Θ bound</p>
+            <div class="rec-picks" role="group" aria-label="Recurrence examples">
+              <button type="button" class="viz-btn is-selected" data-rec="mergesort">Merge sort</button>
+              <button type="button" class="viz-btn" data-rec="binary">Binary search</button>
+              <button type="button" class="viz-btn" data-rec="strassen">Strassen-ish</button>
+              <button type="button" class="viz-btn" data-rec="brute">Brute tree</button>
+            </div>
+            <div id="rec-tree" class="rec-tree" role="img" aria-label="Recursion tree sketch"></div>
+            <p class="viz-live" id="rec-status" aria-live="polite"></p>
+          </div>
+          <aside class="code-panel" aria-labelledby="rec-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="rec-code-title">Bound</p>
+              <span class="code-panel-lang">math</span>
+            </div>
+            <pre class="code-panel-body" id="rec-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="rec-code-note">Compare f(n) vs n^{log_b a}.</p>
+          </aside>
+        </div>
+
+        <h2>Three cases (intuition)</h2>
+        <p>
+          Let <code>c<sub>crit</sub> = log<sub>b</sub> a</code>. If f is polynomially
+          smaller than n<sup>c<sub>crit</sub></sup>, leaves dominate (case 1). If
+          they match up to logs, cost is Θ(n<sup>c<sub>crit</sub></sup> log n)
+          (case 2). If f is larger and regular, root work dominates (case 3).
+        </p>
+        <h2>When Master fails</h2>
+        <p>
+          Non-constant a,b, uneven splits, or f that sits between cases need a
+          recursion tree or Akra–Bazzi. Still start by writing the recurrence
+          from the code.
+        </p>
+        <p>
+          Ties to
+          <a class="concept-link" href="big-o.html">Big-O</a>,
+          <a class="concept-link" href="sorting.html">sorting</a>, and
+          <a class="concept-link" href="amortized-analysis.html">amortized analysis</a>
+          (different question: sequence cost vs closed form).
+        </p>
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Master_theorem_(analysis_of_algorithms)">
+            <p>
+              “The master theorem provides a solution in asymptotic terms
+              (using Big O notation) for recurrence relations of types that occur
+              in the analysis of many divide and conquer algorithms.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a href="https://en.wikipedia.org/wiki/Master_theorem_(analysis_of_algorithms)" rel="noopener noreferrer" target="_blank"
+              >Wikipedia — Master theorem</a>
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#algorithms">← All concepts</a>
+        <a class="next" href="divide-conquer.html">Related: Divide &amp; conquer →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
+    <script src="../js/recurrences.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

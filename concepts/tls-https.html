@@ -77,12 +77,20 @@
       <div class="concept-body">
         <p>
           <strong>TLS</strong> encrypts a TCP connection after a handshake that
-          agrees on keys and authenticates the server.
+          agrees on keys and authenticates the server (via a
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Signed document binding a public key to a hostname/identity"
+            data-def="Signed document binding a public key to a hostname/identity"
+            >certificate</abbr
+          >).
           <strong>HTTPS</strong> is just
           <a class="concept-link" href="http.html">HTTP</a>
           riding that tunnel—same methods and status codes, private on the wire.
-          Contrast plaintext HTTP below; related:
-          <a class="concept-link" href="encryption.html">encryption</a>,
+          TLS is the protocol; 
+          <a class="concept-link" href="encryption.html">encryption</a>
+          is the broader primitive it uses. Related:
           <a class="concept-link" href="tcp-udp.html">TCP</a>,
           <a class="concept-link" href="sockets.html">sockets</a>.
         </p>
@@ -206,6 +214,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/tls-https.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

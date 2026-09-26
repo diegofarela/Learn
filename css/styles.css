@@ -11958,6 +11958,72 @@ button.vm-page {
   color: var(--muted);
 }
 
+/* —— Clarity: aliases + not-to-be-confused —— */
+.aka {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.65rem;
+  margin: 0.35rem 0 1.1rem;
+  padding: 0.55rem 0.75rem;
+  border-left: 3px solid color-mix(in srgb, var(--accent) 55%, transparent);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: var(--ink);
+}
+
+.aka-label {
+  flex: 0 0 auto;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.aka-list {
+  color: var(--ink);
+}
+
+.aka-term {
+  font-weight: 600;
+}
+
+.confused {
+  margin: 1.75rem 0 1.35rem;
+  padding: 1rem 0 0;
+  border-top: 1px solid var(--line);
+}
+
+.confused > h2 {
+  margin: 0 0 0.65rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.confused-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.confused-list > li {
+  margin: 0 0 0.7rem;
+  padding: 0;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+.confused-list > li:last-child {
+  margin-bottom: 0;
+}
+
+.confused-list .concept-link,
+.confused-list .term {
+  font-weight: 650;
+}
+
 /* ===== Discrete math & probability labs ===== */
 .ind-lab,
 .srf-lab,
@@ -15972,3 +16038,361 @@ button.vm-page {
   }
 }
 
+
+
+/* —— MSCS foundation labs + readiness path —— */
+.learn-path {
+  margin: 0 0 2.5rem;
+  scroll-margin-top: 5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.path-blurb {
+  margin: 0 0 1.1rem;
+  max-width: 42rem;
+  color: var(--muted);
+  font-size: 0.98rem;
+  line-height: 1.5;
+}
+
+.path-stages {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1.1rem;
+}
+
+.path-stage-name {
+  margin: 0 0 0.45rem;
+  font-size: 0.95rem;
+  font-weight: 650;
+}
+
+.path-concept-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.55rem;
+}
+
+.path-concept-list a,
+.path-concept-list .soon .name {
+  display: inline-block;
+  padding: 0.28rem 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 0.35rem;
+  font-size: 0.82rem;
+  color: var(--ink);
+  text-decoration: none;
+  background: color-mix(in srgb, var(--stage-mid, #121820) 55%, transparent);
+}
+
+.path-concept-list a:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.path-concept-list .soon .name {
+  opacity: 0.55;
+}
+
+.pt-lab,
+.ture-lab,
+.rec-lab,
+.bayes-lab,
+.var-lab,
+.rand-lab,
+.mc-lab,
+.eig-lab,
+.sl-lab,
+.ent-lab {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin: 1.5rem 0 2rem;
+}
+
+@media (min-width: 900px) {
+  .pt-lab,
+  .ture-lab,
+  .rec-lab,
+  .bayes-lab,
+  .var-lab,
+  .rand-lab,
+  .mc-lab,
+  .eig-lab,
+  .sl-lab,
+  .ent-lab {
+    grid-template-columns: 1.05fr 1fr;
+    align-items: stretch;
+  }
+  .pt-lab .viz-stage,
+  .ture-lab .viz-stage,
+  .rec-lab .viz-stage,
+  .bayes-lab .viz-stage,
+  .var-lab .viz-stage,
+  .rand-lab .viz-stage,
+  .mc-lab .viz-stage,
+  .eig-lab .viz-stage,
+  .sl-lab .viz-stage,
+  .ent-lab .viz-stage {
+    margin: 0;
+    height: 100%;
+  }
+}
+
+.pt-modes,
+.rec-picks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.pt-steps {
+  margin: 0.75rem 0 0;
+  padding-left: 1.15rem;
+}
+
+.pt-step {
+  margin: 0.35rem 0;
+  opacity: 0.45;
+}
+
+.pt-step.is-done {
+  opacity: 0.75;
+}
+
+.pt-step.is-active {
+  opacity: 1;
+  font-weight: 650;
+  color: var(--accent);
+}
+
+.pt-badge,
+.ture-badge,
+.rec-badge,
+.bayes-badge,
+.var-badge,
+.rand-badge,
+.mc-badge,
+.eig-badge,
+.sl-badge,
+.ent-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.ture-tape {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+  margin: 0.75rem 0;
+}
+
+.ture-cell {
+  width: 2.1rem;
+  height: 2.1rem;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 0.35rem;
+  font-family: ui-monospace, monospace;
+  font-weight: 650;
+}
+
+.ture-cell.is-head {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+
+.ture-input-label,
+.bayes-slider-label,
+.var-slider-label,
+.eig-slider-label,
+.sl-slider-label,
+.ent-slider-label {
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.ture-input-label input,
+.bayes-slider-label input,
+.var-slider-label input,
+.eig-slider-label input,
+.sl-slider-label input,
+.ent-slider-label input[type="range"] {
+  width: 100%;
+  accent-color: var(--accent);
+}
+
+.ture-state {
+  margin: 0.35rem 0 0;
+  font-family: ui-monospace, monospace;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.rec-tree {
+  display: grid;
+  gap: 0.4rem;
+  margin-top: 0.85rem;
+}
+
+.rec-level {
+  padding: 0.45rem 0.65rem;
+  border-radius: 0.4rem;
+  border: 1px solid var(--line);
+  font-family: ui-monospace, monospace;
+  font-size: 0.85rem;
+  background: color-mix(in srgb, var(--accent) calc(8% + var(--i, 0) * 3%), transparent);
+}
+
+.bayes-pop {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  min-height: 5rem;
+  margin: 0.75rem 0 0.35rem;
+}
+
+.bayes-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #6b7280;
+}
+
+.bayes-dot.is-tp { background: #34d399; }
+.bayes-dot.is-fp { background: #f87171; }
+.bayes-dot.is-fn { background: #fbbf24; }
+.bayes-dot.is-tn { background: #64748b; opacity: 0.45; }
+
+.var-bars {
+  display: grid;
+  gap: 0.35rem;
+  margin: 0.75rem 0;
+  min-height: 4rem;
+}
+
+.var-bar-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.5rem;
+  align-items: center;
+  font-size: 0.75rem;
+  font-family: ui-monospace, monospace;
+}
+
+.var-bar-fill {
+  height: 0.55rem;
+  border-radius: 999px;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 70%, transparent), var(--accent));
+}
+
+.rand-arr {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0.75rem 0;
+}
+
+.rand-cell {
+  min-width: 2.2rem;
+  padding: 0.45rem 0.35rem;
+  text-align: center;
+  border: 1px solid var(--line);
+  border-radius: 0.35rem;
+  font-family: ui-monospace, monospace;
+  font-weight: 650;
+}
+
+.rand-cell.is-pivot {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+}
+
+.rand-cell.is-done {
+  opacity: 0.4;
+}
+
+.mc-graph {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  margin: 0.75rem 0;
+}
+
+.mc-node {
+  padding: 0.75rem 0.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--line);
+  text-align: center;
+  background: color-mix(in srgb, var(--accent) calc(var(--p, 0) * 55%), transparent);
+}
+
+.mc-node strong {
+  display: block;
+  font-size: 0.9rem;
+}
+
+.mc-node span {
+  font-size: 0.78rem;
+  color: var(--muted);
+  font-family: ui-monospace, monospace;
+}
+
+.mc-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.45rem;
+  height: 4.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.mc-bar {
+  flex: 1;
+  border-radius: 0.25rem 0.25rem 0 0;
+  background: var(--accent);
+  min-height: 4px;
+}
+
+.eig-canvas,
+.sl-canvas {
+  width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--stage-deep, #050b10) 80%, transparent);
+  margin-top: 0.65rem;
+}
+
+.ent-chart {
+  width: 100%;
+  margin-top: 0.65rem;
+}
+
+.ent-curve {
+  stroke: var(--accent);
+  stroke-width: 2;
+}
+
+.ent-dot {
+  fill: var(--accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ture-cell.is-head,
+  .rand-cell.is-pivot,
+  .pt-step.is-active {
+    transition: none;
+  }
+}

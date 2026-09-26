@@ -76,14 +76,38 @@
 
       <div class="concept-body">
         <p>
-          <strong>Virtual memory</strong> gives each process a private address
-          space of <em>pages</em>. The OS + MMU map those pages onto
-          <em>physical frames</em> in RAM. Touch a page that isn’t mapped → a
-          <strong>page fault</strong>; the OS loads or allocates a frame. See also
+          <strong>Virtual memory</strong> gives each
+          <a class="concept-link" href="os-processes.html">process</a>
+          a private address space of
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Virtual page — fixed-size chunk of a process’s address space (not a physical RAM slot)"
+            data-def="Virtual page — fixed-size chunk of a process’s address space (not a physical RAM slot)"
+            >pages</abbr
+          >.
+          The OS +
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Memory Management Unit — hardware that translates virtual addresses to physical ones"
+            data-def="Memory Management Unit — hardware that translates virtual addresses to physical ones"
+            >MMU</abbr
+          >
+          map those pages onto
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Physical frame — a page-sized slot of real RAM that a virtual page can map into"
+            data-def="Physical frame — a page-sized slot of real RAM that a virtual page can map into"
+            >physical frames</abbr
+          >
+          in RAM. Touch a page that isn’t mapped → a
+          <strong>page fault</strong>; the OS loads or allocates a frame. Program
+          <a class="concept-link" href="memory-pointers.html">pointers</a>
+          hold these virtual addresses. See also
           <a class="concept-link" href="caching.html">caching</a>
-          (another hierarchy layer) and
-          <a class="concept-link" href="os-processes.html">OS processes</a>
-          (each gets its own address space).
+          (another hierarchy layer).
         </p>
 
         <div class="vm-lab">
@@ -249,6 +273,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/virtual-memory.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Randomized algorithms — Learn</title>
+    <meta name="description" content="Randomized algorithms: Monte Carlo vs Las Vegas, with a live quicksort pivot demo." />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#algorithms">Algorithms</a>
+      </p>
+      <h1>Randomized algorithms</h1>
+      <p class="concept-meta">
+        <span class="tag">Algorithms</span>
+        <span>Las Vegas · Monte Carlo · pivots</span>
+        <span class="meta-size">pivots <strong id="rand-meta">0</strong></span>
+      </p>
+
+      <div class="concept-body">
+        <p>
+          <strong>Randomized algorithms</strong> flip coins inside the code.
+          <em>Las Vegas</em> always correct, runtime random (randomized quicksort);
+          <em>Monte Carlo</em> may err with small probability (some fingerprinting).
+          Analysis uses
+          <a class="concept-link" href="expectation.html">expectation</a>
+          and
+          <a class="concept-link" href="variance-concentration.html">concentration</a>.
+        </p>
+
+        <div class="rand-lab">
+          <div class="viz viz-stage" aria-labelledby="rand-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="rand-viz-title">Random pivot · partition</p>
+              <span class="rand-badge" id="rand-badge">ready</span>
+            </div>
+            <p class="viz-hint">Step partitions around a random pivot · watch recursion sizes</p>
+            <div id="rand-arr" class="rand-arr" role="img" aria-label="Array being partitioned"></div>
+            <div class="viz-controls">
+              <button type="button" class="viz-btn viz-btn-primary" id="rand-step">Step</button>
+              <button type="button" class="viz-btn" id="rand-reshuffle">New array</button>
+              <button type="button" class="viz-btn viz-btn-ghost" id="rand-reset">Reset</button>
+            </div>
+            <p class="viz-live" id="rand-status" aria-live="polite"></p>
+          </div>
+          <aside class="code-panel" aria-labelledby="rand-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="rand-code-title">Idea</p>
+              <span class="code-panel-lang">pseudocode</span>
+            </div>
+            <pre class="code-panel-body" id="rand-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="rand-code-note">Expected comparisons ~ O(n log n) with random pivots.</p>
+          </aside>
+        </div>
+
+        <h2>Why randomize?</h2>
+        <p>
+          Foil worst-case inputs, simplify algorithms, and get good
+          <em>expected</em> bounds. Hashing with random functions is the same
+          spirit as
+          <a class="concept-link" href="hash-tables.html">hash tables</a>.
+        </p>
+        <h2>Analysis habit</h2>
+        <p>
+          Indicator variables + linearity of expectation beat expanding the full
+          joint. High-probability claims need concentration inequalities.
+        </p>
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Randomized_algorithm">
+            <p>
+              “A randomized algorithm is an algorithm that employs a degree of
+              randomness as part of its logic or procedure.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a href="https://en.wikipedia.org/wiki/Randomized_algorithm" rel="noopener noreferrer" target="_blank"
+              >Wikipedia — Randomized algorithm</a>
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#algorithms">← All concepts</a>
+        <a class="next" href="sorting.html">Related: Sorting →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
+    <script src="../js/randomized-algorithms.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

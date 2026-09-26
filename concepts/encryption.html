@@ -77,8 +77,25 @@
       <div class="concept-body">
         <p>
           <strong>Encryption</strong> turns readable
-          <em>plaintext</em> into unreadable <em>ciphertext</em> using a key;
-          decryption reverses it. This page uses a toy
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Readable data before encryption (or after decryption)"
+            data-def="Readable data before encryption (or after decryption)"
+            >plaintext</abbr
+          >
+          into unreadable
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Data after encryption — unreadable without the key"
+            data-def="Data after encryption — unreadable without the key"
+            >ciphertext</abbr
+          >
+          using a key; decryption reverses it. Unlike
+          <a class="concept-link" href="encoding.html">encoding</a>
+          (Base64, UTF-8), encryption hides data—you need the key. This page uses
+          a toy
           <strong>Caesar cipher</strong> so you can see the steps—real systems
           use AES, ChaCha, RSA, and friends. Contrast
           <a class="concept-link" href="hashing-crypto.html">cryptographic hashing</a>
@@ -214,6 +231,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/encryption.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>

@@ -68,9 +68,22 @@
       <div class="concept-body">
         <p>
           <strong>Endianness</strong> is the order of bytes in a multi-byte
-          word;
-          <strong>alignment</strong> inserts padding so fields sit on natural
-          boundaries. Both matter for
+          <abbr
+            class="term"
+            tabindex="0"
+            title="CPU’s natural chunk size (often 32 or 64 bits)"
+            data-def="CPU’s natural chunk size (often 32 or 64 bits)"
+            >word</abbr
+          >;
+          <strong>alignment</strong> inserts
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Unused bytes inserted to satisfy alignment or layout rules"
+            data-def="Unused bytes inserted to satisfy alignment or layout rules"
+            >padding</abbr
+          >
+          so fields sit on natural boundaries. Both matter for
           <a class="concept-link" href="memory-pointers.html">memory layouts</a>,
           <a class="concept-link" href="tcp-udp.html">network byte order</a>
           (big-endian), and
@@ -202,6 +215,10 @@
     <script src="../js/theme.js"></script>
     <script src="../js/side-nav.js"></script>
     <script src="../js/endianness-alignment.js"></script>
+    <script src="../js/clarity-meta.js"></script>
+    <script src="../js/glossary.js"></script>
+    <script src="../js/clarity.js"></script>
+    <script src="../js/termify.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>
 </html>
