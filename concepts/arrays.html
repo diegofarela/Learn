@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Arrays — Learn</title>
+    <meta
+      name="description"
+      content="Arrays: contiguous slots and O(1) index access. Read, write, append, and resize while watching matching C code light up."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#data-structures">Data structures</a>
+      </p>
+      <h1>Arrays</h1>
+      <p class="concept-meta">
+        <span class="tag">Data structures</span>
+        <span>
+          contiguous · index access ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Constant time — address is base + index × element size"
+            data-def="Constant time — address is base + index × element size"
+            >O(1)</abbr
+          >
+          access
+        </span>
+        <span class="meta-size"
+          >len <strong id="array-len">4</strong> · cap
+          <strong id="array-cap">6</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          An <strong>array</strong> packs elements into
+          <em>contiguous</em> memory slots. Given a base address and an index,
+          the machine jumps straight to that cell—
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Constant time — cost does not grow with array length"
+            data-def="Constant time — cost does not grow with array length"
+            >O(1)</abbr
+          >
+          random access. That speed is why arrays back
+          <a class="concept-link" href="stack.html">stacks</a>, strings, and
+          most “lists” you meet in practice.
+        </p>
+
+        <div class="array-lab">
+          <div class="viz viz-stage" aria-labelledby="array-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="array-viz-title">Live memory strip</p>
+            </div>
+            <p class="viz-hint">
+              Indexed cells · O(1) jump · append may trigger a resize
+            </p>
+            <div class="array-stage" role="presentation">
+              <div class="array-stage-glow" aria-hidden="true"></div>
+              <div class="array-base" aria-hidden="true">
+                <span class="array-base-label">base</span>
+              </div>
+              <div
+                id="array-strip"
+                class="array-strip"
+                role="img"
+                aria-live="polite"
+                aria-label="Contiguous array cells with indices"
+              ></div>
+            </div>
+            <div class="viz-controls array-controls">
+              <label class="array-field">
+                <span class="array-field-label">i</span>
+                <input
+                  id="array-index"
+                  type="number"
+                  min="0"
+                  max="7"
+                  value="1"
+                  aria-label="Index for read or write"
+                />
+              </label>
+              <button type="button" class="viz-btn viz-btn-primary" data-array-action="read">
+                Read
+              </button>
+              <button type="button" class="viz-btn" data-array-action="write">
+                Write
+              </button>
+              <button type="button" class="viz-btn" data-array-action="append">
+                Append
+              </button>
+              <button type="button" class="viz-btn" data-array-action="resize">
+                Resize
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-array-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="array-status" aria-live="polite">
+              Four slots filled. Read index 1 — watch the O(1) jump.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="array-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="array-code-title">Executing</p>
+              <span class="code-panel-lang">C · dynamic array</span>
+            </div>
+            <pre class="code-panel-body" id="array-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="array-code-note">
+              Press <strong>Read</strong>, <strong>Write</strong>,
+              <strong>Append</strong>, or <strong>Resize</strong> — matching C
+              steps light up.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Contiguous memory</h2>
+        <p>
+          Elements sit back-to-back. Address of index
+          <code>i</code> is
+          <code>base + i × sizeof(element)</code>—no chasing pointers. Cache
+          lines love this layout; locality is why array scans feel cheap.
+        </p>
+
+        <h2>Indexing</h2>
+        <p>
+          An index is just an offset. Valid range is
+          <code>0 … len − 1</code>. Out of bounds is undefined in raw C—the
+          demo aborts with a bounds check so you can see the guard fire.
+        </p>
+
+        <h2>Fixed vs dynamic</h2>
+        <p>
+          A fixed array has a compile-time capacity. A dynamic array (vector,
+          <code>ArrayList</code>, growable buffer) keeps a separate
+          <code>len</code> and <code>cap</code>. When append would overflow,
+          allocate a larger block, copy, free the old—amortized
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Amortized constant — occasional O(n) resize spreads over many cheap appends"
+            data-def="Amortized constant — occasional O(n) resize spreads over many cheap appends"
+            >O(1)</abbr
+          >
+          append.
+        </p>
+
+        <h2>Time costs</h2>
+        <ul class="op-list">
+          <li>
+            <code>get(i)</code>
+            <span>read by index</span>
+            <span class="op-cost">O(1)</span>
+          </li>
+          <li>
+            <code>set(i, x)</code>
+            <span>overwrite a slot</span>
+            <span class="op-cost">O(1)</span>
+          </li>
+          <li>
+            <code>append(x)</code>
+            <span>add at the end (may resize)</span>
+            <span class="op-cost">amortized O(1)</span>
+          </li>
+          <li>
+            <code>insert(mid)</code>
+            <span>shift elements right</span>
+            <span class="op-cost">O(n)</span>
+          </li>
+          <li>
+            <code>delete(mid)</code>
+            <span>shift elements left</span>
+            <span class="op-cost">O(n)</span>
+          </li>
+        </ul>
+
+        <h2>Where arrays show up</h2>
+        <ul>
+          <li>
+            <strong>Strings &amp; buffers</strong> — text and binary blobs as
+            contiguous bytes
+          </li>
+          <li>
+            <strong
+              ><a class="concept-link" href="stack.html">Stacks</a> &amp;
+              queues</strong
+            >
+            — array-backed with a moving index or two
+          </li>
+          <li>
+            <strong>Lookup tables</strong> — map a small integer key to a value
+          </li>
+          <li>
+            <strong>Matrices &amp; images</strong> — 2D layouts flattened into
+            1D storage
+          </li>
+          <li>
+            <strong>Heaps &amp; hash tables</strong> — often built on arrays
+            under the hood
+          </li>
+        </ul>
+
+        <p>
+          Need cheap inserts at the front, or don’t know a max size up front?
+          Compare with a
+          <a class="concept-link" href="linked-lists.html">linked list</a>—nodes
+          and pointers instead of one contiguous block.
+        </p>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Array_(data_structure)">
+            <p>
+              “In computer science, an array is a data structure consisting of a
+              collection of elements (values or variables), of the same memory
+              size, each identified by at least one array index or key, the
+              collection of which may be a tuple, known as an index tuple.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Array_(data_structure)"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Array (data structure)</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#data-structures">← All concepts</a>
+        <a class="next" href="linked-lists.html">Next up: Linked lists →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/arrays.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

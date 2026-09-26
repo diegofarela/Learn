@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Cryptographic hashing — Learn</title>
+    <meta
+      name="description"
+      content="Cryptographic hashing: input → fixed digest. Edit one character and watch the avalanche effect (SHA-256 when available)."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#security">Security basics</a>
+      </p>
+      <h1>Cryptographic hashing</h1>
+      <p class="concept-meta">
+        <span class="tag">Security</span>
+        <span>
+          one-way · fixed digest ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="A tiny input change flips roughly half the output bits — digests look unrelated"
+            data-def="A tiny input change flips roughly half the output bits — digests look unrelated"
+            >avalanche</abbr
+          >
+        </span>
+        <span class="meta-size"
+          ><strong id="hash-algo-label">SHA-256</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          A <strong>cryptographic hash</strong> maps arbitrary input to a fixed-size
+          <em>digest</em>. It is designed to be one-way and collision-resistant—not
+          the same as a
+          <a class="concept-link" href="hash-tables.html">hash table</a>
+          hash, which only needs to scatter keys into buckets. Pair with
+          <a class="concept-link" href="encryption.html">encryption</a>
+          (reversible with a key) for the full crypto basics picture.
+        </p>
+
+        <div class="hcrypto-lab">
+          <div class="viz viz-stage" aria-labelledby="hcrypto-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="hcrypto-viz-title">Input → digest</p>
+              <span class="sys-badge" id="hcrypto-badge">ready</span>
+            </div>
+            <p class="viz-hint">
+              Type a message · flip one character to see the avalanche
+            </p>
+            <label class="hcrypto-field">
+              <span class="hcrypto-field-label">message</span>
+              <input
+                id="hcrypto-input"
+                type="text"
+                maxlength="64"
+                value="hello"
+                autocomplete="off"
+                spellcheck="false"
+                aria-label="Message to hash"
+              />
+            </label>
+            <div class="hcrypto-flow" aria-hidden="true">
+              <span class="hcrypto-arrow">→ hash →</span>
+            </div>
+            <div
+              id="hcrypto-digest"
+              class="hcrypto-digest"
+              role="status"
+              aria-live="polite"
+            ></div>
+            <div class="hcrypto-compare" id="hcrypto-compare" hidden>
+              <p class="hcrypto-compare-label">Previous digest (before last edit)</p>
+              <div id="hcrypto-prev" class="hcrypto-digest hcrypto-digest-prev"></div>
+              <p class="hcrypto-diff" id="hcrypto-diff"></p>
+            </div>
+            <div class="viz-controls hcrypto-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-hcrypto-action="hash">
+                Hash
+              </button>
+              <button type="button" class="viz-btn" data-hcrypto-action="flip">
+                Flip 1 char
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-hcrypto-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="hcrypto-status" aria-live="polite">
+              Hash “hello” — then flip one character and watch the digest scramble.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="hcrypto-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="hcrypto-code-title">Executing</p>
+              <span class="code-panel-lang">Web Crypto / demo</span>
+            </div>
+            <pre class="code-panel-body" id="hcrypto-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="hcrypto-code-note">
+              Hash or flip a character — the pipeline highlights.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Not a hash table</h2>
+        <p>
+          Table hashes are fast indexers; crypto hashes are
+          <em>fingerprints</em>. You cannot usefully “invert” SHA-256 to recover
+          the message, and finding two inputs with the same digest should be
+          infeasible. Password stores and integrity checks rely on that.
+        </p>
+
+        <h2>Avalanche</h2>
+        <p>
+          Change one bit of input and roughly half the output bits flip. The demo
+          shows how unrelated digests look after a one-character edit.
+        </p>
+
+        <h2>Related ideas</h2>
+        <ul>
+          <li>
+            <a class="concept-link" href="hash-tables.html">Hash tables</a>
+            — different goal: buckets, not secrecy
+          </li>
+          <li>
+            <a class="concept-link" href="encryption.html">Encryption</a>
+            — reversible confidentiality
+          </li>
+          <li>
+            <a class="concept-link" href="binary-bits.html">Binary &amp; bits</a>
+            — digests are bit strings
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote
+            cite="https://en.wikipedia.org/wiki/Cryptographic_hash_function"
+          >
+            <p>
+              “A cryptographic hash function (CHF) is a hash algorithm (a map of
+              an arbitrary binary string to a binary string with a fixed size of
+              bits) that has special properties desirable for cryptographic
+              applications.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Cryptographic_hash_function"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Cryptographic hash function</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#security">← All concepts</a>
+        <a class="next" href="encryption.html">Next up: Encryption →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/hashing-crypto.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

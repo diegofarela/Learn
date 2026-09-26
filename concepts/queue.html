@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Queue — Learn</title>
+    <meta
+      name="description"
+      content="Queue: first-in, first-out. Enqueue and dequeue on a live conveyor while watching the matching C code execute line by line."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#data-structures">Data structures</a>
+      </p>
+      <h1>Queue</h1>
+      <p class="concept-meta">
+        <span class="tag">Data structures</span>
+        <span>
+          <abbr
+            class="term"
+            tabindex="0"
+            title="First In, First Out — the first item added is the first removed"
+            data-def="First In, First Out — the first item added is the first removed"
+            >FIFO</abbr
+          >
+          · enqueue / dequeue / front ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Constant time — the cost stays about the same as the queue grows"
+            data-def="Constant time — the cost stays about the same as the queue grows"
+            >O(1)</abbr
+          >
+        </span>
+        <span class="meta-size">size <strong id="queue-size">3</strong></span>
+      </p>
+
+      <div class="concept-body">
+        <p>
+          A <strong>queue</strong> is a collection you touch at both ends:
+          <strong>enqueue</strong> adds at the <em>rear</em>,
+          <strong>dequeue</strong> removes from the <em>front</em>. First in is
+          first out—like a line at a ticket window, or the work list behind
+          <a class="concept-link" href="bfs.html">breadth-first search</a>.
+        </p>
+
+        <div class="queue-lab">
+          <div class="viz viz-stage" aria-labelledby="queue-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="queue-viz-title">Live FIFO lane</p>
+              <label class="palette-control">
+                <span class="sr-only">Block colors</span>
+                <select id="queue-palette" aria-label="Block color set">
+                  <option value="ocean">Ocean</option>
+                  <option value="ember">Ember</option>
+                  <option value="mint">Mint</option>
+                  <option value="ink">Ink</option>
+                  <option value="light">Light</option>
+                </select>
+              </label>
+            </div>
+            <p class="viz-hint">Front exits left · rear enters right · buttons drive the C code</p>
+            <div class="queue-stage" role="presentation">
+              <div class="queue-stage-floor" aria-hidden="true"></div>
+              <div class="queue-stage-glow" aria-hidden="true"></div>
+              <div class="queue-lane-marks" aria-hidden="true">
+                <span class="queue-mark queue-mark-front">front</span>
+                <span class="queue-mark queue-mark-rear">rear</span>
+              </div>
+              <div
+                id="queue-3d"
+                class="queue-3d"
+                role="img"
+                aria-live="polite"
+                aria-label="Horizontal queue of colored blocks"
+              ></div>
+            </div>
+            <div class="viz-controls queue-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-queue-action="enqueue">
+                Enqueue
+              </button>
+              <button type="button" class="viz-btn viz-btn-danger" data-queue-action="dequeue">
+                Dequeue
+              </button>
+              <button type="button" class="viz-btn" data-queue-action="front">Front</button>
+              <button type="button" class="viz-btn" data-queue-action="isEmpty">isEmpty</button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-queue-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="queue-status" aria-live="polite">
+              Three blocks in line. Dequeue the front—watch it leave left.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="queue-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="queue-code-title">Executing</p>
+              <span class="code-panel-lang">C · circular array</span>
+            </div>
+            <pre class="code-panel-body" id="queue-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="queue-code-note">
+              Press <strong>Enqueue</strong>, <strong>Dequeue</strong>, or
+              <strong>Front</strong> — each step of the matching C function lights up.
+            </p>
+          </aside>
+        </div>
+
+        <h2>The rule</h2>
+        <p>
+          Access is restricted to opposite ends. That is the whole abstract data
+          type: you never cut the line. Under the hood a queue is often a
+          <a class="concept-link" href="arrays.html">circular array</a>
+          (wrap indices with modulo) or a
+          <a class="concept-link" href="linked-lists.html">linked list</a>
+          (add at the tail, remove at the head)—same FIFO, different guts. The
+          demo on the right is the circular-array version.
+        </p>
+
+        <h2>Operations</h2>
+        <ul class="op-list">
+          <li>
+            <code>enqueue(x)</code>
+            <span>put an item at the rear</span>
+            <span class="op-cost">O(1)</span>
+          </li>
+          <li>
+            <code>dequeue()</code>
+            <span>take the front item off</span>
+            <span class="op-cost">O(1)</span>
+          </li>
+          <li>
+            <code>front()</code>
+            <span>read the front without removing</span>
+            <span class="op-cost">O(1)</span>
+          </li>
+          <li>
+            <code>isEmpty()</code>
+            <span>nothing left to dequeue</span>
+            <span class="op-cost">O(1)</span>
+          </li>
+        </ul>
+
+        <h2>Where queues show up</h2>
+        <ul>
+          <li>
+            <strong
+              ><a class="concept-link" href="bfs.html">Breadth-first search</a></strong
+            >
+            — expand layer by layer; neighbors wait in a queue
+          </li>
+          <li>
+            <strong>Print spooler</strong> — jobs line up; the printer takes the
+            oldest first
+          </li>
+          <li>
+            <strong>Message queues</strong> — producers enqueue work; consumers
+            dequeue it
+          </li>
+          <li>
+            <strong>Event loops</strong> — UI and I/O events wait in order until
+            handled
+          </li>
+          <li>
+            <strong>Task scheduling</strong> — ready processes or requests served
+            FIFO
+          </li>
+        </ul>
+
+        <p>
+          Contrast with a
+          <a class="concept-link" href="stack.html">stack</a>: last in, first
+          out—same “list with rules,” but both ops hit one end instead of opposite
+          ends.
+        </p>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Queue_(abstract_data_type)">
+            <p>
+              “In computer science, a queue is an abstract data type that serves
+              as an ordered collection of entities. By convention, the end of the
+              queue where elements are added is called the back, tail, or rear of
+              the queue. The end of the queue where elements are removed is called
+              the head or front of the queue.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Queue_(abstract_data_type)"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Queue (abstract data type)</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#data-structures">← All concepts</a>
+        <a class="next" href="deque.html">Next up: Deque →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/queue.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

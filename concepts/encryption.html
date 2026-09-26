@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Encryption — Learn</title>
+    <meta
+      name="description"
+      content="Encryption: Caesar cipher toy demo — plaintext to ciphertext with a key. Real systems use AES/RSA."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#security">Security basics</a>
+      </p>
+      <h1>Encryption</h1>
+      <p class="concept-meta">
+        <span class="tag">Security</span>
+        <span>
+          plaintext → ciphertext · key ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Same key encrypts and decrypts — contrast public-key schemes"
+            data-def="Same key encrypts and decrypts — contrast public-key schemes"
+            >symmetric</abbr
+          >
+        </span>
+        <span class="meta-size"
+          >shift <strong id="cipher-shift-label">3</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          <strong>Encryption</strong> turns readable
+          <em>plaintext</em> into unreadable <em>ciphertext</em> using a key;
+          decryption reverses it. This page uses a toy
+          <strong>Caesar cipher</strong> so you can see the steps—real systems
+          use AES, ChaCha, RSA, and friends. Contrast
+          <a class="concept-link" href="hashing-crypto.html">cryptographic hashing</a>
+          (one-way fingerprints, no key to “unlock”).
+        </p>
+
+        <div class="cipher-lab">
+          <div class="viz viz-stage" aria-labelledby="cipher-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="cipher-viz-title">Caesar lock (toy)</p>
+              <span class="sys-badge" id="cipher-badge">plaintext</span>
+            </div>
+            <p class="viz-hint">
+              Shift letters by the key · encrypt / decrypt · not secure in real life
+            </p>
+            <div class="cipher-fields">
+              <label class="cipher-field">
+                <span class="cipher-field-label">plaintext</span>
+                <input
+                  id="cipher-plain"
+                  type="text"
+                  maxlength="40"
+                  value="ATTACK AT DAWN"
+                  autocomplete="off"
+                  spellcheck="false"
+                  aria-label="Plaintext"
+                />
+              </label>
+              <label class="cipher-field cipher-field-key">
+                <span class="cipher-field-label">key (shift)</span>
+                <input
+                  id="cipher-key"
+                  type="number"
+                  min="0"
+                  max="25"
+                  value="3"
+                  aria-label="Caesar shift key"
+                />
+              </label>
+            </div>
+            <div class="cipher-lock" aria-hidden="true">
+              <div class="cipher-lock-body" id="cipher-lock-body">
+                <span class="cipher-lock-shackle"></span>
+                <span class="cipher-lock-label" id="cipher-lock-label">open</span>
+              </div>
+            </div>
+            <div
+              id="cipher-out"
+              class="cipher-out"
+              role="status"
+              aria-live="polite"
+            >
+              —
+            </div>
+            <div class="viz-controls cipher-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-cipher-action="encrypt">
+                Encrypt
+              </button>
+              <button type="button" class="viz-btn" data-cipher-action="decrypt">
+                Decrypt
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-cipher-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="cipher-status" aria-live="polite">
+              Toy Caesar only — production crypto uses AES/RSA with strong keys.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="cipher-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="cipher-code-title">Executing</p>
+              <span class="code-panel-lang">Caesar · toy</span>
+            </div>
+            <pre class="code-panel-body" id="cipher-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="cipher-code-note">
+              Encrypt or decrypt — each letter shift highlights.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Symmetric vs public-key</h2>
+        <p>
+          <strong>Symmetric</strong> schemes (AES) use one shared secret.
+          <strong>Public-key</strong> schemes (RSA, ECC) use a key pair: encrypt
+          with the public key, decrypt with the private. Caesar is a tiny
+          symmetric shift—easy to break by trying 25 keys.
+        </p>
+
+        <h2>Related ideas</h2>
+        <ul>
+          <li>
+            <a class="concept-link" href="hashing-crypto.html">Cryptographic hashing</a>
+            — integrity / fingerprints, not secrecy
+          </li>
+          <li>
+            <a class="concept-link" href="boolean-logic.html">Boolean logic</a>
+            — XOR stream ciphers (another toy model)
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Encryption">
+            <p>
+              “In cryptography, encryption is the process of transforming
+              information in a way that, ideally, only authorized parties can
+              decode. This process converts the original representation of the
+              information, known as plaintext, into an alternative form known as
+              ciphertext.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Encryption"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Encryption</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#security">← All concepts</a>
+        <a class="next" href="hashing-crypto.html">Next up: Cryptographic hashing →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/encryption.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Sorting — Learn</title>
+    <meta
+      name="description"
+      content="Sorting: rearrange values into order. Step through bubble, insertion, and merge sort while watching comparisons and the matching code light up."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#algorithms">Algorithms</a>
+      </p>
+      <h1>Sorting</h1>
+      <p class="concept-meta">
+        <span class="tag">Algorithms</span>
+        <span>
+          rearrange into order · compare by
+          <a class="concept-link" href="big-o.html">growth</a>
+          ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Merge sort is O(n log n); bubble and insertion are O(n²) worst case"
+            data-def="Merge sort is O(n log n); bubble and insertion are O(n²) worst case"
+            >O(n log n)</abbr
+          >
+        </span>
+        <span class="meta-size"
+          >swaps <strong id="sort-swaps">0</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          <strong>Sorting</strong> puts elements into a chosen order—
+          usually ascending numbers. Simple swaps (bubble, insertion) are
+          easy to see but grow
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Cost grows with the square of n"
+            data-def="Cost grows with the square of n"
+            >O(n²)</abbr
+          >
+          in the worst case. Divide-and-conquer merge sort stays
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Cost grows like n times log n"
+            data-def="Cost grows like n times log n"
+            >O(n log n)</abbr
+          >.
+          Compare the curves on
+          <a class="concept-link" href="big-o.html">Big-O</a>; once sorted, you
+          can
+          <a class="concept-link" href="searching.html">search</a>
+          in logarithmic time.
+        </p>
+
+        <div class="sort-lab">
+          <div class="viz viz-stage" aria-labelledby="sort-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="sort-viz-title">Live bar array</p>
+              <span class="sort-phase" id="sort-phase">ready</span>
+            </div>
+            <p class="viz-hint">
+              Pick an algorithm · Step or Play · Shuffle to reshuffle values
+            </p>
+            <div class="sort-stage" role="presentation">
+              <div
+                id="sort-bars"
+                class="sort-bars"
+                role="img"
+                aria-live="polite"
+                aria-label="Bar chart of values being sorted"
+              ></div>
+            </div>
+            <div class="viz-controls sort-controls">
+              <label class="sort-field">
+                <span class="sort-field-label">Algo</span>
+                <select id="sort-algo" aria-label="Sorting algorithm">
+                  <option value="bubble" selected>Bubble</option>
+                  <option value="insertion">Insertion</option>
+                  <option value="merge">Merge</option>
+                </select>
+              </label>
+              <button type="button" class="viz-btn viz-btn-primary" data-sort-action="step">
+                Step
+              </button>
+              <button type="button" class="viz-btn" data-sort-action="play">Play</button>
+              <button type="button" class="viz-btn" data-sort-action="shuffle">
+                Shuffle
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-sort-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="sort-status" aria-live="polite">
+              Ready. Choose an algorithm and step — watch compares and swaps.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="sort-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="sort-code-title">Executing</p>
+              <span class="code-panel-lang" id="sort-code-lang">pseudocode · bubble</span>
+            </div>
+            <pre class="code-panel-body" id="sort-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="sort-code-note">
+              Press <strong>Step</strong> or <strong>Play</strong> — the active
+              line tracks the current compare or swap.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Three strategies</h2>
+        <ul class="op-list">
+          <li>
+            <code>Bubble</code>
+            <span>swap adjacent out-of-order pairs until quiet</span>
+            <span class="op-cost">O(n²)</span>
+          </li>
+          <li>
+            <code>Insertion</code>
+            <span>grow a sorted prefix; slide each new key into place</span>
+            <span class="op-cost">O(n²)</span>
+          </li>
+          <li>
+            <code>Merge</code>
+            <span>split, sort halves, merge sorted runs</span>
+            <span class="op-cost">O(n log n)</span>
+          </li>
+        </ul>
+
+        <h2>Why growth matters</h2>
+        <p>
+          For small <code>n</code>, quadratic sorts feel fine. At thousands of
+          items, the
+          <a class="concept-link" href="big-o.html">O(n²) vs O(n log n)</a>
+          gap dominates. Sorting is also the prep step for binary
+          <a class="concept-link" href="searching.html">search</a>
+          and for many “merge two streams” pipelines.
+        </p>
+
+        <h2>Where sorting shows up</h2>
+        <ul>
+          <li>
+            <strong>User-facing lists</strong> — rank scores, alphabetize names
+          </li>
+          <li>
+            <strong>Databases &amp; indexes</strong> — ordered scans and joins
+          </li>
+          <li>
+            <strong>Graphics / games</strong> — depth order, priority queues
+          </li>
+          <li>
+            <strong>Teaching Big-O</strong> — classic lab for comparing growth
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Sorting_algorithm">
+            <p>
+              “In computer science, a sorting algorithm is an algorithm that
+              puts elements of a list into an order. The most frequently used
+              orders are numerical order and lexicographical order, and either
+              ascending order or descending order. Efficient sorting is
+              important for optimizing the efficiency of other algorithms (such
+              as search and merge algorithms) that require input data to be in
+              sorted lists. Sorting is also often useful for canonicalizing
+              data and for producing human-readable output.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Sorting_algorithm"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Sorting algorithm</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#algorithms">← All concepts</a>
+        <a class="next" href="searching.html">Compare: Searching →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/sorting.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

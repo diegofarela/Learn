@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Object-oriented programming — Learn</title>
+    <meta
+      name="description"
+      content="OOP: classes, objects, inheritance, encapsulation, and polymorphism — interactive Animal → Dog demo."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#programming">Programming models</a>
+      </p>
+      <h1>Object-oriented programming</h1>
+      <p class="concept-meta">
+        <span class="tag">Programming models</span>
+        <span>classes · objects · inheritance</span>
+        <span class="meta-size"
+          >objects <strong id="oop-count">0</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          <strong>Object-oriented programming (OOP)</strong> models software as
+          interacting <em>objects</em>: each bundles data (fields) with behavior
+          (methods). A <strong>class</strong> is the blueprint;
+          <strong>instances</strong> are live objects. Contrast with
+          <a class="concept-link" href="functional.html">functional programming</a>,
+          which emphasizes composing pure functions over mutable objects.
+        </p>
+
+        <div class="oop-lab">
+          <div class="viz viz-stage" aria-labelledby="oop-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="oop-viz-title">Class → objects</p>
+              <span class="sys-badge" id="oop-badge">class</span>
+            </div>
+            <p class="viz-hint">
+              Instantiate dogs · highlight Animal → Dog · call speak()
+            </p>
+            <div class="oop-layout">
+              <div class="oop-tree" id="oop-tree" aria-label="Inheritance tree">
+                <div class="oop-class" data-node="animal" id="oop-animal">
+                  <span class="oop-class-name">Animal</span>
+                  <span class="oop-class-meta">name · speak()</span>
+                </div>
+                <div class="oop-tree-edge" aria-hidden="true"></div>
+                <div class="oop-class oop-class-child" data-node="dog" id="oop-dog">
+                  <span class="oop-class-name">Dog</span>
+                  <span class="oop-class-meta">extends Animal · breed</span>
+                </div>
+              </div>
+              <div
+                class="oop-instances"
+                id="oop-instances"
+                role="img"
+                aria-live="polite"
+                aria-label="Object instances"
+              ></div>
+            </div>
+            <div class="viz-controls oop-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-oop-action="new">
+                New Dog
+              </button>
+              <button type="button" class="viz-btn" data-oop-action="inherit">
+                Highlight inheritance
+              </button>
+              <button type="button" class="viz-btn" data-oop-action="speak">
+                speak()
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-oop-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="oop-status" aria-live="polite">
+              Class Dog extends Animal. Create instances to see fields and methods.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="oop-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="oop-code-title">Executing</p>
+              <span class="code-panel-lang">pseudocode</span>
+            </div>
+            <pre class="code-panel-body" id="oop-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="oop-code-note">
+              Spawn objects — watch the class blueprint light up.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Encapsulation</h2>
+        <p>
+          Fields stay behind the object’s interface. Callers use methods instead of
+          poking at raw state—so you can change internals without breaking clients.
+        </p>
+
+        <h2>Inheritance</h2>
+        <p>
+          A subclass reuses and extends a superclass. <code>Dog</code> inherits
+          <code>name</code> and <code>speak()</code> from <code>Animal</code>, then
+          adds <code>breed</code>. The tree above shows that “is-a” link.
+        </p>
+
+        <h2>Polymorphism</h2>
+        <p>
+          The same message—<code>speak()</code>—can mean different things depending
+          on the runtime type. A <code>Dog</code> may bark while another
+          <code>Animal</code> subclass meows, yet callers treat them uniformly.
+        </p>
+
+        <h2>Related ideas</h2>
+        <ul>
+          <li>
+            <a class="concept-link" href="functional.html">Functional programming</a>
+            — compose functions instead of mutating objects
+          </li>
+          <li>
+            <a class="concept-link" href="variables-types.html">Variables &amp; types</a>
+            — type systems often encode class hierarchies
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Object-oriented_programming">
+            <p>
+              “Object-oriented programming (OOP) is a programming paradigm based
+              on the concept of ‘objects’, which can contain data, in the form of
+              fields, often known as attributes; and code, in the form of
+              procedures, often known as methods.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Object-oriented_programming"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Object-oriented programming</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#programming">← All concepts</a>
+        <a class="next" href="functional.html">Next up: Functional programming →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/oop.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

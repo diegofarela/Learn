@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Greedy — Learn</title>
+    <meta
+      name="description"
+      content="Greedy algorithms: pick the locally best choice each step. Step through US coin change and see when greedy works—and when DP is safer."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#algorithms">Algorithms</a>
+      </p>
+      <h1>Greedy</h1>
+      <p class="concept-meta">
+        <span class="tag">Algorithms</span>
+        <span>
+          local best · commit ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="A choice that looks best right now, without looking ahead"
+            data-def="A choice that looks best right now, without looking ahead"
+            >no undo</abbr
+          >
+        </span>
+        <span class="meta-size">coins <strong id="greedy-coins">0</strong></span>
+      </p>
+
+      <div class="concept-body">
+        <p>
+          A <strong>greedy</strong> algorithm builds a solution by always taking
+          the <em>locally best</em> option and never revisiting that choice. For
+          US coin change, that means “largest denomination that still fits.” On
+          canonical currencies this is optimal; on some coin systems it fails—and
+          <a class="concept-link" href="dynamic-programming.html">dynamic programming</a>
+          is the safe fallback.
+        </p>
+
+        <div class="greedy-lab">
+          <div class="viz viz-stage" aria-labelledby="greedy-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="greedy-viz-title">Coin change · make 41¢</p>
+              <span class="greedy-phase" id="greedy-phase">ready</span>
+            </div>
+            <p class="viz-hint">
+              Step takes the largest US coin ≤ remaining · watch the till fill
+            </p>
+            <div class="greedy-stage" role="presentation">
+              <div class="greedy-remain" aria-labelledby="greedy-remain-label">
+                <p class="greedy-remain-label" id="greedy-remain-label">Remaining</p>
+                <p class="greedy-remain-value">
+                  <strong id="greedy-remain">41</strong><span>¢</span>
+                </p>
+              </div>
+              <div
+                id="greedy-denoms"
+                class="greedy-denoms"
+                role="list"
+                aria-label="Coin denominations"
+              ></div>
+              <div class="greedy-till" aria-labelledby="greedy-till-title">
+                <p class="greedy-till-title" id="greedy-till-title">
+                  Chosen coins
+                </p>
+                <div
+                  id="greedy-chosen"
+                  class="greedy-chosen"
+                  role="list"
+                  aria-label="Greedy coin selection"
+                ></div>
+              </div>
+            </div>
+            <div class="viz-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-greedy-action="step">
+                Step
+              </button>
+              <button type="button" class="viz-btn" data-greedy-action="play">Play</button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-greedy-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="greedy-status" aria-live="polite">
+              Ready. Step to pick the largest coin that fits in 41¢.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="greedy-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="greedy-code-title">Executing</p>
+              <span class="code-panel-lang">C · greedy change</span>
+            </div>
+            <pre class="code-panel-body" id="greedy-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="greedy-code-note">
+              Press <strong>Step</strong> or <strong>Play</strong> — each greedy
+              pick lights up in the loop.
+            </p>
+          </aside>
+        </div>
+
+        <h2>The greedy choice</h2>
+        <p>
+          At every step the algorithm asks only: which legal option looks best
+          <em>right now</em>? For change-making that is the largest coin ≤ remaining
+          amount. For activity selection it is “finish earliest.” There is no
+          search tree and no memo table—just commit and shrink the leftover
+          problem.
+        </p>
+
+        <h2>Sketch of the loop</h2>
+        <ul class="op-list">
+          <li>
+            <code>sort denominations ↓</code>
+            <span>largest first (quarters → pennies)</span>
+          </li>
+          <li>
+            <code>while amount &gt; 0</code>
+            <span>still owe some change</span>
+          </li>
+          <li>
+            <code>take largest coin ≤ amount</code>
+            <span>the greedy choice</span>
+          </li>
+          <li>
+            <code>amount -= coin</code>
+            <span>shrink the leftover</span>
+            <span class="op-cost">O(k)</span>
+          </li>
+        </ul>
+
+        <h2>When greedy fails</h2>
+        <p>
+          US coins are a <em>canonical</em> system: greedy always uses the fewest
+          coins. Try denominations {1, 3, 4} to make 6: greedy takes 4 + 1 + 1
+          (three coins), but 3 + 3 is better. That is where
+          <a class="concept-link" href="dynamic-programming.html">DP</a>
+          (or exhaustive search) earns its keep—optimal substructure without the
+          “local best is global best” guarantee.
+        </p>
+
+        <h2>Where greedy shows up</h2>
+        <ul>
+          <li>
+            <strong>Coin / change systems</strong> — canonical currencies
+          </li>
+          <li>
+            <strong>Activity selection</strong> — schedule the most non-overlapping
+            intervals
+          </li>
+          <li>
+            <strong>Huffman coding</strong> — merge cheapest symbols first
+          </li>
+          <li>
+            <strong>Graph greedies</strong> —
+            <a class="concept-link" href="shortest-paths.html">Dijkstra</a>,
+            <a class="concept-link" href="mst.html">Kruskal / Prim</a>
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Greedy_algorithm">
+            <p>
+              “A greedy algorithm is an algorithm which, at each step, makes the
+              choice that is locally optimal, and subsequently does not
+              reconsider past choices. Greedy algorithms are often used to solve
+              combinatorial optimization problems.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Greedy_algorithm"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Greedy algorithm</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#algorithms">← All concepts</a>
+        <a class="next" href="dynamic-programming.html">Next up: Dynamic programming →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/greedy.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

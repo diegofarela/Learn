@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Union-find — Learn</title>
+    <meta
+      name="description"
+      content="Union-find (disjoint sets): merge components and find roots. Union and Find while parent links and groups update against C code."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#data-structures">Data structures</a>
+      </p>
+      <h1>Union-find</h1>
+      <p class="concept-meta">
+        <span class="tag">Data structures</span>
+        <span>disjoint sets · union by rank · find root</span>
+        <span class="meta-size"
+          >sets <strong id="uf-sets">4</strong> · n
+          <strong id="uf-n">6</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          <strong>Union-find</strong> (a disjoint-set structure) tracks a
+          partition of elements into non-overlapping groups. <em>Find</em>
+          returns the representative (root) of an element’s set;
+          <em>Union</em> merges two sets. That is the engine behind connected
+          components and Kruskal’s MST on
+          <a class="concept-link" href="graphs.html">graphs</a>.
+        </p>
+
+        <div class="uf-lab">
+          <div class="viz viz-stage" aria-labelledby="uf-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="uf-viz-title">Live disjoint-set forest</p>
+            </div>
+            <p class="viz-hint">
+              Color = component · arrows are parent links · roots point to themselves
+            </p>
+            <div class="uf-stage" role="presentation">
+              <svg id="uf-edges" class="uf-edges" aria-hidden="true"></svg>
+              <div
+                id="uf-nodes"
+                class="uf-nodes"
+                role="img"
+                aria-live="polite"
+                aria-label="Union-find elements and parent links"
+              ></div>
+            </div>
+            <p class="uf-parent-row" id="uf-parents" aria-live="polite"></p>
+            <div class="viz-controls uf-controls">
+              <label class="uf-input-wrap">
+                <span class="sr-only">A</span>
+                <input
+                  id="uf-a"
+                  class="uf-input"
+                  type="number"
+                  inputmode="numeric"
+                  min="0"
+                  max="5"
+                  value="1"
+                  aria-label="Element a"
+                />
+              </label>
+              <label class="uf-input-wrap">
+                <span class="sr-only">B</span>
+                <input
+                  id="uf-b"
+                  class="uf-input"
+                  type="number"
+                  inputmode="numeric"
+                  min="0"
+                  max="5"
+                  value="4"
+                  aria-label="Element b"
+                />
+              </label>
+              <button type="button" class="viz-btn viz-btn-primary" data-uf-action="union">
+                Union(a, b)
+              </button>
+              <button type="button" class="viz-btn" data-uf-action="find">
+                Find(a)
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-uf-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="uf-status" aria-live="polite">
+              Seeded forest. Union two elements or Find a root.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="uf-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="uf-code-title">Executing</p>
+              <span class="code-panel-lang">C · union by rank</span>
+            </div>
+            <pre class="code-panel-body" id="uf-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="uf-code-note">
+              Press <strong>Union</strong> or <strong>Find</strong> — parent
+              walks and rank links light up in the C code.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Parent pointers</h2>
+        <p>
+          Each element stores a <strong>parent</strong>. Roots are their own
+          parent. Find climbs to the root; Union links one root under the
+          other. This demo uses <em>union by rank</em> (attach the shallower
+          tree under the taller) so trees stay short. Path compression is
+          omitted so you can see the parent chain clearly.
+        </p>
+
+        <h2>Operations</h2>
+        <ul class="op-list">
+          <li>
+            <code>find(x)</code>
+            <span>walk parents to the root</span>
+            <span class="op-cost">≈ O(α(n))*</span>
+          </li>
+          <li>
+            <code>union(a, b)</code>
+            <span>link roots if different sets</span>
+            <span class="op-cost">≈ O(α(n))*</span>
+          </li>
+          <li>
+            <code>same(a, b)</code>
+            <span>find(a) == find(b)</span>
+            <span class="op-cost">≈ O(α(n))*</span>
+          </li>
+        </ul>
+        <p>
+          *With union-by-rank + path compression, amortized cost is the inverse
+          Ackermann function α(n)—effectively constant.
+        </p>
+
+        <h2>Related ideas</h2>
+        <ul>
+          <li>
+            <a class="concept-link" href="graphs.html">Graphs</a>
+            — connected components via union on edges
+          </li>
+          <li>
+            <a class="concept-link" href="bfs.html">Breadth-first search</a>
+            — another way to find components
+          </li>
+          <li>
+            <a class="concept-link" href="../index.html#algorithms">Minimum spanning trees</a>
+            — Kruskal’s algorithm leans on union-find
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Disjoint-set_data_structure">
+            <p>
+              “In computer science, a disjoint-set data structure, also called a
+              union–find data structure or merge–find set, is a data structure
+              that stores a collection of disjoint (non-overlapping) sets.
+              Equivalently, it stores a partition of a set into disjoint
+              subsets. It provides operations for adding new sets, merging sets
+              (replacing them with their union), and finding a representative
+              member of a set.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Disjoint-set_data_structure"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Disjoint-set data structure</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="priority-queues.html">← Priority queues</a>
+        <a class="next" href="graphs.html">Next up: Graphs →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/union-find.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

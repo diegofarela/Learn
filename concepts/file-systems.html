@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>File systems — Learn</title>
+    <meta
+      name="description"
+      content="File systems: directory tree, inodes, and data blocks — click a file to follow the lookup path."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#systems">Systems</a>
+      </p>
+      <h1>File systems</h1>
+      <p class="concept-meta">
+        <span class="tag">Systems</span>
+        <span>
+          directories ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Inode — metadata record: size, permissions, timestamps, and pointers to data blocks"
+            data-def="Inode — metadata record: size, permissions, timestamps, and pointers to data blocks"
+            >inode</abbr
+          >
+          · blocks
+        </span>
+        <span class="meta-size"
+          >inode <strong id="fs-inode-label">—</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          A <strong>file system</strong> maps names to bytes on disk. Directories
+          store name → inode number; each
+          <em>inode</em> holds metadata and pointers to <em>data blocks</em>.
+          Related:
+          <a class="concept-link" href="virtual-memory.html">virtual memory</a>
+          (pages vs blocks) and
+          <a class="concept-link" href="os-processes.html">OS processes</a>
+          (open file tables).
+        </p>
+
+        <div class="fs-lab">
+          <div class="viz viz-stage" aria-labelledby="fs-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="fs-viz-title">Tree → inode → blocks</p>
+              <span class="sys-badge" id="fs-badge">pick a file</span>
+            </div>
+            <p class="viz-hint">
+              Click a file in the tree · watch the inode and its data blocks light up
+            </p>
+            <div class="fs-layout">
+              <div class="fs-panel">
+                <p class="fs-panel-label">Directory tree</p>
+                <div
+                  id="fs-tree"
+                  class="fs-tree"
+                  role="tree"
+                  aria-label="Directory tree"
+                ></div>
+              </div>
+              <div class="fs-panel">
+                <p class="fs-panel-label">Inode</p>
+                <div
+                  id="fs-inode"
+                  class="fs-inode"
+                  role="img"
+                  aria-live="polite"
+                  aria-label="Selected inode"
+                ></div>
+              </div>
+              <div class="fs-panel">
+                <p class="fs-panel-label">Data blocks</p>
+                <div
+                  id="fs-blocks"
+                  class="fs-blocks"
+                  role="img"
+                  aria-label="Data blocks on disk"
+                ></div>
+              </div>
+            </div>
+            <div class="viz-controls fs-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-fs-action="demo">
+                Demo lookup
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-fs-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="fs-status" aria-live="polite">
+              Select a file to resolve name → inode → blocks.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="fs-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="fs-code-title">Executing</p>
+              <span class="code-panel-lang">lookup · path</span>
+            </div>
+            <pre class="code-panel-body" id="fs-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="fs-code-note">
+              Click a file — path walk and inode read highlight.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Name → inode → blocks</h2>
+        <p>
+          Path components are looked up in directory entries until the final name
+          yields an inode number. The inode’s block pointers (direct, then
+          indirect) locate the file’s bytes on disk—not the path string itself.
+        </p>
+
+        <h2>Related ideas</h2>
+        <ul>
+          <li>
+            <a class="concept-link" href="virtual-memory.html">Virtual memory</a>
+            — another layer of address → storage indirection
+          </li>
+          <li>
+            <a class="concept-link" href="caching.html">Caching</a>
+            — page/buffer cache sits in front of disk blocks
+          </li>
+          <li>
+            <a class="concept-link" href="os-processes.html">OS processes</a>
+            — each process has a table of open file descriptors
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Inode">
+            <p>
+              “The inode (index node) is a data structure in a Unix-style file
+              system that describes a file-system object such as a file or a
+              directory. Each inode stores the attributes and disk block
+              locations of the object's data.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Inode"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Inode</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#systems">← All concepts</a>
+        <a class="next" href="caching.html">Next up: Caching →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/file-systems.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

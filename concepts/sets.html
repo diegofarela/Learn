@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Sets — Learn</title>
+    <meta
+      name="description"
+      content="Sets: unique membership. Add, remove, test Has?, and demo union/intersection on a live membership universe."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#data-structures">Data structures</a>
+      </p>
+      <h1>Sets</h1>
+      <p class="concept-meta">
+        <span class="tag">Data structures</span>
+        <span>
+          unique · membership ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="An element is either in the set or not — never stored twice"
+            data-def="An element is either in the set or not — never stored twice"
+            >no duplicates</abbr
+          >
+        </span>
+        <span class="meta-size">|A| <strong id="set-size">3</strong></span>
+      </p>
+
+      <div class="concept-body">
+        <p>
+          A <strong>set</strong> stores <em>distinct</em> values—membership,
+          not order or multiplicity. Ask “is x in S?”; add and remove change
+          who belongs. Under the hood, languages often implement sets with
+          <a class="concept-link" href="hash-tables.html">hash tables</a>
+          (or trees) so membership stays near constant time.
+        </p>
+
+        <div class="set-lab">
+          <div class="viz viz-stage" aria-labelledby="set-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="set-viz-title">Membership universe</p>
+              <span class="set-op" id="set-op">ready</span>
+            </div>
+            <p class="viz-hint">
+              Add / Remove / Has? · Union &amp; Intersect with set B
+            </p>
+            <div class="set-input-row">
+              <label class="set-field">
+                <span class="sr-only">Element</span>
+                <input
+                  id="set-input"
+                  type="text"
+                  maxlength="6"
+                  placeholder="elem"
+                  autocomplete="off"
+                  spellcheck="false"
+                  aria-label="Element"
+                />
+              </label>
+            </div>
+            <div class="set-boards">
+              <div class="set-board">
+                <p class="set-board-label">Universe · set A</p>
+                <div
+                  id="set-universe"
+                  class="set-universe"
+                  role="img"
+                  aria-live="polite"
+                  aria-label="Universe of elements with membership in set A"
+                ></div>
+              </div>
+              <div class="set-board set-board-b">
+                <p class="set-board-label">Set B (fixed demo)</p>
+                <div id="set-b" class="set-chips" aria-label="Set B elements"></div>
+                <div id="set-result" class="set-result" aria-live="polite"></div>
+              </div>
+            </div>
+            <div class="viz-controls set-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-set-action="add">
+                Add
+              </button>
+              <button type="button" class="viz-btn viz-btn-danger" data-set-action="remove">
+                Remove
+              </button>
+              <button type="button" class="viz-btn" data-set-action="has">Has?</button>
+              <button type="button" class="viz-btn" data-set-action="union">Union</button>
+              <button type="button" class="viz-btn" data-set-action="intersect">
+                Intersect
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-set-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="set-status" aria-live="polite">
+              Set A starts with a, b, c. Try Add with a duplicate—it stays unique.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="set-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="set-code-title">Executing</p>
+              <span class="code-panel-lang">C · set ops</span>
+            </div>
+            <pre class="code-panel-body" id="set-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="set-code-note">
+              Press an operation — membership rules and set algebra light up.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Uniqueness</h2>
+        <p>
+          Adding an element that is already present does nothing to the
+          cardinality. Sets answer membership, not “how many times.” That is
+          the difference from a list or multiset.
+        </p>
+
+        <h2>Union &amp; intersection</h2>
+        <p>
+          <strong>Union</strong> A ∪ B is everything in A or B (still unique).
+          <strong>Intersection</strong> A ∩ B is only what appears in both.
+          Those are the algebra of sets—same ideas as in discrete math.
+        </p>
+
+        <h2>Related ideas</h2>
+        <ul>
+          <li>
+            <a class="concept-link" href="hash-tables.html">Hash tables</a>
+            — common backing store for membership
+          </li>
+          <li>
+            <a class="concept-link" href="maps.html">Maps / dictionaries</a>
+            — key→value; a set is like keys only
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote
+            cite="https://en.wikipedia.org/wiki/Set_(abstract_data_type)"
+          >
+            <p>
+              “In computer science, a set is an abstract data type that can
+              store distinct values, without any particular order. It is a
+              computer implementation of the mathematical concept of a finite
+              set. Unlike most other collection types, rather than retrieving a
+              specific element from a set, one typically tests a value for
+              membership in a set.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Set_(abstract_data_type)"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Set (abstract data type)</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#data-structures">← All concepts</a>
+        <a class="next" href="maps.html">Next up: Maps / dictionaries →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/sets.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>CPU scheduling — Learn</title>
+    <meta
+      name="description"
+      content="CPU scheduling: compare FCFS vs Round Robin on a Gantt-style timeline for four jobs."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#systems">Systems</a>
+      </p>
+      <h1>CPU scheduling</h1>
+      <p class="concept-meta">
+        <span class="tag">Systems</span>
+        <span>
+          FCFS ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Round Robin — each ready job gets a fixed time quantum, then yields"
+            data-def="Round Robin — each ready job gets a fixed time quantum, then yields"
+            >Round Robin</abbr
+          >
+          · quantum
+        </span>
+        <span class="meta-size"
+          >avg wait <strong id="sched-wait">—</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          The <strong>scheduler</strong> picks which ready
+          <a class="concept-link" href="os-processes.html">process</a>
+          (or
+          <a class="concept-link" href="threads-processes.html">thread</a>)
+          runs next on the CPU.
+          <strong>FCFS</strong> runs jobs to completion in arrival order;
+          <strong>Round Robin</strong> slices time into a quantum so no job
+          monopolizes the CPU. Both feed the same ready
+          <a class="concept-link" href="queue.html">queue</a>
+          idea—different selection rules.
+        </p>
+
+        <div class="sched-lab">
+          <div class="viz viz-stage" aria-labelledby="sched-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="sched-viz-title">Gantt timeline</p>
+              <span class="sys-badge" id="sched-badge">FCFS</span>
+            </div>
+            <p class="viz-hint">
+              Four jobs · toggle FCFS vs Round Robin (quantum = 2)
+            </p>
+            <div class="sched-jobs" id="sched-jobs" aria-label="Job table"></div>
+            <div
+              id="sched-gantt"
+              class="sched-gantt"
+              role="img"
+              aria-live="polite"
+              aria-label="Gantt chart of CPU schedule"
+            ></div>
+            <div class="viz-controls sched-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-sched-action="fcfs">
+                FCFS
+              </button>
+              <button type="button" class="viz-btn" data-sched-action="rr">
+                Round Robin
+              </button>
+              <button type="button" class="viz-btn" data-sched-action="play">
+                Animate
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-sched-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="sched-status" aria-live="polite">
+              FCFS: run each job to completion in arrival order.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="sched-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="sched-code-title">Executing</p>
+              <span class="code-panel-lang">scheduler</span>
+            </div>
+            <pre class="code-panel-body" id="sched-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="sched-code-note">
+              Choose a policy — the selection loop highlights.
+            </p>
+          </aside>
+        </div>
+
+        <h2>FCFS</h2>
+        <p>
+          <strong>First-come, first-served</strong> is simple and fair in arrival
+          order, but a long job at the head can make short jobs wait
+          (<em>convoy effect</em>).
+        </p>
+
+        <h2>Round Robin</h2>
+        <p>
+          Each job gets up to <em>q</em> time units, then goes to the back of the
+          ready queue. Smaller <em>q</em> feels more interactive; larger
+          <em>q</em> approaches FCFS with less context-switch overhead.
+        </p>
+
+        <h2>Related ideas</h2>
+        <ul>
+          <li>
+            <a class="concept-link" href="os-processes.html">OS processes</a>
+            — ready ↔ running transitions
+          </li>
+          <li>
+            <a class="concept-link" href="queue.html">Queue</a>
+            — the ready list
+          </li>
+          <li>
+            <a class="concept-link" href="synchronization.html">Synchronization</a>
+            — when waiting jobs unblock
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Scheduling_(computing)">
+            <p>
+              “In computing, scheduling is the action of assigning resources to
+              perform tasks. The resources may be processors, network links or
+              expansion cards. The tasks may be threads, processes or data flows.
+              The scheduling activity is carried out by a process called a
+              scheduler.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Scheduling_(computing)"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Scheduling (computing)</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#systems">← All concepts</a>
+        <a class="next" href="caching.html">Next up: Caching →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/scheduling.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

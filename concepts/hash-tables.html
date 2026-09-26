@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Hash tables — Learn</title>
+    <meta
+      name="description"
+      content="Hash tables: key → bucket via a hash function. Insert, lookup, and delete while watching collisions chain and the matching C code light up."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#data-structures">Data structures</a>
+      </p>
+      <h1>Hash tables</h1>
+      <p class="concept-meta">
+        <span class="tag">Data structures</span>
+        <span>
+          key → bucket · chaining ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Average constant time — typical cost stays about the same as the table grows"
+            data-def="Average constant time — typical cost stays about the same as the table grows"
+            >avg O(1)</abbr
+          >
+        </span>
+        <span class="meta-size"
+          >load <strong id="hash-load">0.38</strong> · n
+          <strong id="hash-count">3</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          A <strong>hash table</strong> maps keys to values by computing an
+          <em>index</em> into an
+          <a class="concept-link" href="arrays.html">array</a>
+          of <strong>buckets</strong>. Hash the key, land in a slot, store or
+          find the pair there. When two keys land in the same bucket, this demo
+          uses <strong>separate chaining</strong>—a short
+          <a class="concept-link" href="linked-lists.html">linked list</a>
+          hanging off that index.
+        </p>
+
+        <div class="hash-lab">
+          <div class="viz viz-stage" aria-labelledby="hash-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="hash-viz-title">Live hash table</p>
+              <p class="hash-formula" id="hash-formula" aria-live="polite">
+                hash(key) = Σ code(c) % 8
+              </p>
+            </div>
+            <p class="viz-hint">
+              Insert / lookup / delete · watch the hash land in a bucket
+            </p>
+            <div class="hash-input-row">
+              <label class="hash-field">
+                <span class="sr-only">Key</span>
+                <input
+                  id="hash-key"
+                  type="text"
+                  maxlength="8"
+                  placeholder="key"
+                  autocomplete="off"
+                  spellcheck="false"
+                  aria-label="Key"
+                />
+              </label>
+              <label class="hash-field">
+                <span class="sr-only">Value</span>
+                <input
+                  id="hash-val"
+                  type="text"
+                  maxlength="8"
+                  placeholder="value"
+                  autocomplete="off"
+                  spellcheck="false"
+                  aria-label="Value"
+                />
+              </label>
+            </div>
+            <div
+              id="hash-buckets"
+              class="hash-buckets"
+              role="img"
+              aria-live="polite"
+              aria-label="Array of hash buckets with chaining"
+            ></div>
+            <div class="viz-controls hash-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-hash-action="insert">
+                Insert
+              </button>
+              <button type="button" class="viz-btn" data-hash-action="lookup">
+                Lookup
+              </button>
+              <button type="button" class="viz-btn viz-btn-danger" data-hash-action="delete">
+                Delete
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-hash-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="hash-status" aria-live="polite">
+              Three pairs loaded — “ab” and “ba” collide. Try lookup or insert.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="hash-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="hash-code-title">Executing</p>
+              <span class="code-panel-lang">C · chaining</span>
+            </div>
+            <pre class="code-panel-body" id="hash-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="hash-code-note">
+              Press <strong>Insert</strong>, <strong>Lookup</strong>, or
+              <strong>Delete</strong> — each step of the matching function lights
+              up.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Hash function</h2>
+        <p>
+          The <strong>hash function</strong> turns a key into an integer index.
+          A good one spreads keys evenly across buckets. This demo uses a toy
+          sum of character codes modulo bucket count—enough to see the idea,
+          not crypto-strong. Real tables use stronger mixers, but the contract
+          is the same: <code>index = hash(key) % N</code>.
+        </p>
+
+        <h2>Buckets</h2>
+        <p>
+          The underlying store is an
+          <a class="concept-link" href="arrays.html">array</a>
+          of length <em>N</em>. Each slot is a <strong>bucket</strong>. Empty
+          buckets hold nothing; occupied ones hold one or more entries. You never
+          scan the whole array for a key—you jump straight to the hashed index.
+        </p>
+
+        <h2>Collisions</h2>
+        <p>
+          Different keys can hash to the same index. That is a
+          <strong>collision</strong>. With <em>separate chaining</em>, the
+          bucket becomes a
+          <a class="concept-link" href="linked-lists.html">linked list</a>
+          (or similar chain) of key–value pairs. Lookup walks that short chain
+          until it finds a matching key—or runs out.
+        </p>
+
+        <h2>Load factor</h2>
+        <p>
+          <strong>Load factor</strong> α = n / N (entries divided by buckets).
+          As α grows, chains get longer and average cost creeps up. Tables
+          often <em>resize</em> (rehash into a larger array) when α crosses a
+          threshold so operations stay near constant time.
+        </p>
+
+        <h2>Cost</h2>
+        <ul class="op-list">
+          <li>
+            <code>insert / lookup / delete</code>
+            <span>average with a good hash + low load</span>
+            <span class="op-cost">O(1)</span>
+          </li>
+          <li>
+            <code>worst case</code>
+            <span>all keys collide into one long chain</span>
+            <span class="op-cost">O(n)</span>
+          </li>
+        </ul>
+
+        <h2>Related ideas</h2>
+        <ul>
+          <li>
+            <a class="concept-link" href="arrays.html">Arrays</a>
+            — the bucket table itself
+          </li>
+          <li>
+            <a class="concept-link" href="linked-lists.html">Linked lists</a>
+            — chaining inside a bucket
+          </li>
+          <li>
+            <a class="concept-link" href="maps.html">Maps / dictionaries</a>
+            — the ADT hash tables usually implement
+          </li>
+          <li>
+            <a class="concept-link" href="sets.html">Sets</a>
+            — unique membership, often hash-backed
+          </li>
+          <li>
+            <a class="concept-link" href="hashing-crypto.html">Cryptographic hashing</a>
+            — one-way digests (different goal than table hashes)
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Hash_table">
+            <p>
+              “In computer science, a hash table is a data structure that
+              implements an associative array, also called a dictionary or
+              simply map; an associative array is an abstract data type that
+              maps keys to values. A hash table uses a hash function to compute
+              an index, also called a hash code, into an array of buckets or
+              slots, from which the desired value can be found.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Hash_table"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Hash table</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#data-structures">← All concepts</a>
+        <a class="next" href="binary-trees.html">Next up: Binary trees →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/hash-tables.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>OS processes — Learn</title>
+    <meta
+      name="description"
+      content="OS processes: new, ready, running, waiting, terminated — step state transitions on a live diagram."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#systems">Systems</a>
+      </p>
+      <h1>OS processes</h1>
+      <p class="concept-meta">
+        <span class="tag">Systems</span>
+        <span>PCB · states · isolation</span>
+        <span class="meta-size"
+          >state <strong id="proc-state-label">new</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          A <strong>process</strong> is a running program plus its resources:
+          address space, open files, and a
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Process Control Block — kernel record of a process’s state, registers, and accounting"
+            data-def="Process Control Block — kernel record of a process’s state, registers, and accounting"
+            >PCB</abbr
+          >. The kernel moves it through
+          <em>new → ready → running → waiting → terminated</em>. Contrast
+          <a class="concept-link" href="threads-processes.html">threads</a>
+          (share memory inside one process) and
+          <a class="concept-link" href="scheduling.html">CPU scheduling</a>
+          (who leaves ready for running).
+        </p>
+
+        <div class="proc-lab">
+          <div class="viz viz-stage" aria-labelledby="proc-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="proc-viz-title">Process state machine</p>
+              <span class="sys-badge" id="proc-badge">P1 · new</span>
+            </div>
+            <p class="viz-hint">
+              Drive transitions · only legal edges from the current state
+            </p>
+            <div
+              id="proc-diagram"
+              class="proc-diagram"
+              role="img"
+              aria-live="polite"
+              aria-label="Process state diagram"
+            ></div>
+            <div class="viz-controls proc-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-proc-action="admit">
+                Admit
+              </button>
+              <button type="button" class="viz-btn" data-proc-action="dispatch">
+                Dispatch
+              </button>
+              <button type="button" class="viz-btn" data-proc-action="io">
+                I/O wait
+              </button>
+              <button type="button" class="viz-btn" data-proc-action="io-done">
+                I/O done
+              </button>
+              <button type="button" class="viz-btn" data-proc-action="preempt">
+                Interrupt
+              </button>
+              <button type="button" class="viz-btn viz-btn-danger" data-proc-action="exit">
+                Exit
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-proc-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="proc-status" aria-live="polite">
+              Process created (new). Admit it to the ready queue.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="proc-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="proc-code-title">Executing</p>
+              <span class="code-panel-lang">kernel · states</span>
+            </div>
+            <pre class="code-panel-body" id="proc-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="proc-code-note">
+              Press a transition — the matching kernel path highlights.
+            </p>
+          </aside>
+        </div>
+
+        <h2>States</h2>
+        <ul class="op-list">
+          <li>
+            <code>new</code>
+            <span>being created; not yet schedulable</span>
+            <span class="op-cost">create</span>
+          </li>
+          <li>
+            <code>ready</code>
+            <span>waiting for CPU time</span>
+            <span class="op-cost">queue</span>
+          </li>
+          <li>
+            <code>running</code>
+            <span>executing on a CPU</span>
+            <span class="op-cost">CPU</span>
+          </li>
+          <li>
+            <code>waiting</code>
+            <span>blocked on I/O or an event</span>
+            <span class="op-cost">block</span>
+          </li>
+          <li>
+            <code>terminated</code>
+            <span>finished; PCB can be reaped</span>
+            <span class="op-cost">exit</span>
+          </li>
+        </ul>
+
+        <h2>Related ideas</h2>
+        <ul>
+          <li>
+            <a class="concept-link" href="scheduling.html">CPU scheduling</a>
+            — choosing which ready process runs
+          </li>
+          <li>
+            <a class="concept-link" href="threads-processes.html">Threads &amp; processes</a>
+            — lighter units inside a process
+          </li>
+          <li>
+            <a class="concept-link" href="virtual-memory.html">Virtual memory</a>
+            — each process’s address space
+          </li>
+          <li>
+            <a class="concept-link" href="queue.html">Queue</a>
+            — ready list is typically FIFO or priority
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Process_(computing)">
+            <p>
+              “In computing, a process is the instance of a computer program that
+              is being executed by one or many threads. It contains the program
+              code and its activity. Depending on the operating system (OS), a
+              process may be made up of multiple threads of execution that
+              execute instructions concurrently.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Process_(computing)"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Process (computing)</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#systems">← All concepts</a>
+        <a class="next" href="scheduling.html">Next up: CPU scheduling →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/os-processes.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

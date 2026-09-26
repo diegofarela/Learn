@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Tries — Learn</title>
+    <meta
+      name="description"
+      content="Tries (prefix trees): share paths for common prefixes. Insert words and search while the matching path lights up against C code."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#data-structures">Data structures</a>
+      </p>
+      <h1>Tries</h1>
+      <p class="concept-meta">
+        <span class="tag">Data structures</span>
+        <span>prefix tree · char edges · autocomplete</span>
+        <span class="meta-size"
+          >words <strong id="trie-count">4</strong> · nodes
+          <strong id="trie-node-count">0</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          A <strong>trie</strong> (prefix tree) stores strings character by
+          character. Shared prefixes share a path from the root—so
+          <code>cat</code> and <code>car</code> diverge only at the last letter.
+          That makes prefix search and autocomplete natural: walk the prefix,
+          then collect everything below.
+        </p>
+
+        <div class="trie-lab">
+          <div class="viz viz-stage" aria-labelledby="trie-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="trie-viz-title">Live trie</p>
+            </div>
+            <p class="viz-hint">
+              Insert words · search highlights the prefix path · ● marks word ends
+            </p>
+            <div class="trie-stage" role="presentation">
+              <svg id="trie-edges" class="trie-edges" aria-hidden="true"></svg>
+              <div
+                id="trie-nodes"
+                class="trie-nodes"
+                role="img"
+                aria-live="polite"
+                aria-label="Prefix trie as a tree"
+              ></div>
+            </div>
+            <div class="viz-controls trie-controls">
+              <label class="trie-input-wrap">
+                <span class="sr-only">Word</span>
+                <input
+                  id="trie-word"
+                  class="trie-input"
+                  type="text"
+                  maxlength="8"
+                  value="care"
+                  autocomplete="off"
+                  spellcheck="false"
+                  aria-label="Word or prefix"
+                />
+              </label>
+              <button type="button" class="viz-btn viz-btn-primary" data-trie-action="insert">
+                Insert word
+              </button>
+              <button type="button" class="viz-btn" data-trie-action="search">
+                Search
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-trie-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="trie-status" aria-live="polite">
+              Seeded with cat, car, dog, do. Insert a word or search a prefix.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="trie-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="trie-code-title">Executing</p>
+              <span class="code-panel-lang">C · insert / search</span>
+            </div>
+            <pre class="code-panel-body" id="trie-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="trie-code-note">
+              Press <strong>Insert word</strong> or <strong>Search</strong> —
+              each character step lights up in the C code.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Shared prefixes</h2>
+        <p>
+          Unlike a
+          <a class="concept-link" href="bst.html">BST</a>
+          (which stores whole keys in nodes), a trie node’s
+          <em>position</em> is the key so far. Edges are labeled by characters.
+          An end-of-word flag marks complete strings so
+          <code>do</code> can exist alongside <code>dog</code>.
+        </p>
+
+        <h2>Operations</h2>
+        <ul class="op-list">
+          <li>
+            <code>insert(w)</code>
+            <span>walk / create one node per character</span>
+            <span class="op-cost">O(m)</span>
+          </li>
+          <li>
+            <code>search(w)</code>
+            <span>exact word — must end on a word mark</span>
+            <span class="op-cost">O(m)</span>
+          </li>
+          <li>
+            <code>startsWith(p)</code>
+            <span>prefix exists if the path exists</span>
+            <span class="op-cost">O(m)</span>
+          </li>
+        </ul>
+        <p>
+          Here <em>m</em> is the length of the string—not the number of words
+          stored. That independence from dictionary size is why tries shine for
+          dictionaries and autocomplete.
+        </p>
+
+        <h2>Related ideas</h2>
+        <ul>
+          <li>
+            <a class="concept-link" href="hash-tables.html">Hash tables</a>
+            — fast exact lookup, weaker on prefixes
+          </li>
+          <li>
+            <a class="concept-link" href="bst.html">Binary search trees</a>
+            — ordered keys, whole-key comparisons
+          </li>
+          <li>
+            <a class="concept-link" href="dfs.html">Depth-first search</a>
+            — natural way to enumerate words under a prefix
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Trie">
+            <p>
+              “In computer science, a trie (/ˈtraɪ/, /ˈtriː/), also known as a
+              digital tree or prefix tree, is a specialized search tree data
+              structure used to store and retrieve strings from a dictionary or
+              set. Unlike a binary search tree, nodes in a trie do not store
+              their associated key. Instead, each node's position within the
+              trie determines its associated key, with the connections between
+              nodes defined by individual characters rather than the entire
+              key.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Trie"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Trie</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="heaps.html">← Heaps</a>
+        <a class="next" href="balanced-trees.html">Next up: Balanced trees →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/tries.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

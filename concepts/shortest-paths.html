@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Shortest paths — Learn</title>
+    <meta
+      name="description"
+      content="Shortest paths: Dijkstra step-by-step on a weighted graph—distance labels, settled set, and the priority-queue loop."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#algorithms">Algorithms</a>
+      </p>
+      <h1>Shortest paths</h1>
+      <p class="concept-meta">
+        <span class="tag">Algorithms</span>
+        <span>
+          Dijkstra · nonnegative ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Nodes whose final shortest-path distance is known"
+            data-def="Nodes whose final shortest-path distance is known"
+            >settled</abbr
+          >
+        </span>
+        <span class="meta-size">settled <strong id="sp-settled">0</strong>/6</span>
+      </p>
+
+      <div class="concept-body">
+        <p>
+          On an unweighted
+          <a class="concept-link" href="graphs.html">graph</a>,
+          <a class="concept-link" href="bfs.html">BFS</a>
+          already gives fewest edges. With <em>positive edge weights</em>,
+          <strong>Dijkstra</strong> repeatedly settles the unsettled node with
+          the smallest tentative distance, then relaxes its neighbors—often with
+          a
+          <a class="concept-link" href="heaps.html">heap</a>
+          as the priority queue.
+        </p>
+
+        <div class="sp-lab">
+          <div class="viz viz-stage" aria-labelledby="sp-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="sp-viz-title">Dijkstra · from A</p>
+              <span class="sp-phase" id="sp-phase">ready</span>
+            </div>
+            <p class="viz-hint">
+              Labels show best-known distance · gold = settled · Step relaxes edges
+            </p>
+            <div class="sp-stage" role="presentation">
+              <svg id="sp-edges" class="sp-edges" aria-hidden="true"></svg>
+              <div
+                id="sp-nodes"
+                class="sp-nodes"
+                role="img"
+                aria-live="polite"
+                aria-label="Weighted graph for Dijkstra"
+              ></div>
+            </div>
+            <div class="sp-settled-bar" aria-labelledby="sp-settled-title">
+              <p class="sp-settled-title" id="sp-settled-title">
+                Settled set
+              </p>
+              <div
+                id="sp-settled-list"
+                class="sp-settled-list"
+                role="list"
+                aria-label="Settled vertices"
+              ></div>
+            </div>
+            <div class="viz-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-sp-action="step">
+                Step
+              </button>
+              <button type="button" class="viz-btn" data-sp-action="play">Play</button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-sp-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="sp-status" aria-live="polite">
+              Ready. Step to set dist[A] = 0 and begin Dijkstra.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="sp-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="sp-code-title">Executing</p>
+              <span class="code-panel-lang">C · Dijkstra</span>
+            </div>
+            <pre class="code-panel-body" id="sp-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="sp-code-note">
+              Press <strong>Step</strong> or <strong>Play</strong> — pick min,
+              settle, relax light up.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Settle the closest</h2>
+        <p>
+          Start with dist[source] = 0 and ∞ elsewhere. While unsettled nodes
+          remain, pick the one with smallest tentative distance, mark it
+          <em>settled</em> (final), then for each neighbor try
+          <code>dist[u] + w(u,v)</code>. If that improves dist[v], update it.
+          Nonnegative weights guarantee the greedy pick is forever correct.
+        </p>
+
+        <h2>Sketch of the loop</h2>
+        <ul class="op-list">
+          <li>
+            <code>dist[s] = 0</code>
+            <span>all others ∞; none settled</span>
+          </li>
+          <li>
+            <code>u = argmin unsettled dist</code>
+            <span>greedy: closest unsettled</span>
+          </li>
+          <li>
+            <code>settle u</code>
+            <span>distance is final</span>
+          </li>
+          <li>
+            <code>relax edges from u</code>
+            <span>shrink neighbor estimates</span>
+            <span class="op-cost">O((V+E) log V)</span>
+          </li>
+        </ul>
+
+        <h2>Where shortest paths show up</h2>
+        <ul>
+          <li>
+            <strong>Maps &amp; routing</strong> — road networks, packet routes
+          </li>
+          <li>
+            <strong>Unweighted case</strong> —
+            <a class="concept-link" href="bfs.html">BFS</a>
+            is enough (every edge weight 1)
+          </li>
+          <li>
+            <strong>Negative weights</strong> — Bellman–Ford / other methods
+            (not Dijkstra)
+          </li>
+          <li>
+            <strong>Priority queues</strong> —
+            <a class="concept-link" href="heaps.html">heaps</a>
+            keep “closest unsettled” cheap
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm">
+            <p>
+              “Dijkstra's algorithm is an algorithm for finding the shortest
+              paths between nodes in a weighted graph, which may represent, for
+              example, a road network. It was conceived by computer scientist
+              Edsger W. Dijkstra in 1956 and published three years later.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Dijkstra's algorithm</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#algorithms">← All concepts</a>
+        <a class="next" href="mst.html">Next up: Minimum spanning trees →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/shortest-paths.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

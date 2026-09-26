@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>TCP &amp; UDP — Learn</title>
+    <meta
+      name="description"
+      content="TCP vs UDP: handshake and ordered delivery beside fire-and-forget datagrams."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#networks">Networks</a>
+      </p>
+      <h1>TCP &amp; UDP</h1>
+      <p class="concept-meta">
+        <span class="tag">Networks</span>
+        <span>
+          reliable stream · datagram ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Three-way handshake that opens a TCP connection"
+            data-def="Three-way handshake that opens a TCP connection"
+            >handshake</abbr
+          >
+        </span>
+        <span class="meta-size"
+          >step <strong id="tu-meta">0</strong>/6</span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          <strong>TCP</strong> opens a connection, numbers segments, and
+          retransmits until delivery is ordered and complete.
+          <strong>UDP</strong> just ships datagrams—fast, no handshake, no
+          guarantees. Apps sit on
+          <a class="concept-link" href="sockets.html">sockets</a>; the web’s
+          <a class="concept-link" href="http.html">HTTP</a> usually rides TCP.
+        </p>
+
+        <div class="tu-lab">
+          <div class="viz viz-stage" aria-labelledby="tu-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="tu-viz-title">TCP vs UDP</p>
+              <span class="tu-phase" id="tu-phase">idle</span>
+            </div>
+            <p class="viz-hint">
+              Side-by-side: handshake + ordered delivery vs fire-and-forget
+            </p>
+            <div class="tu-stage" role="presentation">
+              <div class="tu-stage-glow" aria-hidden="true"></div>
+              <div class="tu-cols">
+                <section class="tu-col" id="tu-tcp" aria-label="TCP lane">
+                  <h3 class="tu-col-title">TCP</h3>
+                  <div class="tu-hosts">
+                    <span class="tu-host" data-tu-host="tcp-a">A</span>
+                    <div class="tu-wire" id="tu-tcp-wire"></div>
+                    <span class="tu-host" data-tu-host="tcp-b">B</span>
+                  </div>
+                  <div class="tu-packets" id="tu-tcp-pkts"></div>
+                  <p class="tu-col-note" id="tu-tcp-note">connection closed</p>
+                </section>
+                <section class="tu-col" id="tu-udp" aria-label="UDP lane">
+                  <h3 class="tu-col-title">UDP</h3>
+                  <div class="tu-hosts">
+                    <span class="tu-host" data-tu-host="udp-a">A</span>
+                    <div class="tu-wire" id="tu-udp-wire"></div>
+                    <span class="tu-host" data-tu-host="udp-b">B</span>
+                  </div>
+                  <div class="tu-packets" id="tu-udp-pkts"></div>
+                  <p class="tu-col-note" id="tu-udp-note">no session</p>
+                </section>
+              </div>
+            </div>
+            <div class="viz-controls tu-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-tu-action="step">
+                Step
+              </button>
+              <button type="button" class="viz-btn" data-tu-action="play">Play</button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-tu-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="tu-status" aria-live="polite">
+              Ready — press Step to begin the TCP handshake (UDP stays quiet).
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="tu-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="tu-code-title">Wire log</p>
+              <span class="code-panel-lang">transport</span>
+            </div>
+            <pre class="code-panel-body" id="tu-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="tu-code-note">
+              TCP pays for reliability; UDP pays almost nothing.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Trade-offs</h2>
+        <ul class="op-list">
+          <li>
+            <code>TCP</code>
+            <span>handshake, ACK, reorder, retransmit</span>
+            <span class="op-cost">reliable</span>
+          </li>
+          <li>
+            <code>UDP</code>
+            <span>send datagram, hope it arrives</span>
+            <span class="op-cost">best-effort</span>
+          </li>
+          <li>
+            <code>use when</code>
+            <span>files/HTTP vs games/DNS/VoIP</span>
+            <span class="op-cost">choose</span>
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Transmission_Control_Protocol">
+            <p>
+              “The Transmission Control Protocol (TCP) is one of the main
+              protocols of the Internet protocol suite. It originated in the
+              initial network implementation in which it complemented the
+              Internet Protocol (IP). Therefore, the entire suite is commonly
+              referred to as TCP/IP.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Transmission_Control_Protocol"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Transmission Control Protocol</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#networks">← All concepts</a>
+        <a class="next" href="http.html">Related: HTTP →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/tcp-udp.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

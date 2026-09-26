@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>NoSQL models — Learn</title>
+    <meta
+      name="description"
+      content="NoSQL: toggle document, key-value, and graph views of the same data."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#databases">Databases</a>
+      </p>
+      <h1>NoSQL models</h1>
+      <p class="concept-meta">
+        <span class="tag">Databases</span>
+        <span>document · key-value · graph</span>
+        <span class="meta-size"
+          >model <strong id="nosql-meta">document</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          <strong>NoSQL</strong> stores the same facts in shapes other than
+          normalized
+          <a class="concept-link" href="relational.html">tables</a>: nested
+          documents, simple key→value maps, or nodes and edges. Trade schemas
+          and
+          <a class="concept-link" href="transactions.html">ACID</a>
+          strictness for flexibility and scale.
+        </p>
+
+        <div class="nosql-lab">
+          <div class="viz viz-stage" aria-labelledby="nosql-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="nosql-viz-title">Same data, three shapes</p>
+              <div class="nosql-toggle" role="group" aria-label="NoSQL model">
+                <button type="button" class="viz-btn is-selected" data-nosql-model="document">
+                  Document
+                </button>
+                <button type="button" class="viz-btn" data-nosql-model="kv">Key-value</button>
+                <button type="button" class="viz-btn" data-nosql-model="graph">Graph</button>
+              </div>
+            </div>
+            <p class="viz-hint">Toggle models — Ada’s profile + orders reframed</p>
+            <div class="nosql-stage" role="presentation">
+              <div class="nosql-stage-glow" aria-hidden="true"></div>
+              <div class="nosql-view" id="nosql-view" aria-live="polite"></div>
+            </div>
+            <p class="viz-live" id="nosql-status" aria-live="polite">
+              Document store: one JSON-like record embeds related fields.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="nosql-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="nosql-code-title">Snippet</p>
+              <span class="code-panel-lang" id="nosql-code-lang">JSON</span>
+            </div>
+            <pre class="code-panel-body" id="nosql-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="nosql-code-note">
+              Pick the model that matches your access patterns.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Common families</h2>
+        <ul class="op-list">
+          <li>
+            <code>document</code>
+            <span>nested records (MongoDB-style)</span>
+            <span class="op-cost">JSON</span>
+          </li>
+          <li>
+            <code>key-value</code>
+            <span>opaque values by key (Redis-style)</span>
+            <span class="op-cost">KV</span>
+          </li>
+          <li>
+            <code>graph</code>
+            <span>nodes + typed edges (Neo4j-style)</span>
+            <span class="op-cost">edges</span>
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/NoSQL">
+            <p>
+              “NoSQL (meaning “not only SQL” or “non-relational”) databases
+              provide a mechanism for storage and retrieval of data that is
+              modeled in means other than the tabular relations used in
+              relational databases.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/NoSQL"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — NoSQL</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#databases">← All concepts</a>
+        <a class="next" href="relational.html">Related: Relational →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/nosql.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

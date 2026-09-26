@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Relational model — Learn</title>
+    <meta
+      name="description"
+      content="Relational model: tables with primary and foreign keys — highlight the relationship."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#databases">Databases</a>
+      </p>
+      <h1>Relational model</h1>
+      <p class="concept-meta">
+        <span class="tag">Databases</span>
+        <span>
+          tables ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Column(s) that uniquely identify each row"
+            data-def="Column(s) that uniquely identify each row"
+            >primary key</abbr
+          >
+          · foreign key
+        </span>
+        <span class="meta-size"
+          >link <strong id="rel-meta">—</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          The <strong>relational model</strong> stores data in tables (relations)
+          linked by keys. A primary key uniquely names a row; a foreign key
+          points at another table’s key. Query that world with
+          <a class="concept-link" href="sql.html">SQL</a>; speed lookups with
+          <a class="concept-link" href="indexes.html">indexes</a>.
+        </p>
+
+        <div class="rel-lab">
+          <div class="viz viz-stage" aria-labelledby="rel-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="rel-viz-title">Users ↔ Orders</p>
+              <span class="rel-phase" id="rel-phase">pick a row</span>
+            </div>
+            <p class="viz-hint">
+              Click a user or order — PK/FK relationship lights up
+            </p>
+            <div class="rel-stage" role="presentation">
+              <div class="rel-stage-glow" aria-hidden="true"></div>
+              <div class="rel-tables">
+                <div class="rel-table" id="rel-users">
+                  <p class="rel-table-name">users <span>PK id</span></p>
+                  <table>
+                    <thead>
+                      <tr>
+                        <th class="is-pk">id</th>
+                        <th>name</th>
+                      </tr>
+                    </thead>
+                    <tbody id="rel-users-body"></tbody>
+                  </table>
+                </div>
+                <div class="rel-link" id="rel-link" aria-hidden="true">
+                  <span class="rel-link-label">FK</span>
+                </div>
+                <div class="rel-table" id="rel-orders">
+                  <p class="rel-table-name">orders <span>FK user_id</span></p>
+                  <table>
+                    <thead>
+                      <tr>
+                        <th class="is-pk">id</th>
+                        <th class="is-fk">user_id</th>
+                        <th>item</th>
+                      </tr>
+                    </thead>
+                    <tbody id="rel-orders-body"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div class="viz-controls rel-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-rel-action="next">
+                Next link
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-rel-action="reset">
+                Clear
+              </button>
+            </div>
+            <p class="viz-live" id="rel-status" aria-live="polite">
+              Click a user to see their orders via user_id → users.id.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="rel-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="rel-code-title">Relationship</p>
+              <span class="code-panel-lang">keys</span>
+            </div>
+            <pre class="code-panel-body" id="rel-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="rel-code-note">
+              Foreign keys enforce referential integrity across tables.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Keys</h2>
+        <ul class="op-list">
+          <li>
+            <code>PRIMARY KEY</code>
+            <span>unique identity for a row</span>
+            <span class="op-cost">PK</span>
+          </li>
+          <li>
+            <code>FOREIGN KEY</code>
+            <span>reference to another table’s PK</span>
+            <span class="op-cost">FK</span>
+          </li>
+          <li>
+            <code>1 : N</code>
+            <span>one user, many orders</span>
+            <span class="op-cost">card.</span>
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Relational_model">
+            <p>
+              “The relational model is an approach to managing data using a
+              structure and language consistent with first-order predicate logic,
+              first described in 1969 by English computer scientist Edgar F.
+              Codd, where all data is represented in terms of tuples, grouped
+              into relations.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Relational_model"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Relational model</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#databases">← All concepts</a>
+        <a class="next" href="sql.html">Next up: SQL →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/relational.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

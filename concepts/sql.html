@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>SQL — Learn</title>
+    <meta
+      name="description"
+      content="SQL: run canned SELECT, WHERE, and JOIN queries and highlight result rows."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#databases">Databases</a>
+      </p>
+      <h1>SQL</h1>
+      <p class="concept-meta">
+        <span class="tag">Databases</span>
+        <span>
+          SELECT · WHERE ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Combine rows from related tables using a key match"
+            data-def="Combine rows from related tables using a key match"
+            >JOIN</abbr
+          >
+        </span>
+        <span class="meta-size"
+          >rows <strong id="sql-meta">0</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          <strong>SQL</strong> is the language for the
+          <a class="concept-link" href="relational.html">relational model</a>:
+          declare what rows you want, not how to walk them. Filters use
+          <code>WHERE</code>; related tables use
+          <code>JOIN</code>. Engines often use
+          <a class="concept-link" href="indexes.html">indexes</a>
+          under the hood.
+        </p>
+
+        <div class="sql-lab">
+          <div class="viz viz-stage" aria-labelledby="sql-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="sql-viz-title">Sample tables</p>
+              <label class="palette-control">
+                <span class="sr-only">Query</span>
+                <select id="sql-query" aria-label="Canned SQL query">
+                  <option value="all">SELECT * FROM users</option>
+                  <option value="where">WHERE city = 'Paris'</option>
+                  <option value="join">JOIN orders ON user_id</option>
+                </select>
+              </label>
+            </div>
+            <p class="viz-hint">Pick a query · matching rows highlight</p>
+            <div class="sql-stage" role="presentation">
+              <div class="sql-stage-glow" aria-hidden="true"></div>
+              <div class="sql-tables">
+                <div class="sql-table">
+                  <p class="sql-table-name">users</p>
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>id</th>
+                        <th>name</th>
+                        <th>city</th>
+                      </tr>
+                    </thead>
+                    <tbody id="sql-users"></tbody>
+                  </table>
+                </div>
+                <div class="sql-table">
+                  <p class="sql-table-name">orders</p>
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>id</th>
+                        <th>user_id</th>
+                        <th>item</th>
+                      </tr>
+                    </thead>
+                    <tbody id="sql-orders"></tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="sql-result" id="sql-result" aria-live="polite"></div>
+            </div>
+            <div class="viz-controls sql-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-sql-action="run">
+                Run
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-sql-action="reset">
+                Clear
+              </button>
+            </div>
+            <p class="viz-live" id="sql-status" aria-live="polite">
+              Choose a query and press Run to highlight result rows.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="sql-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="sql-code-title">Query</p>
+              <span class="code-panel-lang">SQL</span>
+            </div>
+            <pre class="code-panel-body" id="sql-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="sql-code-note">
+              Declare the result set; the engine plans the scan.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Core clauses</h2>
+        <ul class="op-list">
+          <li>
+            <code>SELECT … FROM</code>
+            <span>project columns from a table</span>
+            <span class="op-cost">read</span>
+          </li>
+          <li>
+            <code>WHERE</code>
+            <span>keep rows that pass a predicate</span>
+            <span class="op-cost">filter</span>
+          </li>
+          <li>
+            <code>JOIN … ON</code>
+            <span>match related rows across tables</span>
+            <span class="op-cost">combine</span>
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/SQL">
+            <p>
+              “Structured Query Language (SQL) (pronounced S-Q-L; historically
+              “sequel”) is a domain-specific language used to manage data,
+              especially in a relational database management system (RDBMS). It
+              is particularly useful in handling structured data, i.e., data
+              incorporating relations among entities and variables.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/SQL"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — SQL</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#databases">← All concepts</a>
+        <a class="next" href="indexes.html">Next up: Indexes →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/sql.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

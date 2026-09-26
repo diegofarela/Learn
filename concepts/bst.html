@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Binary search trees — Learn</title>
+    <meta
+      name="description"
+      content="Binary search trees: ordered keys for fast search. Insert values and watch the search path light up against C code."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#data-structures">Data structures</a>
+      </p>
+      <h1>Binary search trees</h1>
+      <p class="concept-meta">
+        <span class="tag">Data structures</span>
+        <span>ordered keys · left &lt; node &lt; right · search / insert</span>
+        <span class="meta-size"
+          >size <strong id="bst-size">5</strong> · height
+          <strong id="bst-height">2</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          A <strong>binary search tree</strong> (BST) is a
+          <a class="concept-link" href="binary-trees.html">binary tree</a>
+          with an ordering rule: every key in the left subtree is
+          <em>less than</em> the node, and every key on the right is
+          <em>greater</em>. That invariant turns search and insert into a walk
+          down one path—often written with
+          <a class="concept-link" href="recursion.html">recursion</a>.
+        </p>
+
+        <div class="bst-lab">
+          <div class="viz viz-stage" aria-labelledby="bst-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="bst-viz-title">Live BST</p>
+            </div>
+            <p class="viz-hint">
+              Insert keeps the BST property · search highlights the path
+            </p>
+            <div class="bst-stage" role="presentation">
+              <svg id="bst-edges" class="bst-edges" aria-hidden="true"></svg>
+              <div
+                id="bst-nodes"
+                class="bst-nodes"
+                role="img"
+                aria-live="polite"
+                aria-label="Binary search tree nodes"
+              ></div>
+            </div>
+            <div class="viz-controls bst-controls">
+              <label class="bst-input-wrap">
+                <span class="sr-only">Value</span>
+                <input
+                  id="bst-value"
+                  class="bst-input"
+                  type="number"
+                  inputmode="numeric"
+                  min="0"
+                  max="99"
+                  value="15"
+                  aria-label="Value to insert or search"
+                />
+              </label>
+              <button type="button" class="viz-btn viz-btn-primary" data-bst-action="insert">
+                Insert
+              </button>
+              <button type="button" class="viz-btn" data-bst-action="search">
+                Search
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-bst-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="bst-status" aria-live="polite">
+              Seeded tree ready. Insert a value or search for one.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="bst-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="bst-code-title">Executing</p>
+              <span class="code-panel-lang">C · search / insert</span>
+            </div>
+            <pre class="code-panel-body" id="bst-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="bst-code-note">
+              Press <strong>Insert</strong> or <strong>Search</strong> — each
+              comparison on the path lights up in the C code.
+            </p>
+          </aside>
+        </div>
+
+        <h2>The BST property</h2>
+        <p>
+          For every node, keys to the left are smaller and keys to the right are
+          larger. Inorder traversal of a BST therefore yields sorted order. Shape
+          still matters: a balanced tree is short; a sorted insert sequence can
+          collapse into a skinny chain of height <em>n − 1</em>.
+        </p>
+
+        <h2>Operations</h2>
+        <ul class="op-list">
+          <li>
+            <code>search(k)</code>
+            <span>walk left/right by comparisons</span>
+            <span class="op-cost">O(h)</span>
+          </li>
+          <li>
+            <code>insert(k)</code>
+            <span>search for a null link, then attach</span>
+            <span class="op-cost">O(h)</span>
+          </li>
+          <li>
+            <code>delete(k)</code>
+            <span>rewire around the removed node</span>
+            <span class="op-cost">O(h)</span>
+          </li>
+        </ul>
+        <p>
+          Here <em>h</em> is height. Average case for a random tree is about
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Logarithmic — cost grows slowly as the tree gets larger"
+            data-def="Logarithmic — cost grows slowly as the tree gets larger"
+            >O(log n)</abbr
+          >; worst case is O(n).
+          <a class="concept-link" href="balanced-trees.html">Balanced trees</a>
+          (AVL and friends) keep height O(log n);
+          <a class="concept-link" href="heaps.html">heaps</a>
+          address priority rather than search order.
+        </p>
+
+        <h2>Related ideas</h2>
+        <ul>
+          <li>
+            <a class="concept-link" href="binary-trees.html">Binary trees</a>
+            — shape without the ordering rule
+          </li>
+          <li>
+            <a class="concept-link" href="balanced-trees.html">Balanced trees</a>
+            — AVL rotations that keep height logarithmic
+          </li>
+          <li>
+            <a class="concept-link" href="recursion.html">Recursion</a>
+            — natural form for search and insert
+          </li>
+          <li>
+            <a class="concept-link" href="heaps.html">Heaps</a>
+            — complete tree with priority at the root (not BST order)
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Binary_search_tree">
+            <p>
+              “In computer science, a binary search tree (BST), also called an
+              ordered or sorted binary tree, is a rooted binary tree data
+              structure with the key of each internal node being greater than all
+              the keys in the respective node's left subtree and less than the
+              ones in its right subtree.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Binary_search_tree"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Binary search tree</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="binary-trees.html">← Binary trees</a>
+        <a class="next" href="balanced-trees.html">Next up: Balanced trees →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/bst.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

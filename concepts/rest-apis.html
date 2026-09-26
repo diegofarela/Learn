@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>REST APIs — Learn</title>
+    <meta
+      name="description"
+      content="REST APIs: map HTTP methods to resource paths — collection vs item."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#networks">Networks</a>
+      </p>
+      <h1>REST APIs</h1>
+      <p class="concept-meta">
+        <span class="tag">Networks</span>
+        <span>
+          resources ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Uniform Resource Identifier naming a resource"
+            data-def="Uniform Resource Identifier naming a resource"
+            >URI</abbr
+          >
+          · verbs
+        </span>
+        <span class="meta-size"
+          >call <strong id="rest-meta">GET</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          <strong>REST</strong> styles APIs as nouns (resources) addressed by
+          paths, acted on with
+          <a class="concept-link" href="http.html">HTTP</a>
+          methods. Collections live at <code>/items</code>; one item at
+          <code>/items/42</code>. The bytes usually travel over
+          <a class="concept-link" href="tcp-udp.html">TCP</a>
+          via
+          <a class="concept-link" href="sockets.html">sockets</a>.
+        </p>
+
+        <div class="rest-lab">
+          <div class="viz viz-stage" aria-labelledby="rest-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="rest-viz-title">Resource paths</p>
+            </div>
+            <p class="viz-hint">Pick a method — path and status light up</p>
+            <div class="rest-stage" role="presentation">
+              <div class="rest-stage-glow" aria-hidden="true"></div>
+              <div class="rest-methods" id="rest-methods" role="group" aria-label="HTTP methods">
+                <button type="button" class="rest-method is-selected" data-rest="GET">GET</button>
+                <button type="button" class="rest-method" data-rest="POST">POST</button>
+                <button type="button" class="rest-method" data-rest="PUT">PUT</button>
+                <button type="button" class="rest-method" data-rest="DELETE">DELETE</button>
+              </div>
+              <div class="rest-path" id="rest-path" aria-live="polite">
+                <span class="rest-method-tag">GET</span>
+                <span class="rest-path-uri">/books</span>
+              </div>
+              <div class="rest-tree" id="rest-tree"></div>
+            </div>
+            <p class="viz-live" id="rest-status" aria-live="polite">
+              GET /books — list the collection (200 OK).
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="rest-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="rest-code-title">Exchange</p>
+              <span class="code-panel-lang">HTTP</span>
+            </div>
+            <pre class="code-panel-body" id="rest-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="rest-code-note">
+              Verbs change state; paths name the resource.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Conventions</h2>
+        <ul class="op-list">
+          <li>
+            <code>GET /books</code>
+            <span>read the collection</span>
+            <span class="op-cost">safe</span>
+          </li>
+          <li>
+            <code>POST /books</code>
+            <span>create in the collection</span>
+            <span class="op-cost">201</span>
+          </li>
+          <li>
+            <code>GET/PUT/DELETE /books/id</code>
+            <span>one resource</span>
+            <span class="op-cost">item</span>
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/REST">
+            <p>
+              “REST (Representational State Transfer) is a software architectural
+              style that was created to guide the design and development of the
+              architecture for the World Wide Web. REST defines a set of
+              constraints for how the architecture of a distributed, Internet-scale
+              hypermedia system, such as the Web, should behave.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/REST"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — REST</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#networks">← All concepts</a>
+        <a class="next" href="http.html">Related: HTTP →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/rest-apis.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

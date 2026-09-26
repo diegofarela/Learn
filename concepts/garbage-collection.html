@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Garbage collection — Learn</title>
+    <meta
+      name="description"
+      content="Garbage collection: mark reachable objects from roots, then sweep unmarked ones."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#systems">Systems</a>
+      </p>
+      <h1>Garbage collection</h1>
+      <p class="concept-meta">
+        <span class="tag">Systems</span>
+        <span>
+          roots ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Mark-and-sweep — mark reachable objects, then free unmarked ones"
+            data-def="Mark-and-sweep — mark reachable objects, then free unmarked ones"
+            >mark/sweep</abbr
+          >
+          · heap
+        </span>
+        <span class="meta-size"
+          >live <strong id="gc-live">0</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          <strong>Garbage collection</strong> reclaims heap objects that are no
+          longer reachable from roots (globals, stack). Mark-and-sweep marks
+          everything reachable, then frees the rest. Related:
+          <a class="concept-link" href="memory-pointers.html">memory &amp; pointers</a>
+          and
+          <a class="concept-link" href="os-processes.html">OS processes</a>
+          (address spaces).
+        </p>
+
+        <div class="gc-lab">
+          <div class="viz viz-stage" aria-labelledby="gc-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="gc-viz-title">Heap · mark &amp; sweep</p>
+              <span class="sys-badge" id="gc-badge">idle</span>
+            </div>
+            <p class="viz-hint">
+              Objects + references · mark from roots, then sweep garbage
+            </p>
+            <div
+              id="gc-heap"
+              class="gc-heap"
+              role="img"
+              aria-live="polite"
+              aria-label="Heap objects and references"
+            ></div>
+            <div class="viz-controls gc-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-gc-action="mark">
+                Mark
+              </button>
+              <button type="button" class="viz-btn" data-gc-action="sweep">
+                Sweep
+              </button>
+              <button type="button" class="viz-btn" data-gc-action="cycle">
+                Full GC
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-gc-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="gc-status" aria-live="polite">
+              Heap ready. Mark reachable objects from roots, then sweep.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="gc-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="gc-code-title">Executing</p>
+              <span class="code-panel-lang">mark · sweep</span>
+            </div>
+            <pre class="code-panel-body" id="gc-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="gc-code-note">
+              Run Mark, then Sweep — or Full GC for both.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Mark then sweep</h2>
+        <p>
+          Start from roots and follow references, marking every visited object.
+          Anything still unmarked is garbage and can be swept. Reference counting
+          is an alternative that frees when a count hits zero (cycles need extra
+          care).
+        </p>
+
+        <h2>Related ideas</h2>
+        <ul>
+          <li>
+            <a class="concept-link" href="memory-pointers.html">Memory &amp; pointers</a>
+            — references the collector follows
+          </li>
+          <li>
+            <a class="concept-link" href="call-stack.html">Call stack</a>
+            — stack frames are typical GC roots
+          </li>
+          <li>
+            <a class="concept-link" href="compilers.html">Compilers</a>
+            — runtimes emit write barriers for some collectors
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Garbage_collection_(computer_science)">
+            <p>
+              “In computer science, garbage collection (GC) is a form of automatic
+              memory management. The garbage collector attempts to reclaim memory
+              that was allocated by the program, but is no longer referenced.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Garbage_collection_(computer_science)"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Garbage collection</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#systems">← All concepts</a>
+        <a class="next" href="memory-pointers.html">Next up: Memory &amp; pointers →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/garbage-collection.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

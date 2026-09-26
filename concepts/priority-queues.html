@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Priority queues — Learn</title>
+    <meta
+      name="description"
+      content="Priority queues: serve the most important item next. Enqueue with a priority and dequeue the highest (or lowest) while watching C code light up."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#data-structures">Data structures</a>
+      </p>
+      <h1>Priority queues</h1>
+      <p class="concept-meta">
+        <span class="tag">Data structures</span>
+        <span>ADT · enqueue by priority · extract max / min</span>
+        <span class="meta-size">size <strong id="pq-size">4</strong></span>
+      </p>
+
+      <div class="concept-body">
+        <p>
+          A <strong>priority queue</strong> is an abstract data type: each item
+          carries a priority, and you always serve the most important one next
+          (highest or lowest, depending on the convention). A plain
+          <a class="concept-link" href="queue.html">queue</a>
+          is FIFO; a priority queue ignores arrival order when priorities
+          differ. Under the hood it is often a
+          <a class="concept-link" href="heaps.html">binary heap</a>.
+        </p>
+
+        <div class="pq-lab">
+          <div class="viz viz-stage" aria-labelledby="pq-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="pq-viz-title">Live priority queue</p>
+              <label class="pq-mode">
+                <span class="sr-only">Priority mode</span>
+                <select id="pq-mode" aria-label="Max or min priority">
+                  <option value="max" selected>Max-priority (higher first)</option>
+                  <option value="min">Min-priority (lower first)</option>
+                </select>
+              </label>
+            </div>
+            <p class="viz-hint">
+              Items ordered by priority · dequeue removes the front of the line
+            </p>
+            <div
+              id="pq-lane"
+              class="pq-lane"
+              role="img"
+              aria-live="polite"
+              aria-label="Priority queue items"
+            ></div>
+            <div class="viz-controls pq-controls">
+              <label class="pq-input-wrap">
+                <span class="sr-only">Label</span>
+                <input
+                  id="pq-label"
+                  class="pq-input pq-input-label"
+                  type="text"
+                  maxlength="6"
+                  value="Job"
+                  autocomplete="off"
+                  spellcheck="false"
+                  aria-label="Item label"
+                />
+              </label>
+              <label class="pq-input-wrap">
+                <span class="sr-only">Priority</span>
+                <input
+                  id="pq-prio"
+                  class="pq-input"
+                  type="number"
+                  inputmode="numeric"
+                  min="0"
+                  max="99"
+                  value="7"
+                  aria-label="Priority"
+                />
+              </label>
+              <button type="button" class="viz-btn viz-btn-primary" data-pq-action="enqueue">
+                Enqueue
+              </button>
+              <button type="button" class="viz-btn viz-btn-danger" data-pq-action="dequeue">
+                Dequeue
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-pq-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="pq-status" aria-live="polite">
+              Max-PQ seeded. Enqueue with a priority or dequeue the top item.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="pq-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="pq-code-title">Executing</p>
+              <span class="code-panel-lang">C · ADT ops</span>
+            </div>
+            <pre class="code-panel-body" id="pq-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="pq-code-note">
+              Press <strong>Enqueue</strong> or <strong>Dequeue</strong> —
+              matching ADT steps light up. Real code often calls a heap.
+            </p>
+          </aside>
+        </div>
+
+        <h2>ADT vs structure</h2>
+        <p>
+          “Priority queue” names the <em>contract</em> (insert + extract
+          extreme). A
+          <a class="concept-link" href="heaps.html">heap</a>
+          is the classic <em>implementation</em>: O(log n) insert and extract,
+          O(1) peek. You could also keep a sorted list or scan an unsorted
+          array—same ADT, different costs.
+        </p>
+
+        <h2>Operations</h2>
+        <ul class="op-list">
+          <li>
+            <code>enqueue(x, p)</code>
+            <span>add item with priority p</span>
+            <span class="op-cost">O(log n)*</span>
+          </li>
+          <li>
+            <code>dequeue()</code>
+            <span>remove highest (or lowest) priority</span>
+            <span class="op-cost">O(log n)*</span>
+          </li>
+          <li>
+            <code>peek()</code>
+            <span>read next without removing</span>
+            <span class="op-cost">O(1)*</span>
+          </li>
+        </ul>
+        <p>*With a binary heap. Unsorted-array extract is O(n).</p>
+
+        <h2>Related ideas</h2>
+        <ul>
+          <li>
+            <a class="concept-link" href="heaps.html">Heaps</a>
+            — the usual concrete structure behind a PQ
+          </li>
+          <li>
+            <a class="concept-link" href="queue.html">Queue</a>
+            — FIFO special case (arrival order as priority)
+          </li>
+          <li>
+            <a class="concept-link" href="sorting.html">Sorting</a>
+            — heapsort is “drain a priority queue”
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Priority_queue">
+            <p>
+              “In computer science, a priority queue is an abstract data type
+              similar to a regular queue where each element has an associated
+              priority determining its order of service. Priority queue serves
+              highest priority items first. While priority queues are often
+              implemented using heaps, they are conceptually distinct. A
+              priority queue can be implemented with a heap or with other
+              methods; just as a list can be implemented with a linked list or
+              with an array.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Priority_queue"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Priority queue</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="heaps.html">← Heaps</a>
+        <a class="next" href="union-find.html">Next up: Union-find →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/priority-queues.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

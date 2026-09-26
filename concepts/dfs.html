@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Depth-first search — Learn</title>
+    <meta
+      name="description"
+      content="DFS: explore a graph deep-first with an explicit stack (or recursion). Step through the frontier and watch the matching C code light up."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#algorithms">Algorithms</a>
+      </p>
+      <h1>Depth-first search</h1>
+      <p class="concept-meta">
+        <span class="tag">Algorithms</span>
+        <span>
+          go deep ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Last In, First Out — the frontier is a stack"
+            data-def="Last In, First Out — the frontier is a stack"
+            >LIFO</abbr
+          >
+          frontier ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Linear in vertices plus edges for an explicit graph"
+            data-def="Linear in vertices plus edges for an explicit graph"
+            >O(V + E)</abbr
+          >
+        </span>
+        <span class="meta-size">visited <strong id="dfs-visited">0</strong>/7</span>
+      </p>
+
+      <div class="concept-body">
+        <p>
+          <strong>Depth-first search (DFS)</strong> walks a graph by going
+          <em>as far as possible</em> along one branch before backtracking. The
+          frontier of pending nodes is a
+          <a class="concept-link" href="stack.html">stack</a>
+          — last pushed, first expanded. Recursive DFS uses the
+          <a class="concept-link" href="call-stack.html">call stack</a>
+          the same way (see
+          <a class="concept-link" href="recursion.html">recursion</a>).
+          Same
+          <a class="concept-link" href="graphs.html">graph</a>
+          family as
+          <a class="concept-link" href="bfs.html">breadth-first search</a>,
+          opposite expansion order.
+        </p>
+
+        <div class="dfs-lab">
+          <div class="viz viz-stage" aria-labelledby="dfs-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="dfs-viz-title">Live graph · DFS from A</p>
+              <span class="dfs-phase" id="dfs-phase">ready</span>
+            </div>
+            <p class="viz-hint">
+              Step pops the stack top · dive deep, then backtrack
+            </p>
+            <div class="dfs-stage" role="presentation">
+              <svg id="dfs-edges" class="dfs-edges" aria-hidden="true"></svg>
+              <div
+                id="dfs-nodes"
+                class="dfs-nodes"
+                role="img"
+                aria-live="polite"
+                aria-label="Graph nodes for depth-first search"
+              ></div>
+            </div>
+            <div class="dfs-frontier" aria-labelledby="dfs-frontier-title">
+              <p class="dfs-frontier-title" id="dfs-frontier-title">
+                Stack <span class="dfs-frontier-ends">bottom → top</span>
+              </p>
+              <div
+                id="dfs-stack"
+                class="dfs-stack"
+                role="list"
+                aria-label="DFS frontier stack"
+              ></div>
+            </div>
+            <div class="viz-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-dfs-action="step">
+                Step
+              </button>
+              <button type="button" class="viz-btn" data-dfs-action="play">Play</button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-dfs-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="dfs-status" aria-live="polite">
+              Ready. Step to push A and start the depth-first walk.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="dfs-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="dfs-code-title">Executing</p>
+              <span class="code-panel-lang">C · stack DFS</span>
+            </div>
+            <pre class="code-panel-body" id="dfs-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="dfs-code-note">
+              Press <strong>Step</strong> or <strong>Play</strong> — the DFS loop
+              lights up as the LIFO frontier grows and shrinks. Recursive DFS is
+              the same idea on the call stack.
+            </p>
+          </aside>
+        </div>
+
+        <h2>The LIFO frontier</h2>
+        <p>
+          Expanding a node pushes its unseen neighbors onto the
+          <em>top</em> of the stack. The next expansion always pops that top—so
+          you keep following the newest branch until it runs out, then
+          backtrack. An explicit
+          <a class="concept-link" href="stack.html">stack</a>
+          makes that visible; a recursive function does the same via the
+          <a class="concept-link" href="call-stack.html">call stack</a>
+          and
+          <a class="concept-link" href="recursion.html">recursion</a>
+          (each deeper call is another push).
+        </p>
+
+        <h2>Sketch of the loop</h2>
+        <ul class="op-list">
+          <li>
+            <code>push(start)</code>
+            <span>seed the frontier (not yet marked visited here)</span>
+          </li>
+          <li>
+            <code>v = pop()</code>
+            <span>take the newest pending node</span>
+          </li>
+          <li>
+            <code>if (!visited[v])</code>
+            <span>mark + visit; push unseen neighbors</span>
+          </li>
+          <li>
+            <code>while stack not empty</code>
+            <span>repeat until the frontier drains</span>
+            <span class="op-cost">O(V+E)</span>
+          </li>
+        </ul>
+
+        <h2>Where DFS shows up</h2>
+        <ul>
+          <li>
+            <strong>Path finding / mazes</strong> — follow one corridor, then
+            backtrack
+          </li>
+          <li>
+            <strong>Topological sort</strong> — finish times on a DAG
+          </li>
+          <li>
+            <strong>Cycle / connectivity checks</strong> — discover back edges
+          </li>
+          <li>
+            <strong>Tree-shaped recursion</strong> — parse trees,
+            <a class="concept-link" href="backtracking.html">backtracking</a>
+            search
+          </li>
+        </ul>
+
+        <p>
+          Prefer
+          <a class="concept-link" href="bfs.html">BFS</a>
+          when you need the fewest edges from the start; DFS when depth, paths,
+          or recursive structure matter more.
+        </p>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Depth-first_search">
+            <p>
+              “In computer science, depth-first search (DFS) is an algorithm for
+              traversing or searching tree or graph data structures. The
+              algorithm starts at the root node (selecting some arbitrary node as
+              the root node in the case of a graph) and explores as far as
+              possible along each branch before backtracking. Extra memory,
+              usually a stack, is needed to keep track of the nodes discovered so
+              far along a specified branch which helps in backtracking of the
+              graph.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Depth-first_search"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Depth-first search</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#algorithms">← All concepts</a>
+        <a class="next" href="bfs.html">Compare: Breadth-first search →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/dfs.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

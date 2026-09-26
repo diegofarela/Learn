@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Heaps — Learn</title>
+    <meta
+      name="description"
+      content="Binary heaps: priority at the root. Insert with sift-up and extract the min while watching array and tree views update."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#data-structures">Data structures</a>
+      </p>
+      <h1>Heaps</h1>
+      <p class="concept-meta">
+        <span class="tag">Data structures</span>
+        <span>min-heap · sift-up / sift-down · complete binary tree</span>
+        <span class="meta-size">size <strong id="heap-size">5</strong></span>
+      </p>
+
+      <div class="concept-body">
+        <p>
+          A <strong>binary heap</strong> is a complete
+          <a class="concept-link" href="binary-trees.html">binary tree</a>
+          stored in an array, with a priority rule at every node. This demo is a
+          <strong>min-heap</strong>: the smallest key sits at the root, and each
+          parent is ≤ its children. Priority queues are often implemented as heaps
+          — see
+          <a class="concept-link" href="priority-queues.html">priority queues</a>.
+        </p>
+
+        <div class="heap-lab">
+          <div class="viz viz-stage" aria-labelledby="heap-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="heap-viz-title">Live min-heap</p>
+            </div>
+            <p class="viz-hint">
+              Tree + array views · insert sifts up · extract-root sifts down
+            </p>
+            <div class="heap-stage" role="presentation">
+              <svg id="heap-edges" class="heap-edges" aria-hidden="true"></svg>
+              <div
+                id="heap-nodes"
+                class="heap-nodes"
+                role="img"
+                aria-live="polite"
+                aria-label="Binary heap as a tree"
+              ></div>
+            </div>
+            <div
+              id="heap-array"
+              class="heap-array"
+              role="img"
+              aria-label="Heap stored as an array"
+            ></div>
+            <div class="viz-controls heap-controls">
+              <label class="heap-input-wrap">
+                <span class="sr-only">Value</span>
+                <input
+                  id="heap-value"
+                  class="heap-input"
+                  type="number"
+                  inputmode="numeric"
+                  min="0"
+                  max="99"
+                  value="7"
+                  aria-label="Value to insert"
+                />
+              </label>
+              <button type="button" class="viz-btn viz-btn-primary" data-heap-action="insert">
+                Insert
+              </button>
+              <button type="button" class="viz-btn viz-btn-danger" data-heap-action="extract">
+                Extract-root
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-heap-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="heap-status" aria-live="polite">
+              Min-heap seeded. Insert a value or extract the root.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="heap-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="heap-code-title">Executing</p>
+              <span class="code-panel-lang">C · array min-heap</span>
+            </div>
+            <pre class="code-panel-body" id="heap-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="heap-code-note">
+              Press <strong>Insert</strong> or <strong>Extract-root</strong> —
+              sift steps light up in the C code.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Tree shape, array guts</h2>
+        <p>
+          A heap is always a <strong>complete</strong> binary tree: levels fill
+          left to right. That shape maps cleanly onto an array: for index
+          <em>i</em>, parent is ⌊(<em>i</em>−1)/2⌋, children are 2<em>i</em>+1 and
+          2<em>i</em>+2. No pointers required—the demo shows both views of the
+          same structure.
+        </p>
+
+        <h2>Operations</h2>
+        <ul class="op-list">
+          <li>
+            <code>insert(x)</code>
+            <span>append, then sift-up</span>
+            <span class="op-cost">O(log n)</span>
+          </li>
+          <li>
+            <code>extractMin()</code>
+            <span>swap root with last, sift-down</span>
+            <span class="op-cost">O(log n)</span>
+          </li>
+          <li>
+            <code>peek()</code>
+            <span>read a[0] without removing</span>
+            <span class="op-cost">O(1)</span>
+          </li>
+        </ul>
+
+        <h2>Heap vs BST</h2>
+        <p>
+          A
+          <a class="concept-link" href="bst.html">binary search tree</a>
+          orders every left/right path for search. A heap only cares about
+          parent–child priority and completeness—siblings can be in any order.
+          That makes heaps excellent for “next most important item,” not for
+          arbitrary key lookup.
+        </p>
+
+        <h2>Priority queues</h2>
+        <p>
+          A priority queue is the ADT (“always serve the highest-priority item”).
+          A binary heap is the classic implementation. Try the
+          <a class="concept-link" href="priority-queues.html">priority queues</a>
+          lab for the ADT view; this heap page is the concrete structure behind
+          that idea.
+        </p>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Binary_heap">
+            <p>
+              “A binary heap is a heap data structure that takes the form of a
+              binary tree. Binary heaps are a common way of implementing priority
+              queues. The binary heap was introduced by J. W. J. Williams in 1964
+              as a data structure for heapsort.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Binary_heap"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Binary heap</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="bst.html">← Binary search trees</a>
+        <a class="next" href="priority-queues.html">Next up: Priority queues →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/heaps.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

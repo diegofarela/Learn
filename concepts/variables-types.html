@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Variables &amp; types — Learn</title>
+    <meta
+      name="description"
+      content="Variables & types: named slots with type tags, mutate vs rebind, and a simple type diagram."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#foundations">Foundations</a>
+      </p>
+      <h1>Variables &amp; types</h1>
+      <p class="concept-meta">
+        <span class="tag">Foundations</span>
+        <span>
+          name · value ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Classification of a value that constrains what operations are valid"
+            data-def="Classification of a value that constrains what operations are valid"
+            >type</abbr
+          >
+        </span>
+        <span class="meta-size"
+          >x : <strong id="vt-meta">number</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          A <strong>variable</strong> is a named slot that holds a value. The
+          <strong>type</strong> of that value says what you can do with it—add
+          numbers, concatenate strings, call methods. Below: mutate the object
+          in place vs rebind the name to a new value, and a tiny type tree.
+        </p>
+
+        <div class="vt-lab">
+          <div class="viz viz-stage" aria-labelledby="vt-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="vt-viz-title">Live slots</p>
+              <span class="vt-readout" id="vt-mode" aria-live="polite">idle</span>
+            </div>
+            <p class="viz-hint">
+              Mutate changes the object · Rebind points the name at something new
+            </p>
+            <div class="vt-stage" role="presentation">
+              <div class="vt-stage-glow" aria-hidden="true"></div>
+              <div class="vt-slots" id="vt-slots"></div>
+              <div class="vt-types" id="vt-types" aria-label="Simple type diagram">
+                <button type="button" class="vt-type" data-vt-type="number">number</button>
+                <button type="button" class="vt-type" data-vt-type="string">string</button>
+                <button type="button" class="vt-type" data-vt-type="boolean">boolean</button>
+                <button type="button" class="vt-type" data-vt-type="object">object</button>
+              </div>
+            </div>
+            <div class="viz-controls vt-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-vt-action="mutate">
+                Mutate list
+              </button>
+              <button type="button" class="viz-btn" data-vt-action="rebind">
+                Rebind x
+              </button>
+              <button type="button" class="viz-btn" data-vt-action="set-num">
+                x = 7
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-vt-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="vt-status" aria-live="polite">
+              x holds a number; items holds a mutable list.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="vt-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="vt-code-title">Bindings</p>
+              <span class="code-panel-lang">JS-ish</span>
+            </div>
+            <pre class="code-panel-body" id="vt-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="vt-code-note">
+              Names on the left; values (and types) on the right.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Name, slot, value</h2>
+        <p>
+          Binding a name does not copy the universe—it attaches a label to a
+          value in memory. Primitive values often behave like copies when you
+          assign; objects are shared until you rebind. Related:
+          <a class="concept-link" href="memory-pointers.html">memory &amp; pointers</a>.
+        </p>
+
+        <h2>Mutate vs rebind</h2>
+        <ul class="op-list">
+          <li>
+            <code>mutate</code>
+            <span>change fields inside the same object</span>
+            <span class="op-cost">same identity</span>
+          </li>
+          <li>
+            <code>rebind</code>
+            <span>point the name at a different value</span>
+            <span class="op-cost">new binding</span>
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Data_type">
+            <p>
+              “In computer science and computer programming, a data type (or
+              simply type) is a collection or grouping of data values, usually
+              specified by a set of possible values, a set of allowed operations
+              on these values, and/or a representation of these values as
+              machine types.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Data_type"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Data type</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#foundations">← All concepts</a>
+        <a class="next" href="memory-pointers.html">Next up: Memory &amp; pointers →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/variables-types.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

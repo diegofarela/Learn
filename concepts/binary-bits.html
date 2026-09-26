@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Binary &amp; bits — Learn</title>
+    <meta
+      name="description"
+      content="Binary & bits: flip an 8-bit row and watch decimal and hex update live. Places, powers of two, and shifts."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#foundations">Foundations</a>
+      </p>
+      <h1>Binary &amp; bits</h1>
+      <p class="concept-meta">
+        <span class="tag">Foundations</span>
+        <span>
+          base-2 · places ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Binary digit — a single 0 or 1"
+            data-def="Binary digit — a single 0 or 1"
+            >bit</abbr
+          >
+        </span>
+        <span class="meta-size"
+          >dec <strong id="bits-dec">42</strong> · hex
+          <strong id="bits-hex">0x2A</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          Computers count in <strong>binary</strong>: only
+          <code>0</code> and <code>1</code>. Each digit is a
+          <em>bit</em>; its place is a power of two. Flip bits below and watch
+          decimal and hex update—then connect the same on/off idea to
+          <a class="concept-link" href="boolean-logic.html">Boolean logic</a>.
+        </p>
+
+        <div class="bits-lab">
+          <div class="viz viz-stage" aria-labelledby="bits-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="bits-viz-title">Live 8-bit row</p>
+              <span class="bits-readout" id="bits-bin" aria-live="polite"
+                >00101010<sub>2</sub></span
+              >
+            </div>
+            <p class="viz-hint">
+              Click a bit to flip · MSB on the left · shifts move the whole byte
+            </p>
+            <div class="bits-stage" role="presentation">
+              <div class="bits-stage-glow" aria-hidden="true"></div>
+              <div
+                id="bits-row"
+                class="bits-row"
+                role="group"
+                aria-label="Eight bits, most significant on the left"
+              ></div>
+              <div class="bits-places" aria-hidden="true">
+                <span>128</span><span>64</span><span>32</span><span>16</span
+                ><span>8</span><span>4</span><span>2</span><span>1</span>
+              </div>
+            </div>
+            <div class="viz-controls bits-controls">
+              <label class="bits-field">
+                <span class="bits-field-label">value</span>
+                <input
+                  id="bits-value"
+                  type="number"
+                  min="0"
+                  max="255"
+                  value="42"
+                  aria-label="Set unsigned byte value 0–255"
+                />
+              </label>
+              <button type="button" class="viz-btn viz-btn-primary" data-bits-action="set">
+                Set
+              </button>
+              <button type="button" class="viz-btn" data-bits-action="random">
+                Random
+              </button>
+              <button type="button" class="viz-btn" data-bits-action="shl">
+                ≪ Shift left
+              </button>
+              <button type="button" class="viz-btn" data-bits-action="shr">
+                Shift right ≫
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-bits-action="clear">
+                Clear
+              </button>
+            </div>
+            <p class="viz-live" id="bits-status" aria-live="polite">
+              42<sub>10</sub> = 00101010<sub>2</sub> = 0x2A. Flip any bit.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="bits-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="bits-code-title">Places</p>
+              <span class="code-panel-lang">powers of 2</span>
+            </div>
+            <pre class="code-panel-body" id="bits-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="bits-code-note">
+              Each lit bit adds its place value. The sum is the decimal number.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Only two symbols</h2>
+        <p>
+          Decimal uses ten digits. Binary uses two: <strong>0</strong> (off) and
+          <strong>1</strong> (on). That maps cleanly to switches, voltages, and
+          magnetic domains—why machines speak binary natively. Group bits into
+          bytes (8), words, and so on when you need larger numbers.
+        </p>
+
+        <h2>Place values</h2>
+        <p>
+          Like decimal places (ones, tens, hundreds), binary places are powers of
+          two. Reading left to right in an 8-bit unsigned byte:
+        </p>
+        <ul class="op-list">
+          <li>
+            <code>2⁷</code>
+            <span>128</span>
+            <span class="op-cost">MSB</span>
+          </li>
+          <li>
+            <code>2⁶ … 2¹</code>
+            <span>64 · 32 · 16 · 8 · 4 · 2</span>
+            <span class="op-cost">middle</span>
+          </li>
+          <li>
+            <code>2⁰</code>
+            <span>1</span>
+            <span class="op-cost">LSB</span>
+          </li>
+        </ul>
+        <p>
+          So <code>00101010</code> means
+          <code>32 + 8 + 2 = 42</code>. Hexadecimal packs four bits per digit
+          (<code>2A</code>)—handy shorthand you’ll meet again in
+          <a class="concept-link" href="number-systems.html">number systems</a>.
+        </p>
+
+        <h2>Shifts</h2>
+        <p>
+          Shift left multiplies by two (when nothing falls off the end); shift
+          right divides by two for unsigned values. Bits that leave the byte are
+          gone—overflow and underflow in miniature. Combine shifts with masks in
+          <a class="concept-link" href="bit-manipulation.html">bit manipulation</a>.
+        </p>
+
+        <p>
+          Bits are the raw material;
+          <a class="concept-link" href="boolean-logic.html">Boolean logic</a>
+          decides how gates combine them into decisions.
+        </p>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Binary_number">
+            <p>
+              “A binary number is a number expressed in the base-2 numeral system
+              or binary numeral system, a method for representing numbers that
+              uses only two symbols for the natural numbers: typically 0 (zero)
+              and 1 (one).”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Binary_number"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Binary number</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#foundations">← All concepts</a>
+        <a class="next" href="number-systems.html">Next up: Number systems →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/binary-bits.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

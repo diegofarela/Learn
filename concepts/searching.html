@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Searching — Learn</title>
+    <meta
+      name="description"
+      content="Searching: linear vs binary search on a sorted array. Step through probes, count comparisons, and watch the matching C code light up."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#algorithms">Algorithms</a>
+      </p>
+      <h1>Searching</h1>
+      <p class="concept-meta">
+        <span class="tag">Algorithms</span>
+        <span>
+          linear vs binary · sorted
+          <a class="concept-link" href="arrays.html">array</a>
+          ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Binary search halves the range each step — logarithmic comparisons"
+            data-def="Binary search halves the range each step — logarithmic comparisons"
+            >O(log n)</abbr
+          >
+        </span>
+        <span class="meta-size"
+          >comps <strong id="search-comps">0</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          <strong>Searching</strong> asks: is a target in this collection, and
+          where? On an unsorted
+          <a class="concept-link" href="arrays.html">array</a>
+          you scan left to right—
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Cost grows in proportion to n"
+            data-def="Cost grows in proportion to n"
+            >O(n)</abbr
+          >
+          linear search. Once the array is sorted, binary search halves the
+          remaining range each probe—
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Cost grows with the log of n"
+            data-def="Cost grows with the log of n"
+            >O(log n)</abbr
+          >. Compare the growth shapes on
+          <a class="concept-link" href="big-o.html">Big-O</a>.
+          For patterns inside text, see
+          <a class="concept-link" href="string-algorithms.html">string algorithms</a>.
+        </p>
+
+        <div class="search-lab">
+          <div class="viz viz-stage" aria-labelledby="search-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="search-viz-title">Live sorted array</p>
+              <span class="search-phase" id="search-phase">ready</span>
+            </div>
+            <p class="viz-hint">
+              Set a target · toggle Linear / Binary · watch probes eliminate range
+            </p>
+            <div class="search-stage" role="presentation">
+              <div
+                id="search-strip"
+                class="search-strip"
+                role="img"
+                aria-live="polite"
+                aria-label="Sorted array cells for search probes"
+              ></div>
+            </div>
+            <div class="viz-controls search-controls">
+              <label class="search-field">
+                <span class="search-field-label">Algo</span>
+                <select id="search-algo" aria-label="Search algorithm">
+                  <option value="binary" selected>Binary</option>
+                  <option value="linear">Linear</option>
+                </select>
+              </label>
+              <label class="search-field">
+                <span class="search-field-label">Target</span>
+                <input
+                  id="search-target"
+                  type="number"
+                  min="1"
+                  max="99"
+                  value="42"
+                  aria-label="Search target value"
+                />
+              </label>
+              <button type="button" class="viz-btn viz-btn-primary" data-search-action="step">
+                Step
+              </button>
+              <button type="button" class="viz-btn" data-search-action="play">Play</button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-search-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="search-status" aria-live="polite">
+              Ready. Set a target and step — binary halves; linear walks left to right.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="search-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="search-code-title">Executing</p>
+              <span class="code-panel-lang" id="search-code-lang">C · binary search</span>
+            </div>
+            <pre class="code-panel-body" id="search-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="search-code-note">
+              Press <strong>Step</strong> or <strong>Play</strong> — each probe
+              lights the matching comparison.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Linear vs binary</h2>
+        <p>
+          Linear search checks index <code>0</code>, then <code>1</code>, and so
+          on until it finds the target or runs out of cells. Binary search needs
+          a sorted array: compare the midpoint, discard the half that cannot
+          hold the target, and repeat. Same question, very different
+          <a class="concept-link" href="big-o.html">growth</a>
+          once <code>n</code> is large.
+        </p>
+
+        <h2>Sketch of the loop</h2>
+        <ul class="op-list">
+          <li>
+            <code>lo, hi = 0, n-1</code>
+            <span>active range for binary search</span>
+          </li>
+          <li>
+            <code>mid = (lo + hi) / 2</code>
+            <span>probe the middle cell</span>
+          </li>
+          <li>
+            <code>if a[mid] == target</code>
+            <span>found — return mid</span>
+          </li>
+          <li>
+            <code>shrink lo or hi</code>
+            <span>discard the impossible half</span>
+            <span class="op-cost">O(log n)</span>
+          </li>
+        </ul>
+
+        <h2>Where searching shows up</h2>
+        <ul>
+          <li>
+            <strong>Dictionaries &amp; indexes</strong> — look up a key in a
+            sorted table
+          </li>
+          <li>
+            <strong>Lower / upper bound</strong> — first slot ≥ target even if
+            the exact value is missing
+          </li>
+          <li>
+            <strong>Guessing games</strong> — “higher or lower” is binary search
+            on a range
+          </li>
+          <li>
+            <strong>After sorting</strong> — pay once to sort, then search fast
+            many times (see
+            <a class="concept-link" href="sorting.html">sorting</a>)
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Binary_search_algorithm">
+            <p>
+              “In computer science, binary search, also known as half-interval
+              search, logarithmic search, or binary chop, is a search algorithm
+              that finds the position of a target value within a sorted array.
+              Binary search compares the target value to the middle element of
+              the array. If they are not equal, the half in which the target
+              cannot lie is eliminated and the search continues on the remaining
+              half, again taking the middle element to compare to the target
+              value, and repeating this until the target value is found. If the
+              search ends with the remaining half being empty, the target is not
+              in the array.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Binary_search_algorithm"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Binary search algorithm</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#algorithms">← All concepts</a>
+        <a class="next" href="sorting.html">Next up: Sorting →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/searching.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

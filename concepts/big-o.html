@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Big-O complexity — Learn</title>
+    <meta
+      name="description"
+      content="Big-O complexity: how cost grows with input size. Compare O(1), O(log n), O(n), O(n log n), and O(n²) as n changes."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#foundations">Foundations</a>
+      </p>
+      <h1>Big-O complexity</h1>
+      <p class="concept-meta">
+        <span class="tag">Foundations</span>
+        <span>
+          growth rate · upper bound ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="How the cost scales as the input size n gets large"
+            data-def="How the cost scales as the input size n gets large"
+            >asymptotics</abbr
+          >
+        </span>
+        <span class="meta-size">n = <strong id="bigo-n-label">16</strong></span>
+      </p>
+
+      <div class="concept-body">
+        <p>
+          <strong>Big-O</strong> answers one question: as the input grows, how
+          does the work grow? It ignores machine speed and constant factors so
+          you can compare
+          <a class="concept-link" href="searching.html">searching</a>
+          and
+          <a class="concept-link" href="sorting.html">sorting</a>
+          by shape, not by milliseconds on one laptop.
+        </p>
+
+        <div class="bigo-lab">
+          <div class="viz viz-stage" aria-labelledby="bigo-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="bigo-viz-title">Growth chart</p>
+              <span class="bigo-picked" id="bigo-picked">O(n)</span>
+            </div>
+            <p class="viz-hint">Drag n · click a class to highlight · watch work units</p>
+            <div class="bigo-chart-wrap" role="img" aria-label="Growth curves for common Big-O classes">
+              <svg
+                id="bigo-chart"
+                class="bigo-chart"
+                viewBox="0 0 480 280"
+                xmlns="http://www.w3.org/2000/svg"
+              ></svg>
+            </div>
+            <div class="bigo-legend" id="bigo-legend" role="list"></div>
+            <label class="bigo-slider-label">
+              <span>Input size n</span>
+              <input
+                id="bigo-n"
+                type="range"
+                min="2"
+                max="48"
+                value="16"
+                aria-valuemin="2"
+                aria-valuemax="48"
+                aria-valuenow="16"
+              />
+            </label>
+            <div class="bigo-work" aria-hidden="true">
+              <span class="bigo-work-label">Work units</span>
+              <div id="bigo-work-bar" class="bigo-work-bar"></div>
+            </div>
+            <p class="viz-live" id="bigo-status" aria-live="polite">
+              At n = 16, linear work stays modest; quadratic is already climbing.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="bigo-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="bigo-code-title">Shape</p>
+              <span class="code-panel-lang">pseudocode</span>
+            </div>
+            <pre class="code-panel-body" id="bigo-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="bigo-code-note">
+              Select a class on the chart — the matching loop shape lights up.
+            </p>
+          </aside>
+        </div>
+
+        <h2>What Big-O measures</h2>
+        <p>
+          It measures <em>how cost scales</em> with input size <code>n</code>—usually
+          time (steps) or space (memory). A linear scan of an array is
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Cost grows in proportion to n"
+            data-def="Cost grows in proportion to n"
+            >O(n)</abbr
+          >; nested loops over the same data are often
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Cost grows with the square of n"
+            data-def="Cost grows with the square of n"
+            >O(n²)</abbr
+          >. Big-O is an <strong>upper bound</strong> on growth for large
+          <code>n</code>, not a stopwatch reading.
+        </p>
+
+        <h2>Common classes</h2>
+        <ul class="op-list">
+          <li>
+            <code>O(1)</code>
+            <span>constant — hash lookup, array index</span>
+            <span class="op-cost">flat</span>
+          </li>
+          <li>
+            <code>O(log n)</code>
+            <span>logarithmic — binary search</span>
+            <span class="op-cost">slow climb</span>
+          </li>
+          <li>
+            <code>O(n)</code>
+            <span>linear — single pass</span>
+            <span class="op-cost">straight</span>
+          </li>
+          <li>
+            <code>O(n log n)</code>
+            <span>linearithmic — efficient sorts</span>
+            <span class="op-cost">steep</span>
+          </li>
+          <li>
+            <code>O(n²)</code>
+            <span>quadratic — nested loops</span>
+            <span class="op-cost">explosion</span>
+          </li>
+        </ul>
+
+        <h2>Best, average, worst</h2>
+        <p>
+          The same algorithm can have different cases. Quicksort’s average is
+          often O(n log n), but a bad pivot order can hit O(n²). Big-O usually
+          quotes the <strong>worst case</strong> unless you say otherwise—so you
+          know the ceiling when the input is adversarial.
+        </p>
+
+        <h2>Why constants drop</h2>
+        <p>
+          Writing <code>3n + 100</code> as O(n) drops the <code>3</code> and the
+          <code>100</code>. For huge <code>n</code>, the leading term dominates;
+          constants and lower-order terms become noise in the growth story. They
+          still matter in practice—just not for classifying the shape.
+        </p>
+
+        <p>
+          See how this plays out in
+          <a class="concept-link" href="searching.html">searching</a>
+          (linear vs binary) and
+          <a class="concept-link" href="sorting.html">sorting</a>.
+        </p>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Big_O_notation">
+            <p>
+              “Big O notation is a mathematical notation that describes the
+              approximate size of a function on a domain. Big O is a member of a
+              family of notations invented by the German mathematicians Paul
+              Bachmann and Edmund Landau and expanded by others, collectively
+              called Bachmann-Landau notation.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Big_O_notation"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Big O notation</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#foundations">← All concepts</a>
+        <a class="next" href="recursion.html">Next up: Recursion →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/big-o.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

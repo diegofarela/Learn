@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Transactions &amp; ACID — Learn</title>
+    <meta
+      name="description"
+      content="Transactions: BEGIN, updates, COMMIT or ROLLBACK — with an ACID checklist."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#databases">Databases</a>
+      </p>
+      <h1>Transactions &amp; ACID</h1>
+      <p class="concept-meta">
+        <span class="tag">Databases</span>
+        <span>
+          BEGIN · COMMIT ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Undo all changes in the open transaction"
+            data-def="Undo all changes in the open transaction"
+            >ROLLBACK</abbr
+          >
+        </span>
+        <span class="meta-size"
+          >step <strong id="txn-meta">0</strong>/5</span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          A <strong>transaction</strong> groups updates into one all-or-nothing
+          unit. <code>COMMIT</code> makes them durable;
+          <code>ROLLBACK</code> undoes them. ACID names the guarantees
+          <a class="concept-link" href="relational.html">relational</a>
+          engines aim for—contrast with many
+          <a class="concept-link" href="nosql.html">NoSQL</a> trade-offs.
+        </p>
+
+        <div class="txn-lab">
+          <div class="viz viz-stage" aria-labelledby="txn-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="txn-viz-title">Transfer $50</p>
+              <label class="palette-control">
+                <span class="sr-only">Ending</span>
+                <select id="txn-ending" aria-label="Transaction ending">
+                  <option value="commit">COMMIT</option>
+                  <option value="rollback">ROLLBACK</option>
+                </select>
+              </label>
+            </div>
+            <p class="viz-hint">
+              BEGIN → debit/credit → COMMIT or ROLLBACK · ACID lights up
+            </p>
+            <div class="txn-stage" role="presentation">
+              <div class="txn-stage-glow" aria-hidden="true"></div>
+              <div class="txn-accounts" id="txn-accounts"></div>
+              <ul class="txn-acid" id="txn-acid" aria-label="ACID checklist">
+                <li data-acid="A">Atomicity</li>
+                <li data-acid="C">Consistency</li>
+                <li data-acid="I">Isolation</li>
+                <li data-acid="D">Durability</li>
+              </ul>
+            </div>
+            <div class="viz-controls txn-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-txn-action="step">
+                Step
+              </button>
+              <button type="button" class="viz-btn" data-txn-action="play">Play</button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-txn-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="txn-status" aria-live="polite">
+              Ready — press Step to BEGIN a $50 transfer.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="txn-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="txn-code-title">SQL</p>
+              <span class="code-panel-lang">transaction</span>
+            </div>
+            <pre class="code-panel-body" id="txn-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="txn-code-note">
+              Either every statement sticks, or none do.
+            </p>
+          </aside>
+        </div>
+
+        <h2>ACID</h2>
+        <ul class="op-list">
+          <li>
+            <code>Atomicity</code>
+            <span>all statements succeed or none</span>
+            <span class="op-cost">A</span>
+          </li>
+          <li>
+            <code>Consistency</code>
+            <span>invariants hold after commit</span>
+            <span class="op-cost">C</span>
+          </li>
+          <li>
+            <code>Isolation</code>
+            <span>concurrent txns don’t stomp each other</span>
+            <span class="op-cost">I</span>
+          </li>
+          <li>
+            <code>Durability</code>
+            <span>committed data survives crashes</span>
+            <span class="op-cost">D</span>
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Database_transaction">
+            <p>
+              “A database transaction symbolizes a unit of work, performed within
+              a database management system against a database, that is treated in
+              a coherent and reliable way independent of other transactions.
+              A transaction generally represents any change in a database.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Database_transaction"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Database transaction</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#databases">← All concepts</a>
+        <a class="next" href="nosql.html">Related: NoSQL →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/transactions.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Recursion — Learn</title>
+    <meta
+      name="description"
+      content="Recursion: a function that calls itself. Step through factorial frames, watch the base case stop the descent, and see the call stack unwind."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#algorithms">Algorithms</a>
+      </p>
+      <h1>Recursion</h1>
+      <p class="concept-meta">
+        <span class="tag">Algorithms</span>
+        <span>
+          base case · recursive case ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Each call waits on a smaller call of the same function"
+            data-def="Each call waits on a smaller call of the same function"
+            >self-call</abbr
+          >
+        </span>
+        <span class="meta-size">depth <strong id="recur-depth">0</strong></span>
+      </p>
+
+      <div class="concept-body">
+        <p>
+          <strong>Recursion</strong> solves a problem by calling the same
+          function on a smaller piece—until a
+          <em>base case</em> answers directly. Each pending call sits on the
+          <a class="concept-link" href="call-stack.html">call stack</a>
+          (the same
+          <a class="concept-link" href="stack.html">stack</a>
+          ADT idea: last frame in, first out).
+        </p>
+
+        <div class="recur-lab">
+          <div class="viz viz-stage" aria-labelledby="recur-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="recur-viz-title">Factorial frames</p>
+              <span class="recur-case" id="recur-case">ready</span>
+            </div>
+            <p class="viz-hint">Step through fact(4) · watch frames grow, then unwind</p>
+            <div
+              id="recur-frames"
+              class="recur-frames"
+              role="img"
+              aria-live="polite"
+              aria-label="Growing stack frames for factorial"
+            ></div>
+            <div class="viz-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-recur-action="step">
+                Step
+              </button>
+              <button type="button" class="viz-btn" data-recur-action="play">Play</button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-recur-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="recur-status" aria-live="polite">
+              Ready. Step to call fact(4)—frames will stack down to the base case.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="recur-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="recur-code-title">Executing</p>
+              <span class="code-panel-lang">C · factorial</span>
+            </div>
+            <pre class="code-panel-body" id="recur-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="recur-code-note">
+              Press <strong>Step</strong> or <strong>Play</strong> — base and
+              recursive cases light up as the call descends and returns.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Base case</h2>
+        <p>
+          The <strong>base case</strong> is the smallest input you can answer
+          without calling yourself again. For factorial, <code>fact(0)</code>
+          (or <code>fact(1)</code>) returns <code>1</code>. Without it, recursion
+          never stops—and the
+          <a class="concept-link" href="call-stack.html">call stack</a>
+          grows until it overflows.
+        </p>
+
+        <h2>Recursive case</h2>
+        <p>
+          The <strong>recursive case</strong> reduces the problem:
+          <code>fact(n) = n * fact(n - 1)</code>. Each call must move toward the
+          base case. If it doesn’t, you get infinite recursion in theory—and a
+          crash in practice.
+        </p>
+
+        <h2>Connection to the call stack</h2>
+        <p>
+          Every recursive call <em>pushes</em> a frame; every return
+          <em>pops</em> one. That’s why deep recursion needs stack space, and why
+          the
+          <a class="concept-link" href="stack.html">stack</a>
+          ADT and the
+          <a class="concept-link" href="call-stack.html">call stack</a>
+          are the same mental model.
+        </p>
+
+        <h2>When to prefer iteration</h2>
+        <p>
+          If a problem is a straight loop (countdown, summing an array), a
+          <code>for</code>/<code>while</code> is usually clearer and cheaper—no
+          frame-per-step overhead. Prefer recursion when the problem is naturally
+          tree-shaped (parse trees, divide-and-conquer, DFS) and the depth stays
+          reasonable—or when the language optimizes tail calls.
+        </p>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote
+            cite="https://en.wikipedia.org/wiki/Recursion_(computer_science)"
+          >
+            <p>
+              “In computer science, recursion is a method of solving a
+              computational problem where the solution depends on solutions to
+              smaller instances of the same problem. Recursion solves such
+              recursive problems by using functions that call themselves from
+              within their own code.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Recursion_(computer_science)"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Recursion (computer science)</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#algorithms">← All concepts</a>
+        <a class="next" href="call-stack.html">Next up: Call stack →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/recursion.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

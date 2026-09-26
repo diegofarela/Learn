@@ -18,7 +18,7 @@ This folder is its own git repository.
 1. Add or mark a concept `status: "ready"` in `js/catalog.js`
 2. Create `concepts/{id}.html` with a live visual
 3. Hyperlink related concepts with `.concept-link`
-4. Go one concept at a time (current: **Stack**)
+4. Prefer one concept at a time when authoring; the catalog already has a full ready set
 
 ## Citation rule
 

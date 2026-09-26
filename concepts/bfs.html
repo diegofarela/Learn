@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Breadth-first search — Learn</title>
+    <meta
+      name="description"
+      content="BFS: explore a graph layer by layer with a FIFO queue. Step through the frontier and watch the matching C code light up."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#algorithms">Algorithms</a>
+      </p>
+      <h1>Breadth-first search</h1>
+      <p class="concept-meta">
+        <span class="tag">Algorithms</span>
+        <span>
+          layer by layer ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="First In, First Out — the frontier is a queue"
+            data-def="First In, First Out — the frontier is a queue"
+            >FIFO</abbr
+          >
+          frontier ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Linear in vertices plus edges for an explicit graph"
+            data-def="Linear in vertices plus edges for an explicit graph"
+            >O(V + E)</abbr
+          >
+        </span>
+        <span class="meta-size">visited <strong id="bfs-visited">0</strong>/7</span>
+      </p>
+
+      <div class="concept-body">
+        <p>
+          <strong>Breadth-first search (BFS)</strong> walks a
+          <a class="concept-link" href="graphs.html">graph</a>
+          (or tree) <em>layer by layer</em>: finish every node at distance
+          <em>d</em> before touching distance <em>d + 1</em>. The frontier of
+          “discovered but not yet expanded” nodes lives in a
+          <a class="concept-link" href="queue.html">queue</a>
+          — first discovered, first expanded. Contrast with
+          <a class="concept-link" href="dfs.html">depth-first search</a>,
+          which dives deep along one branch before backtracking.
+        </p>
+
+        <div class="bfs-lab">
+          <div class="viz viz-stage" aria-labelledby="bfs-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="bfs-viz-title">Live graph · BFS from A</p>
+              <span class="bfs-phase" id="bfs-phase">ready</span>
+            </div>
+            <p class="viz-hint">
+              Step expands the front of the queue · layers fill outward from A
+            </p>
+            <div class="bfs-stage" role="presentation">
+              <svg id="bfs-edges" class="bfs-edges" aria-hidden="true"></svg>
+              <div
+                id="bfs-nodes"
+                class="bfs-nodes"
+                role="img"
+                aria-live="polite"
+                aria-label="Graph nodes for breadth-first search"
+              ></div>
+            </div>
+            <div class="bfs-frontier" aria-labelledby="bfs-frontier-title">
+              <p class="bfs-frontier-title" id="bfs-frontier-title">
+                Queue <span class="bfs-frontier-ends">front → rear</span>
+              </p>
+              <div
+                id="bfs-queue"
+                class="bfs-queue"
+                role="list"
+                aria-label="BFS frontier queue"
+              ></div>
+            </div>
+            <div class="viz-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-bfs-action="step">
+                Step
+              </button>
+              <button type="button" class="viz-btn" data-bfs-action="play">Play</button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-bfs-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="bfs-status" aria-live="polite">
+              Ready. Step to enqueue A and start the layer-by-layer walk.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="bfs-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="bfs-code-title">Executing</p>
+              <span class="code-panel-lang">C · queue BFS</span>
+            </div>
+            <pre class="code-panel-body" id="bfs-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="bfs-code-note">
+              Press <strong>Step</strong> or <strong>Play</strong> — the BFS loop
+              lights up as the FIFO frontier grows and shrinks.
+            </p>
+          </aside>
+        </div>
+
+        <h2>The FIFO frontier</h2>
+        <p>
+          When you expand a node, its unseen neighbors join the
+          <em>rear</em> of the queue. The next expansion always takes the
+          <em>front</em>—so older discoveries (closer to the start) finish
+          before newer ones. That is why BFS finds the shortest path in an
+          unweighted graph: the first time you reach a node, you used the fewest
+          edges. The demo’s frontier strip is the same
+          <a class="concept-link" href="queue.html">queue</a>
+          ADT: enqueue at the rear, dequeue from the front.
+        </p>
+
+        <h2>Sketch of the loop</h2>
+        <ul class="op-list">
+          <li>
+            <code>enqueue(start)</code>
+            <span>mark start visited; seed the frontier</span>
+          </li>
+          <li>
+            <code>v = dequeue()</code>
+            <span>expand the oldest pending node</span>
+          </li>
+          <li>
+            <code>for each neighbor w</code>
+            <span>if unseen, mark + enqueue</span>
+          </li>
+          <li>
+            <code>while queue not empty</code>
+            <span>repeat until the frontier drains</span>
+            <span class="op-cost">O(V+E)</span>
+          </li>
+        </ul>
+
+        <h2>Where BFS shows up</h2>
+        <ul>
+          <li>
+            <strong>Shortest paths (unweighted)</strong> — social hops, maze
+            steps, word ladders; for edge weights use
+            <a class="concept-link" href="shortest-paths.html">Dijkstra</a>
+          </li>
+          <li>
+            <strong>Level-order tree walk</strong> — print a tree by depth
+          </li>
+          <li>
+            <strong>Connected components</strong> — flood-fill every reachable
+            node from a seed
+          </li>
+          <li>
+            <strong>Web / network crawl</strong> — expand neighbors before going
+            deeper
+          </li>
+        </ul>
+
+        <p>
+          Prefer
+          <a class="concept-link" href="dfs.html">DFS</a>
+          when you care about paths, connectivity proofs, or recursion-shaped
+          problems—not when “fewest edges from the start” is the goal.
+        </p>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Breadth-first_search">
+            <p>
+              “In computer science, breadth-first search (BFS) is an algorithm
+              for searching a tree data structure for a node that satisfies a
+              given property. It starts at the tree root and explores all nodes
+              at the present depth prior to moving on to the nodes at the next
+              depth level. Extra memory, usually a queue, is needed to keep
+              track of the child nodes that were encountered but not yet
+              explored.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Breadth-first_search"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Breadth-first search</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#algorithms">← All concepts</a>
+        <a class="next" href="dfs.html">Next up: Depth-first search →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/bfs.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

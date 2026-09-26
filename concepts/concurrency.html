@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Concurrency — Learn</title>
+    <meta
+      name="description"
+      content="Concurrency: interleaved progress of multiple tasks — not the same as parallelism."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#programming">Programming models</a>
+      </p>
+      <h1>Concurrency</h1>
+      <p class="concept-meta">
+        <span class="tag">Programming models</span>
+        <span>interleaving · many tasks in progress</span>
+        <span class="meta-size"
+          >step <strong id="conc-step">0</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          <strong>Concurrency</strong> means dealing with many tasks at once—their
+          progress can <em>interleave</em> on one core via time-slicing. That is
+          not the same as
+          <a class="concept-link" href="parallelism.html">parallelism</a>, where
+          work truly runs simultaneously on multiple cores. Concurrency often uses
+          <a class="concept-link" href="threads-processes.html">threads</a>
+          and needs
+          <a class="concept-link" href="synchronization.html">synchronization</a>
+          when they share state.
+        </p>
+
+        <div class="conc-lab">
+          <div class="viz viz-stage" aria-labelledby="conc-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="conc-viz-title">Interleaved timeline</p>
+              <span class="sys-badge" id="conc-badge">idle</span>
+            </div>
+            <p class="viz-hint">
+              One CPU · two tasks take turns · not running at the same instant
+            </p>
+            <div class="conc-cpu" id="conc-cpu">
+              <span class="conc-cpu-label">CPU</span>
+              <span class="conc-cpu-running" id="conc-running">idle</span>
+            </div>
+            <div class="conc-lanes" id="conc-lanes" aria-label="Task timelines">
+              <div class="conc-lane" data-task="A">
+                <span class="conc-lane-name">Task A</span>
+                <div class="conc-slots" id="conc-slots-a"></div>
+              </div>
+              <div class="conc-lane" data-task="B">
+                <span class="conc-lane-name">Task B</span>
+                <div class="conc-slots" id="conc-slots-b"></div>
+              </div>
+            </div>
+            <div class="viz-controls conc-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-conc-action="run">
+                Run interleave
+              </button>
+              <button type="button" class="viz-btn" data-conc-action="step">
+                Step
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-conc-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="conc-status" aria-live="polite">
+              Both tasks are in progress over time, but only one runs per tick.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="conc-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="conc-code-title">Executing</p>
+              <span class="code-panel-lang">scheduler</span>
+            </div>
+            <pre class="code-panel-body" id="conc-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="conc-code-note">
+              Step or run — watch the CPU switch tasks.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Vs parallelism</h2>
+        <p>
+          Concurrency = structure (many tasks outstanding). Parallelism = execution
+          (many at the same wall-clock time). See
+          <a class="concept-link" href="parallelism.html">parallelism</a>
+          for workers summing slices together.
+        </p>
+
+        <h2>Related ideas</h2>
+        <ul>
+          <li>
+            <a class="concept-link" href="parallelism.html">Parallelism</a>
+            — simultaneous cores
+          </li>
+          <li>
+            <a class="concept-link" href="threads-processes.html">Threads &amp; processes</a>
+            — units that get scheduled
+          </li>
+          <li>
+            <a class="concept-link" href="synchronization.html">Synchronization</a>
+            — protect shared data under interleaving
+          </li>
+          <li>
+            <a class="concept-link" href="scheduling.html">CPU scheduling</a>
+            — who runs next
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote
+            cite="https://en.wikipedia.org/wiki/Concurrency_(computer_science)"
+          >
+            <p>
+              “In computer science, concurrency refers to the ability of a system
+              to execute multiple tasks through simultaneous execution or
+              time-sharing (context switching), sharing resources and managing
+              interactions.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Concurrency_(computer_science)"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Concurrency (computer science)</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#programming">← All concepts</a>
+        <a class="next" href="parallelism.html">Next up: Parallelism →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/concurrency.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

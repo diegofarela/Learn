@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Bloom filters — Learn</title>
+    <meta
+      name="description"
+      content="Bloom filters: add items to a bit array; membership answers maybe or no — with false positives."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#data-structures">Data structures</a>
+      </p>
+      <h1>Bloom filters</h1>
+      <p class="concept-meta">
+        <span class="tag">Data structures</span>
+        <span>
+          bit array ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="False positive — filter says maybe, but the item was never added"
+            data-def="False positive — filter says maybe, but the item was never added"
+            >false positives</abbr
+          >
+        </span>
+        <span class="meta-size"
+          >bits set <strong id="bloom-set-count">0</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          A <strong>Bloom filter</strong> is a compact probabilistic set: add
+          hashes bits into an array. Query answers <em>definitely not</em> or
+          <em>maybe</em> — never a false negative, but possible false positives.
+          Related:
+          <a class="concept-link" href="hash-tables.html">hash tables</a>
+          and
+          <a class="concept-link" href="sets.html">sets</a>.
+        </p>
+
+        <div class="bloom-lab">
+          <div class="viz viz-stage" aria-labelledby="bloom-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="bloom-viz-title">Bit array filter</p>
+              <span class="sys-badge" id="bloom-badge">empty</span>
+            </div>
+            <p class="viz-hint">
+              Add items · query membership (maybe / no) · note false positives
+            </p>
+            <div class="bloom-fields">
+              <label class="bloom-field">
+                <span class="bloom-field-label">item</span>
+                <input
+                  id="bloom-item"
+                  type="text"
+                  maxlength="24"
+                  value="apple"
+                  autocomplete="off"
+                  spellcheck="false"
+                  aria-label="Item to add or query"
+                />
+              </label>
+            </div>
+            <div
+              id="bloom-bits"
+              class="bloom-bits"
+              role="img"
+              aria-live="polite"
+              aria-label="Bloom filter bit array"
+            ></div>
+            <p class="bloom-added" id="bloom-added">Added: (none)</p>
+            <div class="viz-controls bloom-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-bloom-action="add">
+                Add
+              </button>
+              <button type="button" class="viz-btn" data-bloom-action="query">
+                Query
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-bloom-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="bloom-status" aria-live="polite">
+              Empty filter. Add items, then query — “no” is certain; “maybe” is not.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="bloom-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="bloom-code-title">Executing</p>
+              <span class="code-panel-lang">bloom · k=3</span>
+            </div>
+            <pre class="code-panel-body" id="bloom-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="bloom-code-note">
+              Add sets bits; query checks all hash positions.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Maybe vs no</h2>
+        <p>
+          If any hashed bit is 0, the item was never added. If all are 1, it
+          <em>might</em> have been — collisions can create false positives. There
+          are no false negatives (unless you incorrectly clear bits).
+        </p>
+
+        <h2>Related ideas</h2>
+        <ul>
+          <li>
+            <a class="concept-link" href="hash-tables.html">Hash tables</a>
+            — exact membership with more space
+          </li>
+          <li>
+            <a class="concept-link" href="sets.html">Sets</a>
+            — exact unique membership
+          </li>
+          <li>
+            <a class="concept-link" href="hashing-crypto.html">Cryptographic hashing</a>
+            — different goals; Bloom uses fast non-crypto hashes
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Bloom_filter">
+            <p>
+              “A Bloom filter is a space-efficient probabilistic data structure,
+              conceived by Burton Howard Bloom in 1970, that is used to test
+              whether an element is a member of a set. False positive matches are
+              possible, but false negatives are not.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Bloom_filter"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Bloom filter</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#data-structures">← All concepts</a>
+        <a class="next" href="hash-tables.html">Next up: Hash tables →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/bloom-filters.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

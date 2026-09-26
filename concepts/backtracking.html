@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Backtracking — Learn</title>
+    <meta
+      name="description"
+      content="Backtracking: try a partial placement, fail early, undo. Step through the 4-queens puzzle with try / fail / undo highlights."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#algorithms">Algorithms</a>
+      </p>
+      <h1>Backtracking</h1>
+      <p class="concept-meta">
+        <span class="tag">Algorithms</span>
+        <span>
+          try · fail · undo ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Drop a partial candidate as soon as it cannot lead to a valid solution"
+            data-def="Drop a partial candidate as soon as it cannot lead to a valid solution"
+            >prune</abbr
+          >
+        </span>
+        <span class="meta-size">queens <strong id="bt-placed">0</strong>/4</span>
+      </p>
+
+      <div class="concept-body">
+        <p>
+          <strong>Backtracking</strong> builds a solution one choice at a time.
+          If a partial candidate cannot work, it undoes the last choice and tries
+          another—exactly the try / fail / undo pattern. It is
+          <a class="concept-link" href="recursion.html">recursion</a>
+          (and
+          <a class="concept-link" href="dfs.html">DFS</a>-shaped search) with
+          early pruning. The classic demo: place four queens so none attack.
+        </p>
+
+        <div class="bt-lab">
+          <div class="viz viz-stage" aria-labelledby="bt-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="bt-viz-title">4-Queens · place safely</p>
+              <span class="bt-phase" id="bt-phase">ready</span>
+            </div>
+            <p class="viz-hint">
+              Step tries a square · red = attack · undo removes the last queen
+            </p>
+            <div class="bt-stage" role="presentation">
+              <div
+                id="bt-board"
+                class="bt-board"
+                role="img"
+                aria-live="polite"
+                aria-label="4×4 chessboard for N-Queens"
+              ></div>
+            </div>
+            <div class="viz-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-bt-action="step">
+                Step
+              </button>
+              <button type="button" class="viz-btn" data-bt-action="play">Play</button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-bt-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="bt-status" aria-live="polite">
+              Ready. Step to try placing a queen in row 0.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="bt-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="bt-code-title">Executing</p>
+              <span class="code-panel-lang">C · N-Queens</span>
+            </div>
+            <pre class="code-panel-body" id="bt-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="bt-code-note">
+              Press <strong>Step</strong> or <strong>Play</strong> — try, check,
+              fail, undo light up on the board.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Try, fail, undo</h2>
+        <p>
+          For each row, try every column. If the square is safe (no shared
+          column or diagonal with earlier queens), place and recurse to the next
+          row. If every column fails—or a later row dead-ends—remove the queen
+          and try the next column. That undo is the “backtrack.”
+        </p>
+
+        <h2>Sketch of the recursion</h2>
+        <ul class="op-list">
+          <li>
+            <code>if row == N</code>
+            <span>all rows filled — solution found</span>
+          </li>
+          <li>
+            <code>for col in 0..N-1</code>
+            <span>try each square in this row</span>
+          </li>
+          <li>
+            <code>if safe(row, col)</code>
+            <span>no attack from earlier queens</span>
+          </li>
+          <li>
+            <code>place; solve(row+1); undo</code>
+            <span>recurse, then backtrack</span>
+            <span class="op-cost">prune</span>
+          </li>
+        </ul>
+
+        <h2>Where backtracking shows up</h2>
+        <ul>
+          <li>
+            <strong>N-Queens / Sudoku</strong> — constraint placement puzzles
+          </li>
+          <li>
+            <strong>Subsets &amp; permutations</strong> — enumerate then prune
+          </li>
+          <li>
+            <strong>Mazes / path search</strong> — try a corridor, reverse on
+            dead end
+          </li>
+          <li>
+            <strong>Parsing &amp; Prolog</strong> — choice points with undo
+          </li>
+        </ul>
+
+        <p>
+          Related:
+          <a class="concept-link" href="recursion.html">recursion</a>
+          for the call shape;
+          <a class="concept-link" href="dfs.html">DFS</a>
+          for the deep-first exploration order.
+        </p>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Backtracking">
+            <p>
+              “Backtracking is a class of algorithms for finding solutions to
+              some computational problems, notably constraint satisfaction or
+              enumeration problems, that incrementally builds candidates to the
+              solutions, and abandons a candidate (“backtracks”) as soon as it
+              determines that the candidate cannot possibly be completed to a
+              valid solution.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Backtracking"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Backtracking</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#algorithms">← All concepts</a>
+        <a class="next" href="bfs.html">Next up: Breadth-first search →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/backtracking.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

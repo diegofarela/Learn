@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Bit manipulation — Learn</title>
+    <meta
+      name="description"
+      content="Bit manipulation: AND, OR, XOR, NOT, and shifts on two bytes with live bit-row results."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#algorithms">Algorithms</a>
+      </p>
+      <h1>Bit manipulation</h1>
+      <p class="concept-meta">
+        <span class="tag">Algorithms</span>
+        <span>
+          AND · OR · XOR · NOT ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Move bits left or right within a word"
+            data-def="Move bits left or right within a word"
+            >shifts</abbr
+          >
+        </span>
+        <span class="meta-size"
+          >res <strong id="bm-meta">0x2A</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          Bitwise ops apply
+          <a class="concept-link" href="boolean-logic.html">Boolean logic</a>
+          to every
+          <a class="concept-link" href="binary-bits.html">bit</a> in parallel.
+          Pick an operation, tweak the operands, and watch the result row light
+          up. Related place-value thinking lives in
+          <a class="concept-link" href="number-systems.html">number systems</a>.
+        </p>
+
+        <div class="bm-lab">
+          <div class="viz viz-stage" aria-labelledby="bm-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="bm-viz-title">Live bitwise lab</p>
+              <label class="palette-control">
+                <span class="sr-only">Operation</span>
+                <select id="bm-op" aria-label="Bitwise operation">
+                  <option value="AND">AND</option>
+                  <option value="OR">OR</option>
+                  <option value="XOR">XOR</option>
+                  <option value="NOT">NOT</option>
+                  <option value="SHL">≪ Shift left</option>
+                  <option value="SHR">≫ Shift right</option>
+                </select>
+              </label>
+            </div>
+            <p class="viz-hint">
+              Edit A / B as 0–255 · choose an op · bit rows show the result
+            </p>
+            <div class="bm-stage" role="presentation">
+              <div class="bm-stage-glow" aria-hidden="true"></div>
+              <div class="bm-operands">
+                <label class="bm-field">
+                  <span class="bm-field-label">A</span>
+                  <input id="bm-a" type="number" min="0" max="255" value="42" />
+                </label>
+                <label class="bm-field" id="bm-b-wrap">
+                  <span class="bm-field-label">B</span>
+                  <input id="bm-b" type="number" min="0" max="255" value="15" />
+                </label>
+              </div>
+              <div class="bm-rows" id="bm-rows" aria-live="polite"></div>
+            </div>
+            <div class="viz-controls bm-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-bm-action="apply">
+                Apply
+              </button>
+              <button type="button" class="viz-btn" data-bm-action="random">
+                Random
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-bm-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="bm-status" aria-live="polite">
+              42 &amp; 15 = 10 (0x0A)
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="bm-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="bm-code-title">Expression</p>
+              <span class="code-panel-lang" id="bm-code-lang">AND</span>
+            </div>
+            <pre class="code-panel-body" id="bm-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="bm-code-note">
+              Each column is one bit position; the op runs independently per bit.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Ops at a glance</h2>
+        <ul class="op-list">
+          <li>
+            <code>&amp;</code>
+            <span>AND — keep bits set in both</span>
+            <span class="op-cost">mask</span>
+          </li>
+          <li>
+            <code>|</code>
+            <span>OR — set bits from either</span>
+            <span class="op-cost">combine</span>
+          </li>
+          <li>
+            <code>^</code>
+            <span>XOR — bits that differ</span>
+            <span class="op-cost">toggle</span>
+          </li>
+          <li>
+            <code>~</code> / shifts
+            <span>NOT flips; ≪ / ≫ move places</span>
+            <span class="op-cost">8-bit</span>
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Bitwise_operation">
+            <p>
+              “In computer programming, a bitwise operation operates on a bit
+              string, a bit array or a binary numeral (considered as a bit string)
+              at the level of its individual bits. It is a fast and simple
+              action, basic to the higher-level arithmetic operations and
+              directly supported by the processor.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Bitwise_operation"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Bitwise operation</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#algorithms">← All concepts</a>
+        <a class="next" href="binary-bits.html">Related: Binary &amp; bits →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/bit-manipulation.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

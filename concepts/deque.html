@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Deque — Learn</title>
+    <meta
+      name="description"
+      content="Deque: double-ended queue. Push and pop at both front and rear while watching the matching C code execute line by line."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#data-structures">Data structures</a>
+      </p>
+      <h1>Deque</h1>
+      <p class="concept-meta">
+        <span class="tag">Data structures</span>
+        <span>
+          double-ended · push / pop front &amp; rear ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Constant time — the cost stays about the same as the deque grows"
+            data-def="Constant time — the cost stays about the same as the deque grows"
+            >O(1)</abbr
+          >
+        </span>
+        <span class="meta-size">size <strong id="deque-size">3</strong></span>
+      </p>
+
+      <div class="concept-body">
+        <p>
+          A <strong>deque</strong> (double-ended queue) lets you
+          <strong>insert</strong> and <strong>remove</strong> at
+          <em>both</em> ends. It is the flexible middle ground between a
+          <a class="concept-link" href="stack.html">stack</a>
+          (one end only) and a
+          <a class="concept-link" href="queue.html">queue</a>
+          (add one end, remove the other).
+        </p>
+
+        <div class="deque-lab">
+          <div class="viz viz-stage" aria-labelledby="deque-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="deque-viz-title">Live double-ended lane</p>
+              <label class="palette-control">
+                <span class="sr-only">Block colors</span>
+                <select id="deque-palette" aria-label="Block color set">
+                  <option value="ocean">Ocean</option>
+                  <option value="ember">Ember</option>
+                  <option value="mint">Mint</option>
+                  <option value="ink">Ink</option>
+                  <option value="light">Light</option>
+                </select>
+              </label>
+            </div>
+            <p class="viz-hint">
+              Front left · rear right · push or pop either end · buttons drive the C code
+            </p>
+            <div class="deque-stage" role="presentation">
+              <div class="deque-stage-floor" aria-hidden="true"></div>
+              <div class="deque-stage-glow" aria-hidden="true"></div>
+              <div class="deque-lane-marks" aria-hidden="true">
+                <span class="deque-mark deque-mark-front">front</span>
+                <span class="deque-mark deque-mark-rear">rear</span>
+              </div>
+              <div
+                id="deque-3d"
+                class="deque-3d"
+                role="img"
+                aria-live="polite"
+                aria-label="Horizontal deque of colored blocks"
+              ></div>
+            </div>
+            <div class="viz-controls deque-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-deque-action="pushFront">
+                Push front
+              </button>
+              <button type="button" class="viz-btn viz-btn-primary" data-deque-action="pushBack">
+                Push back
+              </button>
+              <button type="button" class="viz-btn viz-btn-danger" data-deque-action="popFront">
+                Pop front
+              </button>
+              <button type="button" class="viz-btn viz-btn-danger" data-deque-action="popBack">
+                Pop back
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-deque-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="deque-status" aria-live="polite">
+              Three blocks ready. Push or pop at either end.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="deque-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="deque-code-title">Executing</p>
+              <span class="code-panel-lang">C · circular array</span>
+            </div>
+            <pre class="code-panel-body" id="deque-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="deque-code-note">
+              Press a <strong>Push</strong> or <strong>Pop</strong> — each step of
+              the matching C function lights up.
+            </p>
+          </aside>
+        </div>
+
+        <h2>The rule</h2>
+        <p>
+          Both ends are open. That is the whole abstract data type: you still
+          never dig into the middle, but you choose which end for every insert
+          and remove. Under the hood a deque is often a
+          <a class="concept-link" href="arrays.html">circular array</a>
+          (wrap indices with modulo) or a
+          <a class="concept-link" href="linked-lists.html">doubly linked list</a>
+          — same double-ended ops, different guts. The demo is the circular-array
+          version.
+        </p>
+
+        <h2>Operations</h2>
+        <ul class="op-list">
+          <li>
+            <code>pushFront(x)</code>
+            <span>put an item at the front</span>
+            <span class="op-cost">O(1)</span>
+          </li>
+          <li>
+            <code>pushBack(x)</code>
+            <span>put an item at the rear</span>
+            <span class="op-cost">O(1)</span>
+          </li>
+          <li>
+            <code>popFront()</code>
+            <span>take the front item off</span>
+            <span class="op-cost">O(1)</span>
+          </li>
+          <li>
+            <code>popBack()</code>
+            <span>take the rear item off</span>
+            <span class="op-cost">O(1)</span>
+          </li>
+        </ul>
+
+        <h2>Stack vs queue vs deque</h2>
+        <ul>
+          <li>
+            <strong
+              ><a class="concept-link" href="stack.html">Stack</a></strong
+            >
+            — push and pop at one end only (LIFO)
+          </li>
+          <li>
+            <strong
+              ><a class="concept-link" href="queue.html">Queue</a></strong
+            >
+            — enqueue at rear, dequeue at front (FIFO)
+          </li>
+          <li>
+            <strong>Deque</strong> — all four end operations; can emulate either
+            stack or queue
+          </li>
+        </ul>
+
+        <h2>Where deques show up</h2>
+        <ul>
+          <li>
+            <strong>Sliding-window algorithms</strong> — maintain candidates at
+            both ends of a window
+          </li>
+          <li>
+            <strong>Undo / redo</strong> — history that grows and shrinks from
+            either side of a cursor
+          </li>
+          <li>
+            <strong>Work stealing</strong> — threads push locally and steal from
+            the other end of a deque
+          </li>
+          <li>
+            <strong>Palindrome checks</strong> — compare and discard from both
+            ends toward the middle
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Double-ended_queue">
+            <p>
+              “In computer science, a double-ended queue (abbreviated to deque,
+              pronounced deck) is an abstract data type that generalizes a queue,
+              for which elements can be added to or removed from either the front
+              (head) or back (tail).”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Double-ended_queue"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Double-ended queue</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="queue.html">← Queue</a>
+        <a class="next" href="hash-tables.html">Next up: Hash tables →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/deque.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

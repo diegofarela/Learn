@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Deadlocks — Learn</title>
+    <meta
+      name="description"
+      content="Deadlocks: two threads each hold a lock and wait for the other — circular wait demo."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#programming">Programming models</a>
+      </p>
+      <h1>Deadlocks</h1>
+      <p class="concept-meta">
+        <span class="tag">Programming models</span>
+        <span>
+          circular wait ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Four conditions: mutual exclusion, hold-and-wait, no preemption, circular wait"
+            data-def="Four conditions: mutual exclusion, hold-and-wait, no preemption, circular wait"
+            >Coffman</abbr
+          >
+        </span>
+        <span class="meta-size"
+          ><strong id="dl-state-label">ready</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          A <strong>deadlock</strong> is when threads wait forever in a cycle:
+          each holds a lock the other needs. Classic fix: acquire locks in a
+          global order. Built on
+          <a class="concept-link" href="synchronization.html">synchronization</a>
+          and
+          <a class="concept-link" href="threads-processes.html">threads</a>.
+        </p>
+
+        <div class="dl-lab">
+          <div class="viz viz-stage" aria-labelledby="dl-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="dl-viz-title">Two-lock circular wait</p>
+              <span class="sys-badge" id="dl-badge">ready</span>
+            </div>
+            <p class="viz-hint">
+              T1 grabs Lock A then waits for B · T2 grabs B then waits for A
+            </p>
+            <div class="dl-layout" id="dl-layout">
+              <div class="dl-thread" data-tid="0">
+                <span class="dl-thread-name">T1</span>
+                <span class="dl-thread-holds" id="dl-holds0">holds: —</span>
+                <span class="dl-thread-waits" id="dl-waits0">waits: —</span>
+              </div>
+              <div class="dl-locks">
+                <div class="dl-lock" id="dl-lockA" data-lock="A">
+                  <span class="dl-lock-name">Lock A</span>
+                  <span class="dl-lock-owner" id="dl-ownerA">free</span>
+                </div>
+                <div class="dl-cycle" id="dl-cycle" hidden>⇄ deadlock</div>
+                <div class="dl-lock" id="dl-lockB" data-lock="B">
+                  <span class="dl-lock-name">Lock B</span>
+                  <span class="dl-lock-owner" id="dl-ownerB">free</span>
+                </div>
+              </div>
+              <div class="dl-thread" data-tid="1">
+                <span class="dl-thread-name">T2</span>
+                <span class="dl-thread-holds" id="dl-holds1">holds: —</span>
+                <span class="dl-thread-waits" id="dl-waits1">waits: —</span>
+              </div>
+            </div>
+            <div class="viz-controls dl-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-dl-action="deadlock">
+                Cause deadlock
+              </button>
+              <button type="button" class="viz-btn" data-dl-action="ordered">
+                Ordered acquire
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-dl-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="dl-status" aria-live="polite">
+              Cause a circular wait — or acquire A then B in the same order on both threads.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="dl-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="dl-code-title">Executing</p>
+              <span class="code-panel-lang">locks</span>
+            </div>
+            <pre class="code-panel-body" id="dl-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="dl-code-note">
+              Run a scenario — hold-and-wait vs ordered locking.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Four conditions</h2>
+        <ul class="op-list">
+          <li>
+            <code>mutual exclusion</code>
+            <span>resources can’t be shared</span>
+            <span class="op-cost">ME</span>
+          </li>
+          <li>
+            <code>hold and wait</code>
+            <span>hold one, wait for another</span>
+            <span class="op-cost">H&amp;W</span>
+          </li>
+          <li>
+            <code>no preemption</code>
+            <span>can’t forcibly take a lock</span>
+            <span class="op-cost">NP</span>
+          </li>
+          <li>
+            <code>circular wait</code>
+            <span>cycle in the waits-for graph</span>
+            <span class="op-cost">CW</span>
+          </li>
+        </ul>
+
+        <h2>Related ideas</h2>
+        <ul>
+          <li>
+            <a class="concept-link" href="synchronization.html">Synchronization</a>
+            — locks that can deadlock
+          </li>
+          <li>
+            <a class="concept-link" href="threads-processes.html">Threads &amp; processes</a>
+            — who contends
+          </li>
+          <li>
+            <a class="concept-link" href="concurrency.html">Concurrency</a>
+            — many tasks in progress
+          </li>
+          <li>
+            <a class="concept-link" href="parallelism.html">Parallelism</a>
+            — simultaneous lock holders
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Deadlock">
+            <p>
+              “In concurrent computing, deadlock is any situation in which no
+              member of some group of entities can proceed because each waits for
+              another member, including itself, to take action, such as sending a
+              message or, more commonly, releasing a lock.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Deadlock"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Deadlock</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#programming">← All concepts</a>
+        <a class="next" href="synchronization.html">Next up: Synchronization →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/deadlocks.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Boolean logic — Learn</title>
+    <meta
+      name="description"
+      content="Boolean logic: toggle A and B, pick AND/OR/NOT/XOR, and watch the truth table and gate output update live."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#foundations">Foundations</a>
+      </p>
+      <h1>Boolean logic</h1>
+      <p class="concept-meta">
+        <span class="tag">Foundations</span>
+        <span>
+          AND · OR · NOT · XOR ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Lists every input combination and the resulting output"
+            data-def="Lists every input combination and the resulting output"
+            >truth table</abbr
+          >
+        </span>
+        <span class="meta-size">out <strong id="bool-out">1</strong></span>
+      </p>
+
+      <div class="concept-body">
+        <p>
+          <strong>Boolean logic</strong> deals in true and false—usually written
+          <code>1</code> and <code>0</code>, the same symbols as
+          <a class="concept-link" href="binary-bits.html">binary bits</a>.
+          Gates combine those bits: AND needs both on, OR needs either, NOT
+          flips one wire, XOR is “exactly one.”
+        </p>
+
+        <div class="bool-lab">
+          <div class="viz viz-stage" aria-labelledby="bool-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="bool-viz-title">Live gate</p>
+              <label class="palette-control">
+                <span class="sr-only">Gate type</span>
+                <select id="bool-gate" aria-label="Logic gate">
+                  <option value="AND">AND</option>
+                  <option value="OR">OR</option>
+                  <option value="NOT">NOT</option>
+                  <option value="XOR">XOR</option>
+                </select>
+              </label>
+            </div>
+            <p class="viz-hint">
+              Pick a gate · toggle A / B · match the highlighted truth-table row
+            </p>
+            <div class="bool-stage" role="presentation">
+              <div class="bool-stage-glow" aria-hidden="true"></div>
+              <div class="bool-diagram" id="bool-diagram" aria-hidden="true">
+                <button
+                  type="button"
+                  class="bool-pin"
+                  id="bool-pin-a"
+                  data-bool-input="A"
+                  aria-pressed="true"
+                >
+                  <span class="bool-pin-label">A</span>
+                  <span class="bool-pin-val" id="bool-a-val">1</span>
+                </button>
+                <button
+                  type="button"
+                  class="bool-pin"
+                  id="bool-pin-b"
+                  data-bool-input="B"
+                  aria-pressed="false"
+                >
+                  <span class="bool-pin-label">B</span>
+                  <span class="bool-pin-val" id="bool-b-val">0</span>
+                </button>
+                <div class="bool-gate-box" id="bool-gate-box">
+                  <span id="bool-gate-label">AND</span>
+                </div>
+                <div class="bool-out-pin" id="bool-out-pin">
+                  <span class="bool-pin-label">Y</span>
+                  <span class="bool-pin-val" id="bool-y-val">0</span>
+                </div>
+                <svg class="bool-wires" viewBox="0 0 320 160" aria-hidden="true">
+                  <path id="bool-wire-a" class="bool-wire" d="M70 40 H130" />
+                  <path id="bool-wire-b" class="bool-wire" d="M70 120 H130" />
+                  <path id="bool-wire-y" class="bool-wire" d="M210 80 H250" />
+                </svg>
+              </div>
+            </div>
+            <div class="viz-controls bool-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-bool-input="A">
+                Toggle A
+              </button>
+              <button type="button" class="viz-btn viz-btn-primary" data-bool-input="B" id="bool-toggle-b">
+                Toggle B
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-bool-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="bool-status" aria-live="polite">
+              AND(1, 0) → 0. Toggle inputs or switch gates.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="bool-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="bool-code-title">Truth table</p>
+              <span class="code-panel-lang" id="bool-code-lang">AND</span>
+            </div>
+            <div class="bool-table-wrap">
+              <table class="bool-table" id="bool-table" aria-live="polite">
+                <thead>
+                  <tr>
+                    <th scope="col">A</th>
+                    <th scope="col" id="bool-th-b">B</th>
+                    <th scope="col">Y</th>
+                  </tr>
+                </thead>
+                <tbody id="bool-tbody"></tbody>
+              </table>
+            </div>
+            <p class="code-panel-note" id="bool-code-note">
+              The highlighted row matches the pins on the left.
+            </p>
+          </aside>
+        </div>
+
+        <h2>The four gates</h2>
+        <ul class="op-list">
+          <li>
+            <code>AND</code>
+            <span>1 only if both inputs are 1</span>
+            <span class="op-cost">A ∧ B</span>
+          </li>
+          <li>
+            <code>OR</code>
+            <span>1 if either input is 1</span>
+            <span class="op-cost">A ∨ B</span>
+          </li>
+          <li>
+            <code>NOT</code>
+            <span>flips a single input</span>
+            <span class="op-cost">¬A</span>
+          </li>
+          <li>
+            <code>XOR</code>
+            <span>1 if the inputs differ</span>
+            <span class="op-cost">A ⊕ B</span>
+          </li>
+        </ul>
+
+        <h2>Why it matters</h2>
+        <p>
+          Every digital chip is a network of these decisions. Comparisons,
+          masks, branch conditions, and ALUs all bottom out in Boolean
+          operations on
+          <a class="concept-link" href="binary-bits.html">bits</a>—see
+          <a class="concept-link" href="bit-manipulation.html">bit manipulation</a>
+          for whole-byte AND/OR/XOR and shifts.
+        </p>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Logic_gate">
+            <p>
+              “A logic gate is a device that performs a Boolean function, a
+              logical operation performed on one or more binary inputs that
+              produces a single binary output.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Logic_gate"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Logic gate</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#foundations">← All concepts</a>
+        <a class="next" href="memory-pointers.html">Next up: Memory &amp; pointers →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/boolean-logic.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

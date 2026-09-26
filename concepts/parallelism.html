@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Parallelism — Learn</title>
+    <meta
+      name="description"
+      content="Parallelism: split an array sum across 2–4 workers running at the same time."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#programming">Programming models</a>
+      </p>
+      <h1>Parallelism</h1>
+      <p class="concept-meta">
+        <span class="tag">Programming models</span>
+        <span>many tasks at once · workers</span>
+        <span class="meta-size"
+          >sum <strong id="par-sum">0</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          <strong>Parallelism</strong> means doing many calculations
+          <em>simultaneously</em>—typically on separate cores or machines. Split
+          an array, sum each slice on its own worker, then combine. That differs
+          from
+          <a class="concept-link" href="concurrency.html">concurrency</a>, where
+          tasks may only interleave on one core. Parallel workers often still need
+          <a class="concept-link" href="synchronization.html">synchronization</a>
+          at the merge step.
+        </p>
+
+        <div class="par-lab">
+          <div class="viz viz-stage" aria-labelledby="par-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="par-viz-title">Parallel sum</p>
+              <span class="sys-badge" id="par-badge">idle</span>
+            </div>
+            <p class="viz-hint">
+              Choose 2–4 workers · slices sum in parallel · then reduce
+            </p>
+            <div class="par-array" id="par-array" aria-label="Input array"></div>
+            <div class="par-workers" id="par-workers" aria-label="Workers"></div>
+            <div class="par-total-wrap">
+              <span class="par-total-label">combined sum</span>
+              <div class="par-total" id="par-total">0</div>
+            </div>
+            <div class="viz-controls par-controls">
+              <label class="par-workers-select">
+                <span class="sr-only">Worker count</span>
+                <select id="par-n" aria-label="Number of workers">
+                  <option value="2">2 workers</option>
+                  <option value="3">3 workers</option>
+                  <option value="4" selected>4 workers</option>
+                </select>
+              </label>
+              <button type="button" class="viz-btn viz-btn-primary" data-par-action="run">
+                Run parallel
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-par-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="par-status" aria-live="polite">
+              Workers sum their slices at the same time, then results merge.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="par-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="par-code-title">Executing</p>
+              <span class="code-panel-lang">map-reduce</span>
+            </div>
+            <pre class="code-panel-body" id="par-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="par-code-note">
+              Run — watch slices light up together.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Vs concurrency</h2>
+        <p>
+          Parallelism needs hardware that can run work at the same wall-clock
+          time. Concurrency is about structuring many outstanding tasks—even on
+          one core. See the
+          <a class="concept-link" href="concurrency.html">concurrency</a>
+          interleaved timeline.
+        </p>
+
+        <h2>Related ideas</h2>
+        <ul>
+          <li>
+            <a class="concept-link" href="concurrency.html">Concurrency</a>
+            — interleaving vs simultaneous
+          </li>
+          <li>
+            <a class="concept-link" href="threads-processes.html">Threads &amp; processes</a>
+            — how work is packaged
+          </li>
+          <li>
+            <a class="concept-link" href="divide-conquer.html">Divide &amp; conquer</a>
+            — split, solve, merge
+          </li>
+          <li>
+            <a class="concept-link" href="synchronization.html">Synchronization</a>
+            — safe shared updates
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Parallel_computing">
+            <p>
+              “Parallel computing is a type of computation in which many
+              calculations or processes are carried out simultaneously. Large
+              problems can often be divided into smaller ones, which can then be
+              solved at the same time.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Parallel_computing"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Parallel computing</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#programming">← All concepts</a>
+        <a class="next" href="threads-processes.html">Next up: Threads &amp; processes →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/parallelism.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

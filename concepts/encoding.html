@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Characters &amp; encoding — Learn</title>
+    <meta
+      name="description"
+      content="Characters & encoding: type a character and see its Unicode code point plus UTF-8 bytes."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#foundations">Foundations</a>
+      </p>
+      <h1>Characters &amp; encoding</h1>
+      <p class="concept-meta">
+        <span class="tag">Foundations</span>
+        <span>
+          ASCII · Unicode ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Variable-length encoding of Unicode code points as bytes"
+            data-def="Variable-length encoding of Unicode code points as bytes"
+            >UTF-8</abbr
+          >
+        </span>
+        <span class="meta-size"
+          >U+<strong id="enc-meta">0041</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          Text is not stored as letters—it is stored as
+          <strong>numbers</strong>, then encoded as bytes. Type a character
+          below to see its Unicode code point and the UTF-8 byte sequence
+          machines actually send. For how those numbers are written in binary
+          and hex, see
+          <a class="concept-link" href="number-systems.html">number systems</a>.
+        </p>
+
+        <div class="enc-lab">
+          <div class="viz viz-stage" aria-labelledby="enc-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="enc-viz-title">Live encoder</p>
+              <span class="enc-readout" id="enc-glyph" aria-live="polite">A</span>
+            </div>
+            <p class="viz-hint">
+              Type one character (or paste emoji) · code point and UTF-8 update
+              live
+            </p>
+            <div class="enc-stage" role="presentation">
+              <div class="enc-stage-glow" aria-hidden="true"></div>
+              <label class="enc-field">
+                <span class="enc-field-label">character</span>
+                <input
+                  id="enc-input"
+                  type="text"
+                  value="A"
+                  maxlength="8"
+                  spellcheck="false"
+                  aria-label="Character to encode"
+                />
+              </label>
+              <div class="enc-bytes" id="enc-bytes" aria-live="polite"></div>
+            </div>
+            <div class="viz-controls enc-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-enc-char="A">
+                A
+              </button>
+              <button type="button" class="viz-btn" data-enc-char="é">
+                é
+              </button>
+              <button type="button" class="viz-btn" data-enc-char="你">
+                你
+              </button>
+              <button type="button" class="viz-btn" data-enc-char="😀">
+                😀
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-enc-action="clear">
+                Clear
+              </button>
+            </div>
+            <p class="viz-live" id="enc-status" aria-live="polite">
+              'A' → U+0041 → UTF-8: 41
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="enc-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="enc-code-title">Code point</p>
+              <span class="code-panel-lang" id="enc-code-lang">ASCII</span>
+            </div>
+            <pre class="code-panel-body" id="enc-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="enc-code-note">
+              Code points below 128 fit in one UTF-8 byte (ASCII).
+            </p>
+          </aside>
+        </div>
+
+        <h2>ASCII, then Unicode</h2>
+        <p>
+          Early systems mapped Latin letters to 0–127 (ASCII). Unicode assigns
+          a unique <em>code point</em> to every character worldwide—still just
+          an integer, like
+          <code>U+0041</code> for <code>A</code>.
+        </p>
+
+        <h2>UTF-8 on the wire</h2>
+        <ul class="op-list">
+          <li>
+            <code>1 byte</code>
+            <span>U+0000…U+007F (ASCII)</span>
+            <span class="op-cost">0xxxxxxx</span>
+          </li>
+          <li>
+            <code>2 bytes</code>
+            <span>U+0080…U+07FF</span>
+            <span class="op-cost">110xxxxx…</span>
+          </li>
+          <li>
+            <code>3–4 bytes</code>
+            <span>most scripts &amp; emoji</span>
+            <span class="op-cost">1110… / 11110…</span>
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/UTF-8">
+            <p>
+              “UTF-8 is a variable-length character encoding standard used for
+              electronic communication. Defined by the Unicode Standard, the name
+              is derived from Unicode (or Universal Coded Character Set)
+              Transformation Format – 8-bit.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/UTF-8"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — UTF-8</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#foundations">← All concepts</a>
+        <a class="next" href="variables-types.html">Next up: Variables &amp; types →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/encoding.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

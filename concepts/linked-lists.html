@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Linked lists — Learn</title>
+    <meta
+      name="description"
+      content="Linked lists: nodes and next pointers. Insert, delete, and traverse while watching matching C struct code light up."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#data-structures">Data structures</a>
+      </p>
+      <h1>Linked lists</h1>
+      <p class="concept-meta">
+        <span class="tag">Data structures</span>
+        <span>
+          nodes · next pointers ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Insert or delete at the head without shifting the rest"
+            data-def="Insert or delete at the head without shifting the rest"
+            >O(1)</abbr
+          >
+          head ops
+        </span>
+        <span class="meta-size">nodes <strong id="ll-size">3</strong></span>
+      </p>
+
+      <div class="concept-body">
+        <p>
+          A <strong>linked list</strong> is a chain of
+          <em>nodes</em>. Each node holds a value and a
+          <strong>next</strong> pointer to its neighbor. Order lives in the
+          links—not in contiguous addresses—so you can splice at the head in
+          constant time, but finding the <em>k</em>-th item costs a walk.
+        </p>
+
+        <div class="ll-lab">
+          <div class="viz viz-stage" aria-labelledby="ll-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="ll-viz-title">Live node chain</p>
+            </div>
+            <p class="viz-hint">
+              Value + next · arrows rewire on insert / delete
+            </p>
+            <div class="ll-stage" role="presentation">
+              <div class="ll-stage-glow" aria-hidden="true"></div>
+              <div class="ll-head-tag" aria-hidden="true">
+                <span class="ll-head-label">head</span>
+              </div>
+              <div
+                id="ll-chain"
+                class="ll-chain"
+                role="img"
+                aria-live="polite"
+                aria-label="Singly linked list of nodes"
+              ></div>
+            </div>
+            <div class="viz-controls ll-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-ll-action="insert-head">
+                Insert head
+              </button>
+              <button type="button" class="viz-btn" data-ll-action="insert-tail">
+                Insert tail
+              </button>
+              <button type="button" class="viz-btn viz-btn-danger" data-ll-action="delete-head">
+                Delete head
+              </button>
+              <button type="button" class="viz-btn" data-ll-action="traverse">
+                Traverse
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-ll-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="ll-status" aria-live="polite">
+              Three nodes linked. Insert at the head—watch next rewire.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="ll-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="ll-code-title">Executing</p>
+              <span class="code-panel-lang">C · singly linked</span>
+            </div>
+            <pre class="code-panel-body" id="ll-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="ll-code-note">
+              Press <strong>Insert head</strong>, <strong>Insert tail</strong>,
+              <strong>Delete head</strong>, or <strong>Traverse</strong> —
+              matching C steps light up.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Nodes and pointers</h2>
+        <p>
+          A node is a small record: payload plus a link. The list itself is just
+          a <code>head</code> pointer (and sometimes a <code>tail</code>). The
+          last node’s <code>next</code> is <code>NULL</code>—the terminator.
+        </p>
+
+        <h2>Versus arrays</h2>
+        <p>
+          An
+          <a class="concept-link" href="arrays.html">array</a> gives
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Constant-time random access by index"
+            data-def="Constant-time random access by index"
+            >O(1)</abbr
+          >
+          index access and great cache locality, but inserting in the middle
+          shifts everyone. A linked list flips that tradeoff: splice by rewiring
+          a few pointers, but reaching index <code>i</code> walks
+          <code>i</code> links—
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Linear time — cost grows with how far you walk"
+            data-def="Linear time — cost grows with how far you walk"
+            >O(n)</abbr
+          >
+          access.
+        </p>
+
+        <h2>Operation costs</h2>
+        <ul class="op-list">
+          <li>
+            <code>insert_head(x)</code>
+            <span>new node points at old head</span>
+            <span class="op-cost">O(1)</span>
+          </li>
+          <li>
+            <code>delete_head()</code>
+            <span>advance head, free old node</span>
+            <span class="op-cost">O(1)</span>
+          </li>
+          <li>
+            <code>insert_tail(x)</code>
+            <span>walk to end (or keep a tail ptr)</span>
+            <span class="op-cost">O(n) / O(1)*</span>
+          </li>
+          <li>
+            <code>find(x)</code>
+            <span>traverse until match or NULL</span>
+            <span class="op-cost">O(n)</span>
+          </li>
+          <li>
+            <code>get(i)</code>
+            <span>no random access — walk i steps</span>
+            <span class="op-cost">O(n)</span>
+          </li>
+        </ul>
+        <p class="ll-footnote">
+          *With an explicit <code>tail</code> pointer, append is O(1).
+        </p>
+
+        <h2>Where linked lists show up</h2>
+        <ul>
+          <li>
+            <strong
+              ><a class="concept-link" href="stack.html">Stacks</a> &amp;
+              queues</strong
+            >
+            — list-backed with head (and maybe tail) ops
+          </li>
+          <li>
+            <strong>Hash table chaining</strong> — buckets as short lists of
+            collisions
+          </li>
+          <li>
+            <strong>LRU / freelists</strong> — splice nodes without shifting
+            arrays
+          </li>
+          <li>
+            <strong>Adjacent / adjacency lists</strong> — graph neighbors as
+            chains
+          </li>
+          <li>
+            <strong>Undo trails &amp; playlists</strong> — insert/remove without
+            compacting
+          </li>
+        </ul>
+
+        <p>
+          Prefer index math and cache-friendly scans? Start from
+          <a class="concept-link" href="arrays.html">arrays</a>. Same “list with
+          rules” idea as a
+          <a class="concept-link" href="stack.html">stack</a> or
+          <a class="concept-link" href="queue.html">queue</a>,
+          different guts.
+        </p>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Linked_list">
+            <p>
+              “In computer science, a linked list is a linear collection of data
+              elements whose order is not given by their physical placement in
+              memory. Instead, each element points to the next. It is a data
+              structure consisting of a collection of nodes which together
+              represent a sequence.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Linked_list"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Linked list</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="arrays.html">← Arrays</a>
+        <a class="next" href="stack.html">Next up: Stack →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/linked-lists.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

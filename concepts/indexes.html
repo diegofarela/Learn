@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Indexes — Learn</title>
+    <meta
+      name="description"
+      content="Indexes: compare a full table scan with a B-tree index lookup on sorted keys."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#databases">Databases</a>
+      </p>
+      <h1>Indexes</h1>
+      <p class="concept-meta">
+        <span class="tag">Databases</span>
+        <span>
+          table scan ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Balanced tree of sorted keys pointing at rows"
+            data-def="Balanced tree of sorted keys pointing at rows"
+            >B-tree</abbr
+          >
+          · lookup
+        </span>
+        <span class="meta-size"
+          >probes <strong id="idx-meta">0</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          An <strong>index</strong> is a side structure—often a B-tree—that
+          finds rows by key without reading the whole table. Without one, a
+          <a class="concept-link" href="sql.html">SQL</a>
+          <code>WHERE</code> may scan every row. Related:
+          <a class="concept-link" href="bst.html">binary search trees</a>
+          and
+          <a class="concept-link" href="searching.html">binary search</a>.
+        </p>
+
+        <div class="idx-lab">
+          <div class="viz viz-stage" aria-labelledby="idx-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="idx-viz-title">Scan vs index</p>
+              <label class="palette-control">
+                <span class="sr-only">Mode</span>
+                <select id="idx-mode" aria-label="Lookup mode">
+                  <option value="scan">Table scan</option>
+                  <option value="index">B-tree index</option>
+                </select>
+              </label>
+            </div>
+            <p class="viz-hint">
+              Look up key 42 — watch the path: every row vs tree descent
+            </p>
+            <div class="idx-stage" role="presentation">
+              <div class="idx-stage-glow" aria-hidden="true"></div>
+              <div class="idx-heap" id="idx-heap" aria-label="Table rows"></div>
+              <div class="idx-tree" id="idx-tree" aria-label="Index tree"></div>
+            </div>
+            <div class="viz-controls idx-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-idx-action="step">
+                Step
+              </button>
+              <button type="button" class="viz-btn" data-idx-action="play">Play</button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-idx-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="idx-status" aria-live="polite">
+              Ready — choose scan or index, then Step to find key 42.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="idx-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="idx-code-title">Plan</p>
+              <span class="code-panel-lang" id="idx-code-lang">scan</span>
+            </div>
+            <pre class="code-panel-body" id="idx-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="idx-code-note">
+              Indexes trade write cost and space for faster reads.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Why indexes help</h2>
+        <ul class="op-list">
+          <li>
+            <code>table scan</code>
+            <span>check every row — O(n)</span>
+            <span class="op-cost">slow</span>
+          </li>
+          <li>
+            <code>B-tree lookup</code>
+            <span>follow sorted branches — ~O(log n)</span>
+            <span class="op-cost">fast</span>
+          </li>
+          <li>
+            <code>trade-off</code>
+            <span>extra storage + slower writes</span>
+            <span class="op-cost">cost</span>
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Database_index">
+            <p>
+              “A database index is a data structure that improves the speed of
+              data retrieval operations on a database table at the cost of
+              additional writes and storage space to maintain the index data
+              structure. Indexes are used to quickly locate data without having
+              to search every row in a database table every time it is accessed.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Database_index"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Database index</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#databases">← All concepts</a>
+        <a class="next" href="transactions.html">Next up: Transactions →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/indexes.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

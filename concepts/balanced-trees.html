@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Balanced trees — Learn</title>
+    <meta
+      name="description"
+      content="Balanced trees (AVL): keep height near log n. Insert a skewing sequence and step through the rotation that restores balance."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#data-structures">Data structures</a>
+      </p>
+      <h1>Balanced trees</h1>
+      <p class="concept-meta">
+        <span class="tag">Data structures</span>
+        <span>AVL · height balance · rotations</span>
+        <span class="meta-size"
+          >height <strong id="avl-height">0</strong> · next
+          <strong id="avl-next">10</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          A plain
+          <a class="concept-link" href="bst.html">binary search tree</a>
+          can skew into a linked list if you insert sorted keys. A
+          <strong>self-balancing</strong> BST restores a height invariant after
+          updates. This lab is an <strong>AVL</strong> tree: for every node, the
+          heights of the left and right subtrees differ by at most one.
+          Violations trigger a <em>rotation</em>.
+        </p>
+
+        <div class="avl-lab">
+          <div class="viz viz-stage" aria-labelledby="avl-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="avl-viz-title">Live AVL demo</p>
+              <p class="avl-phase" id="avl-phase" aria-live="polite">Ready</p>
+            </div>
+            <p class="viz-hint">
+              Sequence 10 → 20 → 30 skews right · Step rotation restores balance
+            </p>
+            <div class="avl-stage" role="presentation">
+              <svg id="avl-edges" class="avl-edges" aria-hidden="true"></svg>
+              <div
+                id="avl-nodes"
+                class="avl-nodes"
+                role="img"
+                aria-live="polite"
+                aria-label="AVL tree with balance factors"
+              ></div>
+            </div>
+            <div class="viz-controls avl-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-avl-action="insert">
+                Insert next
+              </button>
+              <button
+                type="button"
+                class="viz-btn"
+                data-avl-action="rotate"
+                id="avl-rotate-btn"
+                disabled
+              >
+                Step rotation
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-avl-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="avl-status" aria-live="polite">
+              Empty tree. Insert next (10, then 20, then 30) to force a left
+              rotation.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="avl-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="avl-code-title">Executing</p>
+              <span class="code-panel-lang">C · AVL insert / rotate</span>
+            </div>
+            <pre class="code-panel-body" id="avl-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="avl-code-note">
+              Press <strong>Insert next</strong> through the skewing sequence,
+              then <strong>Step rotation</strong> when balance breaks.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Height balance</h2>
+        <p>
+          The <strong>balance factor</strong> of a node is
+          height(left) − height(right). AVL allows −1, 0, or +1. After insert,
+          if any ancestor hits ±2, a single or double rotation rewires parent
+          and child links so the BST order stays and heights shrink back into
+          range. Result: height stays O(log n), so search stays fast.
+        </p>
+
+        <h2>Operations</h2>
+        <ul class="op-list">
+          <li>
+            <code>insert(k)</code>
+            <span>BST insert, then rebalance up the path</span>
+            <span class="op-cost">O(log n)</span>
+          </li>
+          <li>
+            <code>rotateLeft / rotateRight</code>
+            <span>local rewrite that preserves inorder</span>
+            <span class="op-cost">O(1)</span>
+          </li>
+          <li>
+            <code>search(k)</code>
+            <span>same walk as a plain BST</span>
+            <span class="op-cost">O(log n)</span>
+          </li>
+        </ul>
+
+        <h2>Related ideas</h2>
+        <ul>
+          <li>
+            <a class="concept-link" href="bst.html">Binary search trees</a>
+            — ordering without the height guarantee
+          </li>
+          <li>
+            <a class="concept-link" href="binary-trees.html">Binary trees</a>
+            — shape vocabulary (height, subtree)
+          </li>
+          <li>
+            <a class="concept-link" href="heaps.html">Heaps</a>
+            — complete shape for priority, not search order
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/AVL_tree">
+            <p>
+              “In computer science, an AVL tree (named after inventors
+              Adelson-Velsky and Landis) is a self-balancing binary search tree.
+              In an AVL tree, the heights of the two child subtrees of any node
+              differ by not more than one; if at any time they differ by more
+              than one, rebalancing is done to restore this property. Lookup,
+              insertion, and deletion all take O(log n) time in both the average
+              and worst cases.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/AVL_tree"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — AVL tree</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="bst.html">← Binary search trees</a>
+        <a class="next" href="tries.html">Next up: Tries →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/balanced-trees.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Memory &amp; pointers — Learn</title>
+    <meta
+      name="description"
+      content="Memory & pointers: address slots, a pointer arrow, and live demos of &amp;x and *p in C."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#foundations">Foundations</a>
+      </p>
+      <h1>Memory &amp; pointers</h1>
+      <p class="concept-meta">
+        <span class="tag">Foundations</span>
+        <span>
+          address ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Reading or writing the value at the address a pointer holds"
+            data-def="Reading or writing the value at the address a pointer holds"
+            >dereference</abbr
+          >
+          · <code>&amp;</code> / <code>*</code>
+        </span>
+        <span class="meta-size"
+          >p → <strong id="mem-p-label">0x1008</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          A <strong>pointer</strong> is a variable that stores a
+          <em>memory address</em>—not the value itself.
+          <code>&amp;x</code> takes the address of <code>x</code>;
+          <code>*p</code> follows that address to read or write. Contrast the
+          <a class="concept-link" href="call-stack.html">call stack</a>
+          (automatic locals) with the heap (dynamic allocations)—both are just
+          addressable slots.
+        </p>
+
+        <div class="mem-lab">
+          <div class="viz viz-stage" aria-labelledby="mem-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="mem-viz-title">Live address map</p>
+              <span class="mem-readout" id="mem-readout">*p = 7</span>
+            </div>
+            <p class="viz-hint">
+              Variables on the left · heap slots on the right · arrow is the pointer
+            </p>
+            <div class="mem-stage" role="presentation">
+              <div class="mem-stage-glow" aria-hidden="true"></div>
+              <div class="mem-vars" id="mem-vars" aria-label="Named variables">
+                <div class="mem-var" data-var="x">
+                  <span class="mem-var-name">x</span>
+                  <span class="mem-var-val" id="mem-x-val">7</span>
+                  <span class="mem-var-addr">@0x1008</span>
+                </div>
+                <div class="mem-var is-ptr" data-var="p" id="mem-p-box">
+                  <span class="mem-var-name">p</span>
+                  <span class="mem-var-val" id="mem-p-val">0x1008</span>
+                  <span class="mem-var-addr">pointer</span>
+                </div>
+              </div>
+              <svg class="mem-arrow" id="mem-arrow" viewBox="0 0 120 160" aria-hidden="true">
+                <defs>
+                  <marker
+                    id="mem-arrowhead"
+                    markerWidth="8"
+                    markerHeight="8"
+                    refX="6"
+                    refY="3"
+                    orient="auto"
+                  >
+                    <path d="M0,0 L6,3 L0,6 Z" fill="currentColor" />
+                  </marker>
+                </defs>
+                <path
+                  id="mem-arrow-path"
+                  class="mem-arrow-path"
+                  d="M10 110 C55 110, 55 48, 110 48"
+                  fill="none"
+                  marker-end="url(#mem-arrowhead)"
+                />
+              </svg>
+              <div
+                id="mem-slots"
+                class="mem-slots"
+                role="img"
+                aria-live="polite"
+                aria-label="Memory address slots"
+              ></div>
+            </div>
+            <div class="viz-controls mem-controls">
+              <label class="mem-field">
+                <span class="mem-field-label">target</span>
+                <select id="mem-target" aria-label="Point p at address">
+                  <option value="0x1004">0x1004</option>
+                  <option value="0x1008" selected>0x1008 (x)</option>
+                  <option value="0x100C">0x100C</option>
+                  <option value="0x1010">0x1010</option>
+                </select>
+              </label>
+              <button type="button" class="viz-btn viz-btn-primary" data-mem-action="point">
+                Set p = &amp;…
+              </button>
+              <button type="button" class="viz-btn" data-mem-action="deref">
+                Read *p
+              </button>
+              <label class="mem-field">
+                <span class="mem-field-label">write</span>
+                <input
+                  id="mem-write"
+                  type="number"
+                  min="0"
+                  max="99"
+                  value="42"
+                  aria-label="Value to write via pointer"
+                />
+              </label>
+              <button type="button" class="viz-btn viz-btn-danger" data-mem-action="write">
+                *p =
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-mem-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="mem-status" aria-live="polite">
+              p holds 0x1008 — the address of x. Read or write through *p.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="mem-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="mem-code-title">Executing</p>
+              <span class="code-panel-lang">C · pointers</span>
+            </div>
+            <pre class="code-panel-body" id="mem-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="mem-code-note">
+              Press a control — <strong>&amp;</strong> takes an address,
+              <strong>*</strong> follows it.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Address vs value</h2>
+        <p>
+          Every variable lives somewhere. The address is <em>where</em>; the
+          contents are <em>what</em>. A pointer variable’s value <em>is</em> an
+          address. That indirection is why
+          <a class="concept-link" href="arrays.html">arrays</a>
+          decay to pointers and why linked structures can grow without moving
+          callers.
+        </p>
+
+        <h2>Operators</h2>
+        <ul class="op-list">
+          <li>
+            <code>&amp;x</code>
+            <span>address of x</span>
+            <span class="op-cost">point</span>
+          </li>
+          <li>
+            <code>*p</code>
+            <span>value at address in p</span>
+            <span class="op-cost">deref</span>
+          </li>
+          <li>
+            <code>p = &amp;x</code>
+            <span>make p point at x</span>
+            <span class="op-cost">assign</span>
+          </li>
+          <li>
+            <code>*p = v</code>
+            <span>write v through the pointer</span>
+            <span class="op-cost">store</span>
+          </li>
+        </ul>
+
+        <h2>Stack vs heap</h2>
+        <p>
+          Locals often live on the
+          <a class="concept-link" href="call-stack.html">call stack</a>
+          (or a data-structure
+          <a class="concept-link" href="stack.html">stack</a>
+          in spirit): automatic lifetime, fixed frames. Heap memory is allocated
+          at runtime and reached only through pointers—flexible size, manual or
+          GC cleanup. Same address idea either way.
+        </p>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote
+            cite="https://en.wikipedia.org/wiki/Pointer_(computer_programming)"
+          >
+            <p>
+              “In computer science, a pointer is an object in many programming
+              languages that stores a memory address. This can be that of another
+              value located in computer memory, or in some cases, that of
+              memory-mapped computer hardware. A pointer references a location in
+              memory, and obtaining the value stored at that location is known as
+              dereferencing the pointer.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Pointer_(computer_programming)"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Pointer (computer programming)</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#foundations">← All concepts</a>
+        <a class="next" href="big-o.html">Next up: Big-O complexity →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/memory-pointers.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

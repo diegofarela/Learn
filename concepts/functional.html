@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Functional programming — Learn</title>
+    <meta
+      name="description"
+      content="Functional programming: map / filter / reduce pipelines, pure vs impure, and immutability."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#programming">Programming models</a>
+      </p>
+      <h1>Functional programming</h1>
+      <p class="concept-meta">
+        <span class="tag">Programming models</span>
+        <span>map · filter · reduce · pure</span>
+        <span class="meta-size"
+          >result <strong id="fp-result">—</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          <strong>Functional programming</strong> builds programs by composing
+          functions. Prefer <em>pure</em> functions (same inputs → same output, no
+          side effects) and <em>immutable</em> data. Contrast with
+          <a class="concept-link" href="oop.html">OOP</a>, where behavior often
+          lives on mutable objects.
+        </p>
+
+        <div class="fp-lab">
+          <div class="viz viz-stage" aria-labelledby="fp-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="fp-viz-title">Pipeline</p>
+              <span class="sys-badge" id="fp-badge">idle</span>
+            </div>
+            <p class="viz-hint">
+              filter odds → map ×2 → reduce sum · toggle pure vs impure
+            </p>
+            <div class="fp-pipeline" id="fp-pipeline" aria-label="Data pipeline">
+              <div class="fp-stage-block" data-stage="src">
+                <span class="fp-stage-label">list</span>
+                <div class="fp-chips" id="fp-src"></div>
+              </div>
+              <span class="fp-arrow" aria-hidden="true">→</span>
+              <div class="fp-stage-block" data-stage="filter">
+                <span class="fp-stage-label">filter</span>
+                <div class="fp-chips" id="fp-filter"></div>
+              </div>
+              <span class="fp-arrow" aria-hidden="true">→</span>
+              <div class="fp-stage-block" data-stage="map">
+                <span class="fp-stage-label">map</span>
+                <div class="fp-chips" id="fp-map"></div>
+              </div>
+              <span class="fp-arrow" aria-hidden="true">→</span>
+              <div class="fp-stage-block" data-stage="reduce">
+                <span class="fp-stage-label">reduce</span>
+                <div class="fp-reduce" id="fp-reduce">—</div>
+              </div>
+            </div>
+            <div class="fp-immut" id="fp-immut">
+              <div class="fp-immut-col">
+                <p class="fp-immut-label">original</p>
+                <div class="fp-chips" id="fp-orig"></div>
+              </div>
+              <div class="fp-immut-col">
+                <p class="fp-immut-label" id="fp-immut-mode-label">after copy</p>
+                <div class="fp-chips" id="fp-copy"></div>
+              </div>
+            </div>
+            <div class="viz-controls fp-controls">
+              <label class="sync-toggle">
+                <input type="checkbox" id="fp-impure" />
+                <span>Impure (side effect)</span>
+              </label>
+              <button type="button" class="viz-btn viz-btn-primary" data-fp-action="run">
+                Run pipeline
+              </button>
+              <button type="button" class="viz-btn" data-fp-action="copy">
+                Copy + change
+              </button>
+              <button type="button" class="viz-btn" data-fp-action="mutate">
+                Mutate in place
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-fp-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="fp-status" aria-live="polite">
+              Pure mode: pipeline returns a value without touching outside state.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="fp-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="fp-code-title">Executing</p>
+              <span class="code-panel-lang">JS-ish</span>
+            </div>
+            <pre class="code-panel-body" id="fp-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="fp-code-note">
+              Run the pipeline — each stage lights up.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Purity</h2>
+        <p>
+          A pure function’s result depends only on its arguments. Flip
+          <em>Impure</em> to log to a shared counter—same math, but now the call
+          has a side effect.
+        </p>
+
+        <h2>Immutability</h2>
+        <p>
+          Prefer copying and transforming over mutating. <strong>Copy + change</strong>
+          leaves the original list intact; <strong>Mutate in place</strong> rewrites
+          it—harder to reason about when data is shared.
+        </p>
+
+        <h2>Related ideas</h2>
+        <ul>
+          <li>
+            <a class="concept-link" href="oop.html">Object-oriented programming</a>
+            — objects + methods vs function composition
+          </li>
+          <li>
+            <a class="concept-link" href="recursion.html">Recursion</a>
+            — natural fit for functional style
+          </li>
+          <li>
+            <a class="concept-link" href="variables-types.html">Variables &amp; types</a>
+            — mutability and type systems
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Functional_programming">
+            <p>
+              “In computer science, functional programming is a programming
+              paradigm where programs are constructed by applying and composing
+              functions. It is a declarative programming paradigm in which
+              function definitions are trees of expressions that map values to
+              other values, rather than a sequence of imperative statements which
+              update the running state of the program.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Functional_programming"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Functional programming</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#programming">← All concepts</a>
+        <a class="next" href="concurrency.html">Next up: Concurrency →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/functional.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

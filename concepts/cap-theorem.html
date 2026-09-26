@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>CAP theorem — Learn</title>
+    <meta
+      name="description"
+      content="CAP theorem: pick any two of Consistency, Availability, Partition tolerance."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#databases">Databases</a>
+      </p>
+      <h1>CAP theorem</h1>
+      <p class="concept-meta">
+        <span class="tag">Databases</span>
+        <span>consistency · availability · partition tolerance</span>
+        <span class="meta-size"
+          >pick <strong id="cap-meta">2</strong>/3</span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          In a partitioned network you can’t keep full
+          <strong>consistency</strong> and full
+          <strong>availability</strong> at once. Systems choose a corner of the
+          triangle—relevant when comparing
+          <a class="concept-link" href="relational.html">relational</a>
+          /
+          <a class="concept-link" href="transactions.html">ACID</a>
+          stores with many
+          <a class="concept-link" href="nosql.html">NoSQL</a>
+          designs.
+        </p>
+
+        <div class="cap-lab">
+          <div class="viz viz-stage" aria-labelledby="cap-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="cap-viz-title">Pick 2 of 3</p>
+              <span class="cap-phase" id="cap-phase">CA / CP / AP</span>
+            </div>
+            <p class="viz-hint">
+              Toggle properties — invalid “all three” is blocked under partition
+            </p>
+            <div class="cap-stage" role="presentation">
+              <div class="cap-stage-glow" aria-hidden="true"></div>
+              <div class="cap-tri" id="cap-tri">
+                <button type="button" class="cap-node is-on" data-cap="C" aria-pressed="true">
+                  <span class="cap-node-letter">C</span>
+                  <span class="cap-node-name">Consistency</span>
+                </button>
+                <button type="button" class="cap-node is-on" data-cap="A" aria-pressed="true">
+                  <span class="cap-node-letter">A</span>
+                  <span class="cap-node-name">Availability</span>
+                </button>
+                <button type="button" class="cap-node" data-cap="P" aria-pressed="false">
+                  <span class="cap-node-letter">P</span>
+                  <span class="cap-node-name">Partition tolerance</span>
+                </button>
+              </div>
+              <p class="cap-verdict" id="cap-verdict">CA — fine without a network split.</p>
+            </div>
+            <div class="viz-controls cap-controls">
+              <button type="button" class="viz-btn" data-cap-preset="CP">CP</button>
+              <button type="button" class="viz-btn" data-cap-preset="AP">AP</button>
+              <button type="button" class="viz-btn" data-cap-preset="CA">CA</button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-cap-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="cap-status" aria-live="polite">
+              Toggle C / A / P. Under partition, you may keep only two.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="cap-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="cap-code-title">Reading</p>
+              <span class="code-panel-lang">distributed</span>
+            </div>
+            <pre class="code-panel-body" id="cap-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="cap-code-note">
+              Real systems soften “C” and “A”; CAP is a forcing function.
+            </p>
+          </aside>
+        </div>
+
+        <h2>The three</h2>
+        <ul class="op-list">
+          <li>
+            <code>C</code>
+            <span>every read sees the latest write</span>
+            <span class="op-cost">linearizable</span>
+          </li>
+          <li>
+            <code>A</code>
+            <span>every request gets a non-error response</span>
+            <span class="op-cost">up</span>
+          </li>
+          <li>
+            <code>P</code>
+            <span>system keeps working despite message loss</span>
+            <span class="op-cost">split</span>
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/CAP_theorem">
+            <p>
+              “In theoretical computer science, the CAP theorem, also named
+              Brewer's theorem after computer scientist Eric Brewer, states that
+              it is impossible for a distributed data store to simultaneously
+              provide more than two out of the following three guarantees:
+              Consistency, Availability, and Partition tolerance.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/CAP_theorem"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — CAP theorem</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#databases">← All concepts</a>
+        <a class="next" href="nosql.html">Related: NoSQL →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/cap-theorem.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

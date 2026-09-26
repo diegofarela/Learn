@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Virtual memory — Learn</title>
+    <meta
+      name="description"
+      content="Virtual memory: virtual pages map to physical frames. Trigger a page fault and watch the mapping update."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#systems">Systems</a>
+      </p>
+      <h1>Virtual memory</h1>
+      <p class="concept-meta">
+        <span class="tag">Systems</span>
+        <span>
+          pages → frames ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Access to a page that is not currently mapped into a physical frame — OS must load or allocate it"
+            data-def="Access to a page that is not currently mapped into a physical frame — OS must load or allocate it"
+            >page fault</abbr
+          >
+        </span>
+        <span class="meta-size"
+          >mapped <strong id="vm-mapped">3</strong> / 6</span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          <strong>Virtual memory</strong> gives each process a private address
+          space of <em>pages</em>. The OS + MMU map those pages onto
+          <em>physical frames</em> in RAM. Touch a page that isn’t mapped → a
+          <strong>page fault</strong>; the OS loads or allocates a frame. See also
+          <a class="concept-link" href="caching.html">caching</a>
+          (another hierarchy layer) and
+          <a class="concept-link" href="os-processes.html">OS processes</a>
+          (each gets its own address space).
+        </p>
+
+        <div class="vm-lab">
+          <div class="viz viz-stage" aria-labelledby="vm-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="vm-viz-title">Pages → frames</p>
+              <span class="sys-badge" id="vm-badge">ready</span>
+            </div>
+            <p class="viz-hint">
+              Click a virtual page to access it · unmapped pages fault
+            </p>
+            <div class="vm-layout">
+              <div class="vm-panel">
+                <p class="vm-panel-label">Virtual pages</p>
+                <div
+                  id="vm-pages"
+                  class="vm-pages"
+                  role="list"
+                  aria-label="Virtual pages"
+                ></div>
+              </div>
+              <div class="vm-arrows" aria-hidden="true" id="vm-arrows"></div>
+              <div class="vm-panel">
+                <p class="vm-panel-label">Physical frames (RAM)</p>
+                <div
+                  id="vm-frames"
+                  class="vm-frames"
+                  role="list"
+                  aria-label="Physical frames"
+                ></div>
+              </div>
+            </div>
+            <div class="viz-controls vm-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-vm-action="access">
+                Access next
+              </button>
+              <button type="button" class="viz-btn viz-btn-danger" data-vm-action="fault">
+                Force fault
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-vm-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="vm-status" aria-live="polite">
+              Three pages mapped. Access a page — or force a fault on an unmapped one.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="vm-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="vm-code-title">Executing</p>
+              <span class="code-panel-lang">pseudocode · MMU</span>
+            </div>
+            <pre class="code-panel-body" id="vm-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="vm-code-note">
+              Access a page — translation or page-fault handling lights up.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Address translation</h2>
+        <p>
+          A virtual address splits into a <strong>page number</strong> and an
+          offset. The page table maps page → frame; the MMU concatenates the
+          frame with the offset to get a physical address—transparent to the
+          program, which only sees virtual addresses.
+        </p>
+
+        <h2>Page faults</h2>
+        <p>
+          If the page isn’t present (or isn’t allocated yet), hardware traps to
+          the OS. The kernel may free a frame, load the page from disk (swap),
+          update the page table, then restart the instruction. Costly—but it
+          lets the working set exceed physical RAM.
+        </p>
+
+        <h2>Related ideas</h2>
+        <ul>
+          <li>
+            <a class="concept-link" href="caching.html">Caching</a>
+            — TLB and page frames are cache-like
+          </li>
+          <li>
+            <a class="concept-link" href="os-processes.html">OS processes</a>
+            — isolated address spaces
+          </li>
+          <li>
+            <a class="concept-link" href="memory-pointers.html">Memory &amp; pointers</a>
+            — pointers hold virtual addresses in user code
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Virtual_memory">
+            <p>
+              “In computing, virtual memory, or virtual storage, is enabled by a
+              memory management technique that provides an ‘idealized abstraction
+              of the storage resources that are actually available on a given
+              machine’ which ‘creates the illusion to users of a very large
+              (main) memory’.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Virtual_memory"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Virtual memory</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#systems">← All concepts</a>
+        <a class="next" href="os-processes.html">Next up: OS processes →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/virtual-memory.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

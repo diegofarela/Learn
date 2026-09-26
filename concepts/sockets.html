@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Sockets — Learn</title>
+    <meta
+      name="description"
+      content="Sockets: client and server endpoints connect, then send and receive messages."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#networks">Networks</a>
+      </p>
+      <h1>Sockets</h1>
+      <p class="concept-meta">
+        <span class="tag">Networks</span>
+        <span>
+          endpoint · bind ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Accept an incoming connection on a listening socket"
+            data-def="Accept an incoming connection on a listening socket"
+            >accept</abbr
+          >
+        </span>
+        <span class="meta-size"
+          >step <strong id="sock-meta">0</strong>/5</span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          A <strong>socket</strong> is an endpoint for sending and receiving
+          bytes. A server binds and listens; a client connects; then both
+          <code>send</code> / <code>recv</code>. Under the hood that often
+          means
+          <a class="concept-link" href="tcp-udp.html">TCP or UDP</a>; above it,
+          protocols like
+          <a class="concept-link" href="http.html">HTTP</a>.
+        </p>
+
+        <div class="sock-lab">
+          <div class="viz viz-stage" aria-labelledby="sock-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="sock-viz-title">Client ↔ server</p>
+              <span class="sock-phase" id="sock-phase">idle</span>
+            </div>
+            <p class="viz-hint">
+              Listen → connect → exchange messages on the connected sockets
+            </p>
+            <div class="sock-stage" role="presentation">
+              <div class="sock-stage-glow" aria-hidden="true"></div>
+              <div class="sock-nodes">
+                <div class="sock-node" id="sock-client">
+                  <span class="sock-node-role">Client</span>
+                  <span class="sock-node-fd" id="sock-client-fd">fd ?</span>
+                  <span class="sock-node-buf" id="sock-client-buf">—</span>
+                </div>
+                <div class="sock-link" aria-hidden="true">
+                  <div class="sock-wire" id="sock-wire"></div>
+                  <div class="sock-msg" id="sock-msg"></div>
+                </div>
+                <div class="sock-node" id="sock-server">
+                  <span class="sock-node-role">Server</span>
+                  <span class="sock-node-fd" id="sock-server-fd">listen ?</span>
+                  <span class="sock-node-buf" id="sock-server-buf">—</span>
+                </div>
+              </div>
+            </div>
+            <div class="viz-controls sock-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-sock-action="step">
+                Step
+              </button>
+              <button type="button" class="viz-btn" data-sock-action="play">Play</button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-sock-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="sock-status" aria-live="polite">
+              Ready — press Step for the server to bind and listen.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="sock-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="sock-code-title">API log</p>
+              <span class="code-panel-lang">Berkeley sockets</span>
+            </div>
+            <pre class="code-panel-body" id="sock-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="sock-code-note">
+              Same file-descriptor style API on most OSes.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Lifecycle</h2>
+        <ul class="op-list">
+          <li>
+            <code>bind / listen</code>
+            <span>server waits on a port</span>
+            <span class="op-cost">passive</span>
+          </li>
+          <li>
+            <code>connect / accept</code>
+            <span>pair of connected endpoints</span>
+            <span class="op-cost">active</span>
+          </li>
+          <li>
+            <code>send / recv</code>
+            <span>bytes either direction</span>
+            <span class="op-cost">I/O</span>
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Network_socket">
+            <p>
+              “A network socket is a software structure within a network node of
+              a computer network that serves as an endpoint for sending and
+              receiving data across the network. The structure and properties of
+              a socket are defined by an application programming interface (API)
+              for the networking architecture.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Network_socket"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Network socket</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#networks">← All concepts</a>
+        <a class="next" href="tcp-udp.html">Related: TCP &amp; UDP →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/sockets.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

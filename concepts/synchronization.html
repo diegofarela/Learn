@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Synchronization — Learn</title>
+    <meta
+      name="description"
+      content="Synchronization: two threads racing on a counter — toggle a lock to fix the race condition."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#programming">Programming models</a>
+      </p>
+      <h1>Synchronization</h1>
+      <p class="concept-meta">
+        <span class="tag">Programming models</span>
+        <span>
+          race ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Mutual exclusion — only one thread in the critical section at a time"
+            data-def="Mutual exclusion — only one thread in the critical section at a time"
+            >mutex</abbr
+          >
+          · critical section
+        </span>
+        <span class="meta-size"
+          >counter <strong id="sync-count">0</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          When
+          <a class="concept-link" href="threads-processes.html">threads</a>
+          share memory, interleaved reads and writes can corrupt data—a
+          <strong>race condition</strong>. A <strong>lock</strong> (mutex) makes
+          the critical section exclusive so increments stay correct. Over-locking
+          can lead to
+          <a class="concept-link" href="deadlocks.html">deadlocks</a>.
+        </p>
+
+        <div class="sync-lab">
+          <div class="viz viz-stage" aria-labelledby="sync-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="sync-viz-title">Counter race</p>
+              <span class="sys-badge" id="sync-badge">unlocked</span>
+            </div>
+            <p class="viz-hint">
+              Both threads do +1 ten times · expect 20 — unlock to see lost updates
+            </p>
+            <div class="sync-layout">
+              <div class="sync-threads" id="sync-threads">
+                <div class="sync-thread" data-tid="0">
+                  <span class="sync-thread-name">T1</span>
+                  <span class="sync-thread-op" id="sync-op0">idle</span>
+                </div>
+                <div class="sync-thread" data-tid="1">
+                  <span class="sync-thread-name">T2</span>
+                  <span class="sync-thread-op" id="sync-op1">idle</span>
+                </div>
+              </div>
+              <div class="sync-counter-wrap">
+                <p class="sync-counter-label">shared counter</p>
+                <div class="sync-counter" id="sync-counter">0</div>
+                <div class="sync-lock" id="sync-lock" aria-hidden="true">unlocked</div>
+              </div>
+            </div>
+            <div class="viz-controls sync-controls">
+              <label class="sync-toggle">
+                <input type="checkbox" id="sync-use-lock" />
+                <span>Use lock</span>
+              </label>
+              <button type="button" class="viz-btn viz-btn-primary" data-sync-action="run">
+                Run race
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-sync-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="sync-status" aria-live="polite">
+              Lock off: interleaved read-modify-write can lose increments.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="sync-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="sync-code-title">Executing</p>
+              <span class="code-panel-lang">critical section</span>
+            </div>
+            <pre class="code-panel-body" id="sync-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="sync-code-note">
+              Run the race — watch read / write interleave or lock serialize.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Critical section</h2>
+        <p>
+          The code that touches shared state must run as if atomic. Locks,
+          atomics, and higher-level monitors all enforce
+          <strong>mutual exclusion</strong> for that window.
+        </p>
+
+        <h2>Related ideas</h2>
+        <ul>
+          <li>
+            <a class="concept-link" href="threads-processes.html">Threads &amp; processes</a>
+            — who shares memory
+          </li>
+          <li>
+            <a class="concept-link" href="concurrency.html">Concurrency</a>
+            — interleaving that causes races
+          </li>
+          <li>
+            <a class="concept-link" href="parallelism.html">Parallelism</a>
+            — simultaneous writers too
+          </li>
+          <li>
+            <a class="concept-link" href="deadlocks.html">Deadlocks</a>
+            — circular lock waits
+          </li>
+          <li>
+            <a class="concept-link" href="scheduling.html">CPU scheduling</a>
+            — preemption creates interleavings
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Race_condition">
+            <p>
+              “A race condition or race hazard is the condition of an
+              electronics, software, or other system where the system's
+              substantive behavior is dependent on the sequence or timing of
+              other uncontrollable events. It becomes a bug when one or more of
+              the possible behaviors is undesirable.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Race_condition"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Race condition</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#programming">← All concepts</a>
+        <a class="next" href="deadlocks.html">Next up: Deadlocks →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/synchronization.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

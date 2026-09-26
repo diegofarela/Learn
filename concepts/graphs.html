@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Graphs — Learn</title>
+    <meta
+      name="description"
+      content="Graphs: nodes and edges. Select a vertex to see neighbors, toggle directed vs undirected, and compare adjacency list vs matrix."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#data-structures">Data structures</a>
+      </p>
+      <h1>Graphs</h1>
+      <p class="concept-meta">
+        <span class="tag">Data structures</span>
+        <span>
+          vertices + edges · directed or undirected ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Neighbors of a vertex — stored as a list or a matrix row"
+            data-def="Neighbors of a vertex — stored as a list or a matrix row"
+            >adjacency</abbr
+          >
+        </span>
+        <span class="meta-size"
+          >edges <strong id="graph-edge-count">6</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          A <strong>graph</strong> is a set of
+          <em>vertices</em> (nodes) plus
+          <em>edges</em> that connect them. Unlike a
+          <a class="concept-link" href="binary-trees.html">binary tree</a>,
+          there is no single root rule: edges can form cycles, forks, and
+          arbitrary networks. Traversals like
+          <a class="concept-link" href="bfs.html">BFS</a>
+          and
+          <a class="concept-link" href="dfs.html">DFS</a>
+          walk those connections layer by layer or deep-first.
+        </p>
+
+        <div class="graph-lab">
+          <div class="viz viz-stage" aria-labelledby="graph-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="graph-viz-title">Live graph</p>
+              <span class="graph-mode" id="graph-mode">undirected</span>
+            </div>
+            <p class="viz-hint">
+              Click a node for neighbors · Add edge between two selected nodes ·
+              Toggle directed
+            </p>
+            <div class="graph-stage" role="presentation">
+              <svg id="graph-edges" class="graph-edges" aria-hidden="true"></svg>
+              <div
+                id="graph-nodes"
+                class="graph-nodes"
+                role="img"
+                aria-live="polite"
+                aria-label="Interactive graph nodes"
+              ></div>
+            </div>
+            <div class="graph-adj" aria-labelledby="graph-adj-title">
+              <p class="graph-adj-title" id="graph-adj-title">
+                Neighbors <span id="graph-adj-of">(none selected)</span>
+              </p>
+              <div
+                id="graph-neighbors"
+                class="graph-neighbors"
+                role="list"
+                aria-label="Adjacent vertices"
+              ></div>
+            </div>
+            <div class="viz-controls graph-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-graph-action="add-edge">
+                Add edge
+              </button>
+              <button type="button" class="viz-btn" data-graph-action="toggle-dir">
+                Toggle directed
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-graph-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="graph-status" aria-live="polite">
+              Click a node to select it. Select two nodes, then Add edge.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="graph-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="graph-code-title">Representation</p>
+              <span class="code-panel-lang">C · adjacency list</span>
+            </div>
+            <pre class="code-panel-body" id="graph-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="graph-code-note">
+              Select a node — the adjacency list for that vertex lights up.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Adjacency list vs matrix</h2>
+        <p>
+          An <strong>adjacency list</strong> stores, for each vertex, the
+          neighbors it touches—space about
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Linear in vertices plus edges"
+            data-def="Linear in vertices plus edges"
+            >O(V + E)</abbr
+          >, great for sparse graphs. An
+          <strong>adjacency matrix</strong> is a V×V grid of 0/1 (or weights)—
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Quadratic in the number of vertices"
+            data-def="Quadratic in the number of vertices"
+            >O(V²)</abbr
+          >
+          space, O(1) edge checks. The demo’s side panel mirrors a list; the
+          highlighted edges are what a matrix row would mark as 1.
+        </p>
+
+        <h2>Directed vs undirected</h2>
+        <p>
+          Undirected edges are mutual: A–B means both directions. Directed
+          edges (arcs) are one-way: A→B does not imply B→A. Toggle the mode to
+          see arrowheads and how the neighbor list changes for the same
+          underlying pairs.
+        </p>
+
+        <h2>Where graphs show up</h2>
+        <ul>
+          <li>
+            <strong>Maps &amp; routes</strong> — cities as nodes, roads as edges
+          </li>
+          <li>
+            <strong>Social / web</strong> — people or pages linked together
+          </li>
+          <li>
+            <strong>Dependency graphs</strong> — packages, build targets, tasks
+          </li>
+          <li>
+            <strong>Traversals</strong> —
+            <a class="concept-link" href="bfs.html">BFS</a>
+            for shortest unweighted paths;
+            <a class="concept-link" href="dfs.html">DFS</a>
+            for deep exploration
+          </li>
+          <li>
+            <strong>Weighted paths &amp; trees</strong> —
+            <a class="concept-link" href="shortest-paths.html">Dijkstra</a>
+            for nonnegative shortest paths;
+            <a class="concept-link" href="mst.html">MST</a>
+            (Kruskal / Prim) for cheapest connectors
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Graph_(abstract_data_type)">
+            <p>
+              “In computer science, a graph is an abstract data type that is
+              meant to implement the undirected graph and directed graph
+              concepts from the field of graph theory within mathematics. A
+              graph data structure consists of a finite (and possibly mutable)
+              set of vertices (also called nodes or points), together with a set
+              of unordered pairs of these vertices for an undirected graph or a
+              set of ordered pairs for a directed graph. These pairs are known
+              as edges (also called links or lines), and for a directed graph
+              are also known as edges but also sometimes arrows or arcs.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Graph_(abstract_data_type)"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Graph (abstract data type)</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#data-structures">← All concepts</a>
+        <a class="next" href="bfs.html">Next up: Breadth-first search →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/graphs.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Network layers — Learn</title>
+    <meta
+      name="description"
+      content="Network layers: click TCP/IP or OSI stack layers to see each layer's short role."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#networks">Networks</a>
+      </p>
+      <h1>Network layers</h1>
+      <p class="concept-meta">
+        <span class="tag">Networks</span>
+        <span>
+          TCP/IP · OSI ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Stack of protocols where each layer serves the one above"
+            data-def="Stack of protocols where each layer serves the one above"
+            >layering</abbr
+          >
+        </span>
+        <span class="meta-size"
+          ><strong id="osi-meta">Application</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          Networks are built as a <strong>stack</strong>: each layer offers a
+          service to the one above and uses the one below. Toggle TCP/IP (4) or
+          OSI (7), click a layer for its job. Application traffic includes
+          <a class="concept-link" href="http.html">HTTP</a> and
+          <a class="concept-link" href="dns.html">DNS</a>.
+        </p>
+
+        <div class="osi-lab">
+          <div class="viz viz-stage" aria-labelledby="osi-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="osi-viz-title">Protocol stack</p>
+              <div class="osi-model-toggle" role="group" aria-label="Stack model">
+                <button type="button" class="viz-btn is-selected" data-osi-model="tcpip">
+                  TCP/IP
+                </button>
+                <button type="button" class="viz-btn" data-osi-model="osi">
+                  OSI
+                </button>
+              </div>
+            </div>
+            <p class="viz-hint">
+              Click a layer · role text updates · top is closest to the app
+            </p>
+            <div class="osi-stage" role="presentation">
+              <div class="osi-stage-glow" aria-hidden="true"></div>
+              <div class="osi-stack" id="osi-stack" role="list"></div>
+            </div>
+            <div class="viz-controls osi-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-osi-action="up">
+                Layer up
+              </button>
+              <button type="button" class="viz-btn" data-osi-action="down">
+                Layer down
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-osi-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="osi-status" aria-live="polite">
+              Application — HTTP, DNS, and other end-user protocols.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="osi-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="osi-code-title">Layer role</p>
+              <span class="code-panel-lang" id="osi-code-lang">TCP/IP</span>
+            </div>
+            <pre class="code-panel-body" id="osi-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="osi-code-note">
+              Encapsulation: each layer wraps the payload from above.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Why layers</h2>
+        <p>
+          Separating concerns lets HTTP ignore Ethernet details and IP ignore
+          browser quirks. TCP/IP is the practical Internet model; OSI is a
+          finer teaching map that still maps cleanly onto it.
+        </p>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Internet_protocol_suite">
+            <p>
+              “The Internet protocol suite, commonly known as TCP/IP, is a
+              framework for organizing the set of communication protocols used
+              in the Internet and similar computer networks according to
+              functional criteria. The foundational protocols in the suite are
+              the Transmission Control Protocol (TCP), the User Datagram Protocol
+              (UDP), and the Internet Protocol (IP).”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Internet_protocol_suite"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Internet protocol suite</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#networks">← All concepts</a>
+        <a class="next" href="http.html">Next up: HTTP →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/osi-tcpip.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

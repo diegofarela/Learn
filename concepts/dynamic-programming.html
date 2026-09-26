@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Dynamic programming — Learn</title>
+    <meta
+      name="description"
+      content="Dynamic programming: overlapping subproblems + memoization. Compare naive Fibonacci recursion with a filling DP table."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#algorithms">Algorithms</a>
+      </p>
+      <h1>Dynamic programming</h1>
+      <p class="concept-meta">
+        <span class="tag">Algorithms</span>
+        <span>
+          overlap · memo ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Store each subproblem answer once and reuse it"
+            data-def="Store each subproblem answer once and reuse it"
+            >table fill</abbr
+          >
+        </span>
+        <span class="meta-size">calls <strong id="dp-calls">0</strong></span>
+      </p>
+
+      <div class="concept-body">
+        <p>
+          <strong>Dynamic programming</strong> (DP) tackles problems with
+          <em>overlapping subproblems</em>: the same smaller question shows up
+          again and again. Instead of recomputing (as naive
+          <a class="concept-link" href="recursion.html">recursion</a>
+          does), you store each answer in a table—memoization or bottom-up
+          fill—so total work drops from exponential to roughly
+          <a class="concept-link" href="big-o.html">linear</a>
+          in the table size.
+        </p>
+
+        <div class="dp-lab">
+          <div class="viz viz-stage" aria-labelledby="dp-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="dp-viz-title">Fibonacci: naive vs DP</p>
+              <div class="dp-mode-toggle" role="group" aria-label="Demo mode">
+                <button type="button" class="dp-mode is-active" data-dp-mode="naive">
+                  Naive
+                </button>
+                <button type="button" class="dp-mode" data-dp-mode="memo">
+                  Memo table
+                </button>
+              </div>
+            </div>
+            <p class="viz-hint">
+              Toggle mode · Step / Play · watch call explosion vs table fill
+            </p>
+            <div class="dp-panels">
+              <div class="dp-panel" id="dp-naive-panel">
+                <p class="dp-panel-label">Call tree · fib(5)</p>
+                <div
+                  id="dp-tree"
+                  class="dp-tree"
+                  role="img"
+                  aria-live="polite"
+                  aria-label="Naive Fibonacci call tree"
+                ></div>
+              </div>
+              <div class="dp-panel" id="dp-memo-panel" hidden>
+                <p class="dp-panel-label">Memo table · fib[0…5]</p>
+                <div
+                  id="dp-table"
+                  class="dp-table"
+                  role="img"
+                  aria-live="polite"
+                  aria-label="Dynamic programming memo table"
+                ></div>
+              </div>
+            </div>
+            <div class="viz-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-dp-action="step">
+                Step
+              </button>
+              <button type="button" class="viz-btn" data-dp-action="play">Play</button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-dp-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="dp-status" aria-live="polite">
+              Naive mode. Step to expand fib(5)—notice repeated subcalls.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="dp-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="dp-code-title">Executing</p>
+              <span class="code-panel-lang" id="dp-code-lang">C · naive fib</span>
+            </div>
+            <pre class="code-panel-body" id="dp-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="dp-code-note">
+              Press <strong>Step</strong> or <strong>Play</strong> — compare
+              exponential calls with a filled memo table.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Overlapping subproblems</h2>
+        <p>
+          In naive <code>fib(n)</code>, <code>fib(3)</code> is computed many
+          times from different parents. The call tree fans out exponentially.
+          That explosion is the clue that DP can help: the same answers are
+          needed repeatedly.
+        </p>
+
+        <h2>Memoization / table</h2>
+        <p>
+          Store <code>fib(i)</code> once. Top-down memoization caches recursive
+          results; bottom-up fills <code>dp[0…n]</code> in order. Either way
+          each index is solved once—about <code>O(n)</code> time and space for
+          Fibonacci.
+        </p>
+
+        <h2>Related ideas</h2>
+        <ul>
+          <li>
+            <a class="concept-link" href="recursion.html">Recursion</a>
+            — the shape DP often starts from
+          </li>
+          <li>
+            <a class="concept-link" href="big-o.html">Big-O complexity</a>
+            — why memo turns exponential into linear
+          </li>
+          <li>
+            <a class="concept-link" href="divide-conquer.html">Divide &amp; conquer</a>
+            — related split idea, but without reuse of overlaps
+          </li>
+          <li>
+            <a class="concept-link" href="greedy.html">Greedy</a>
+            — also builds locally; DP when local best is not enough
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Dynamic_programming">
+            <p>
+              “Dynamic programming is both a mathematical optimization method
+              and an algorithmic paradigm. The method was developed by Richard
+              Bellman in the 1950s and has found applications in numerous
+              fields, from aerospace engineering to economics. In both contexts
+              it refers to simplifying a complicated problem by breaking it
+              down into simpler sub-problems in a recursive manner.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Dynamic_programming"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Dynamic programming</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#algorithms">← All concepts</a>
+        <a class="next" href="bfs.html">Next up: Breadth-first search →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/dynamic-programming.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>
