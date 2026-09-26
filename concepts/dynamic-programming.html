@@ -185,6 +185,40 @@
           </li>
         </ul>
 
+        <section class="mastery" aria-labelledby="mastery-heading">
+          <h2 id="mastery-heading">For mastery</h2>
+          <ul class="mastery-list">
+            <li>
+              <span class="mastery-label">Invariant</span>
+              Optimal substructure + overlapping subproblems: each table/memo
+              entry stores the answer for one state.
+            </li>
+            <li>
+              <span class="mastery-label">When / when not</span>
+              Use when subproblems repeat and optima compose. Prefer
+              <a class="concept-link" href="greedy.html">greedy</a>
+              when a local choice suffices; plain
+              <a class="concept-link" href="divide-conquer.html">divide &amp; conquer</a>
+              when overlaps are rare.
+            </li>
+            <li>
+              <span class="mastery-label">Common failure</span>
+              Wrong recurrence or state; missing bases; iterating dependencies
+              in the wrong order.
+            </li>
+            <li>
+              <span class="mastery-label">Proof shape</span>
+              Induction on subproblem size: memoized value equals OPT — see
+              <a class="concept-link" href="induction-invariants.html">induction &amp; invariants</a>.
+            </li>
+            <li>
+              <span class="mastery-label">Assumes</span>
+              The state captures all history that affects the answer; dependency
+              graph is a DAG.
+            </li>
+          </ul>
+        </section>
+
         <h2>From the literature</h2>
         <figure class="verbatim">
           <blockquote cite="https://en.wikipedia.org/wiki/Dynamic_programming">
@@ -216,6 +250,7 @@
     </main>
 
     <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
     <script src="../js/dynamic-programming.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>

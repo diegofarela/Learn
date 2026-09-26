@@ -179,17 +179,73 @@
         <h2>Fixed vs dynamic</h2>
         <p>
           A fixed array has a compile-time capacity. A dynamic array (vector,
-          <code>ArrayList</code>, growable buffer) keeps a separate
-          <code>len</code> and <code>cap</code>. When append would overflow,
-          allocate a larger block, copy, free the old—amortized
+          <code>ArrayList</code>, JS <code>Array</code>, growable buffer) is
+          still one <strong>contiguous</strong> block—not a chain of nodes.
+          It tracks both how many elements are live (<code>length</code>) and
+          how many slots are reserved (<code>capacity</code>), with
+          <code>capacity ≥ length</code>.
+        </p>
+        <ul class="op-list">
+          <li>
+            <code>append</code>
+            <span>write into the next free index in the same block</span>
+            <span class="op-cost">usual case</span>
+          </li>
+          <li>
+            <code>resize</code>
+            <span
+              >if full: allocate a bigger block, copy old elements, then
+              append; old block becomes unused (GC / <code>free</code>)</span
+            >
+            <span class="op-cost">occasional</span>
+          </li>
+        </ul>
+        <p>
+          So you are writing into reserved space—or moving the whole array to a
+          larger slot when you run out—not “chaining to the next node” like a
+          <a class="concept-link" href="linked-lists.html">linked list</a>.
+          Spreading rare resizes over many cheap appends is why cost is
+          amortized
           <abbr
             class="term"
             tabindex="0"
             title="Amortized constant — occasional O(n) resize spreads over many cheap appends"
             data-def="Amortized constant — occasional O(n) resize spreads over many cheap appends"
             >O(1)</abbr
-          >
-          append.
+          >. See also
+          <a class="concept-link" href="amortized-analysis.html"
+            >amortized analysis</a
+          >.
+        </p>
+
+        <h2>What stops overwrites?</h2>
+        <ul class="op-list">
+          <li>
+            <code>allocator</code>
+            <span>tracks which address ranges are owned</span>
+            <span class="op-cost">ownership</span>
+          </li>
+          <li>
+            <code>size / cap</code>
+            <span>each object knows how big its block is</span>
+            <span class="op-cost">bounds</span>
+          </li>
+          <li>
+            <code>safe langs</code>
+            <span>bounds-check so you cannot write past the end</span>
+            <span class="op-cost">checked</span>
+          </li>
+          <li>
+            <code>unsafe (C)</code>
+            <span>will not stop you—that’s a buffer overflow</span>
+            <span class="op-cost">unchecked</span>
+          </li>
+        </ul>
+        <p>
+          Addresses and heap allocation:
+          <a class="concept-link" href="memory-pointers.html"
+            >memory &amp; pointers</a
+          >.
         </p>
 
         <h2>Time costs</h2>
@@ -283,6 +339,7 @@
     </main>
 
     <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
     <script src="../js/arrays.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>

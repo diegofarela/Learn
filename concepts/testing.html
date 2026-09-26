@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Testing — Learn</title>
+    <meta
+      name="description"
+      content="Testing pyramid plus a failing unit test you can fix to green."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#software">Software engineering</a>
+      </p>
+      <h1>Testing</h1>
+      <p class="concept-meta">
+        <span class="tag">Software</span>
+        <span>
+          unit · integration ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Many fast unit tests, fewer slower broad tests"
+            data-def="Many fast unit tests, fewer slower broad tests"
+            >pyramid</abbr
+          >
+        </span>
+        <span class="meta-size"
+          ><strong id="testpy-meta">RED</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          <strong>Automated tests</strong> encode expected behavior so changes
+          do not silently break it. The <em>test pyramid</em> suggests many fast
+          unit tests, fewer integration tests, and a thin E2E tip. Related:
+          <a class="concept-link" href="version-control.html">version control</a>
+          (test before merge) and
+          <a class="concept-link" href="design-patterns.html">design patterns</a>
+          (testable seams).
+        </p>
+
+        <div class="testpy-lab">
+          <div class="viz viz-stage" aria-labelledby="testpy-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="testpy-viz-title">Pyramid + red → green</p>
+              <span class="sys-badge" id="testpy-badge">failing</span>
+            </div>
+            <p class="viz-hint">
+              Click pyramid layers · fix the buggy function to go green
+            </p>
+            <div class="testpy-stage">
+              <div class="testpy-stage-glow" aria-hidden="true"></div>
+              <div class="testpy-pyramid" id="testpy-pyramid" role="list">
+                <button type="button" class="testpy-layer testpy-e2e" data-testpy-layer="e2e" role="listitem">
+                  E2E
+                </button>
+                <button type="button" class="testpy-layer testpy-int" data-testpy-layer="integration" role="listitem">
+                  Integration
+                </button>
+                <button type="button" class="testpy-layer testpy-unit is-active" data-testpy-layer="unit" role="listitem">
+                  Unit
+                </button>
+              </div>
+              <div class="testpy-run" id="testpy-run">
+                <p class="testpy-case">expect(sum(2, 3)).toBe(5)</p>
+                <p class="testpy-result" id="testpy-result">FAIL — got 6</p>
+              </div>
+            </div>
+            <div class="viz-controls testpy-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-testpy-action="fix">
+                Fix implementation
+              </button>
+              <button type="button" class="viz-btn" data-testpy-action="run">
+                Re-run
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-testpy-action="break">
+                Break again
+              </button>
+            </div>
+            <p class="viz-live" id="testpy-status" aria-live="polite">
+              Unit test is red — the implementation adds one too many.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="testpy-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="testpy-code-title">Code under test</p>
+              <span class="code-panel-lang">unit</span>
+            </div>
+            <pre class="code-panel-body" id="testpy-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="testpy-code-note">
+              Red → fix → green is the feedback loop.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Pyramid</h2>
+        <ul class="op-list">
+          <li>
+            <code>unit</code>
+            <span>fast, focused, many</span>
+            <span class="op-cost">base</span>
+          </li>
+          <li>
+            <code>integration</code>
+            <span>modules + real collaborators</span>
+            <span class="op-cost">middle</span>
+          </li>
+          <li>
+            <code>E2E</code>
+            <span>full UI / system — sparse &amp; slower</span>
+            <span class="op-cost">tip</span>
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Software_testing">
+            <p>
+              “Software testing is the act of examining the artifacts and the
+              behavior of the software under test by validation and
+              verification. Software testing can also provide an objective,
+              independent view of the software to allow the business to
+              appreciate and understand the risks of software implementation.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Software_testing"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Software testing</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#software">← All concepts</a>
+        <a class="next" href="version-control.html">Related: Version control →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
+    <script src="../js/testing.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

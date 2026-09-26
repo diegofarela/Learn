@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Logical clocks — Learn</title>
+    <meta
+      name="description"
+      content="Logical clocks: Lamport timestamps on message send and receive between processes."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#distributed">Distributed systems</a>
+      </p>
+      <h1>Logical clocks</h1>
+      <p class="concept-meta">
+        <span class="tag">Distributed</span>
+        <span>Lamport · happens-before · send/recv</span>
+        <span class="meta-size"
+          >C <strong id="lclock-meta">0</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          Wall clocks drift, so distributed systems use
+          <strong>logical clocks</strong>. A Lamport clock ticks on local
+          events and on message send/receive so
+          <em>happens-before</em> implies a smaller timestamp—useful beside
+          <a class="concept-link" href="consistency-models.html">consistency models</a>
+          and
+          <a class="concept-link" href="os-processes.html">processes</a>
+          that exchange messages over
+          <a class="concept-link" href="tcp-udp.html">TCP/UDP</a>.
+        </p>
+
+        <div class="lclock-lab">
+          <div class="viz viz-stage" aria-labelledby="lclock-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="lclock-viz-title">Three processes</p>
+              <span class="sys-badge" id="lclock-phase">READY</span>
+            </div>
+            <p class="viz-hint">
+              Local event, send, or receive · clocks update per Lamport rules
+            </p>
+            <div class="lclock-stage" role="presentation">
+              <div class="lclock-stage-glow" aria-hidden="true"></div>
+              <div id="lclock-procs" class="lclock-procs" aria-label="Processes"></div>
+              <div id="lclock-msg" class="lclock-msg" aria-live="polite"></div>
+            </div>
+            <div class="viz-controls lclock-controls">
+              <button type="button" class="viz-btn" data-lclock-action="local-a">
+                Event A
+              </button>
+              <button type="button" class="viz-btn" data-lclock-action="local-b">
+                Event B
+              </button>
+              <button type="button" class="viz-btn viz-btn-primary" data-lclock-action="send-ab">
+                A→B send
+              </button>
+              <button type="button" class="viz-btn" data-lclock-action="recv-b">
+                B recv
+              </button>
+              <button type="button" class="viz-btn" data-lclock-action="send-bc">
+                B→C send
+              </button>
+              <button type="button" class="viz-btn" data-lclock-action="recv-c">
+                C recv
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-lclock-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="lclock-status" aria-live="polite">
+              Each process starts at C=0. Local events and sends increment first.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="lclock-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="lclock-code-title">Rules</p>
+              <span class="code-panel-lang">Lamport</span>
+            </div>
+            <pre class="code-panel-body" id="lclock-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="lclock-code-note">
+              On recv: C = max(C_local, C_msg) + 1
+            </p>
+          </aside>
+        </div>
+
+        <h2>Rules</h2>
+        <ul class="op-list">
+          <li>
+            <code>local / send</code>
+            <span>C ← C + 1 before the event</span>
+            <span class="op-cost">tick</span>
+          </li>
+          <li>
+            <code>send</code>
+            <span>piggyback timestamp on the message</span>
+            <span class="op-cost">stamp</span>
+          </li>
+          <li>
+            <code>recv</code>
+            <span>C ← max(C, T_msg) + 1</span>
+            <span class="op-cost">merge</span>
+          </li>
+        </ul>
+
+        <h2>Related ideas</h2>
+        <ul>
+          <li>
+            <a class="concept-link" href="consistency-models.html">Consistency models</a>
+            — what orderings mean for reads/writes
+          </li>
+          <li>
+            <a class="concept-link" href="os-processes.html">OS processes</a>
+            — independent clocks per process
+          </li>
+          <li>
+            <a class="concept-link" href="tcp-udp.html">TCP &amp; UDP</a>
+            — the messages that carry timestamps
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Lamport_timestamp">
+            <p>
+              “The Lamport timestamp algorithm is a simple logical clock
+              algorithm used to determine the order of events in a distributed
+              computer system. As different nodes or processes will typically
+              not be perfectly synchronized, this algorithm is used to provide a
+              partial ordering of events with minimal overhead, and conceptually
+              provide a starting point for the more advanced vector clock
+              method.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Lamport_timestamp"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Lamport timestamp</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#distributed">← All concepts</a>
+        <a class="next" href="consensus-raft.html">Next up: Consensus (Raft) →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
+    <script src="../js/logical-clocks.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

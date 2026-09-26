@@ -210,6 +210,41 @@
           problems—not when “fewest edges from the start” is the goal.
         </p>
 
+        <section class="mastery" aria-labelledby="mastery-heading">
+          <h2 id="mastery-heading">For mastery</h2>
+          <ul class="mastery-list">
+            <li>
+              <span class="mastery-label">Invariant</span>
+              A
+              <a class="concept-link" href="queue.html">queue</a>
+              holds the frontier; nodes leave in nondecreasing unweighted
+              distance from the source.
+            </li>
+            <li>
+              <span class="mastery-label">When / when not</span>
+              Use for fewest-edges paths and level order. Not for weighted
+              distances (
+              <a class="concept-link" href="shortest-paths.html">Dijkstra</a>)
+              or deep path/structure search (
+              <a class="concept-link" href="dfs.html">DFS</a>).
+            </li>
+            <li>
+              <span class="mastery-label">Common failure</span>
+              Marking visited too late → duplicate enqueues; using a stack
+              instead of a queue.
+            </li>
+            <li>
+              <span class="mastery-label">Proof shape</span>
+              First time a node is dequeued (or enqueued, if marked early),
+              its distance is the minimum edge count.
+            </li>
+            <li>
+              <span class="mastery-label">Assumes</span>
+              Unweighted (unit) edges and a finite locally explorable graph.
+            </li>
+          </ul>
+        </section>
+
         <h2>From the literature</h2>
         <figure class="verbatim">
           <blockquote cite="https://en.wikipedia.org/wiki/Breadth-first_search">
@@ -242,6 +277,7 @@
     </main>
 
     <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
     <script src="../js/bfs.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>

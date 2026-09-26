@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Assembly basics — Learn</title>
+    <meta name="description" content="Assembly basics: tiny register file and memory; step MOV, ADD, CALL, and RET." />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#architecture">Computer architecture</a>
+      </p>
+      <h1>Assembly basics</h1>
+      <p class="concept-meta">
+        <span class="tag">Architecture</span>
+        <span>registers · MOV · ADD · CALL / RET</span>
+        <span class="meta-size">PC <strong id="asm-meta">0</strong></span>
+      </p>
+
+      <div class="concept-body">
+        <p>
+          Assembly is a human-readable form of machine instructions: move data between
+          <strong>registers</strong> and memory, do arithmetic, and
+          <code>CALL</code>/<code>RET</code> for subroutines. It sits under high-level
+          languages and beside the
+          <a class="concept-link" href="instruction-cycle.html">instruction cycle</a>
+          that fetches each opcode—see also the
+          <a class="concept-link" href="call-stack.html">call stack</a>.
+        </p>
+
+        <div class="asm-lab">
+          <div class="viz viz-stage" aria-labelledby="asm-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="asm-viz-title">Tiny CPU: regs + memory</p>
+              <span class="sys-badge" id="asm-phase">READY</span>
+            </div>
+            <p class="viz-hint">
+              Step through MOV / ADD / CALL / RET · watch registers and stack
+            </p>
+            <div class="asm-stage" role="presentation">
+              <div class="asm-stage-glow" aria-hidden="true"></div>
+              <div class="asm-panels">
+                <div class="asm-regs" id="asm-regs" aria-label="Register file"></div>
+                <div class="asm-mem" id="asm-mem" aria-label="Memory / stack"></div>
+              </div>
+              <p class="asm-insn" id="asm-insn">—</p>
+            </div>
+            <div class="viz-controls asm-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-asm-action="step">
+                Step
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-asm-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="asm-status" aria-live="polite">
+              Program loaded. Step to execute the next instruction.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="asm-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="asm-code-title">Program</p>
+              <span class="code-panel-lang">asm</span>
+            </div>
+            <pre class="code-panel-body" id="asm-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="asm-code-note">
+              Highlighted line is about to run (or just ran).
+            </p>
+          </aside>
+        </div>
+
+        <h2>Instructions</h2>
+        <ul class="op-list">
+          <li>
+            <code>MOV dst, src</code>
+            <span>copy a value into a register</span>
+            <span class="op-cost">copy</span>
+          </li>
+          <li>
+            <code>ADD dst, src</code>
+            <span>dst ← dst + src</span>
+            <span class="op-cost">ALU</span>
+          </li>
+          <li>
+            <code>CALL label</code>
+            <span>push return address; jump</span>
+            <span class="op-cost">stack</span>
+          </li>
+          <li>
+            <code>RET</code>
+            <span>pop return address into PC</span>
+            <span class="op-cost">return</span>
+          </li>
+        </ul>
+
+        <h2>Related ideas</h2>
+        <ul>
+          <li>
+            <a class="concept-link" href="instruction-cycle.html">Instruction cycle</a>
+            — how each opcode is fetched and run
+          </li>
+          <li>
+            <a class="concept-link" href="call-stack.html">Call stack</a>
+            — what CALL / RET manipulate
+          </li>
+          <li>
+            <a class="concept-link" href="memory-pointers.html">Memory &amp; pointers</a>
+            — addresses behind loads/stores
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Assembly_language">
+            <p>
+              “In computer programming, assembly language (alternatively assembler language or symbolic machine code), often referred to simply as assembly and commonly abbreviated as ASM or asm, is any low-level programming language with a very strong correspondence between the instructions in the language and the architecture's machine code instructions.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Assembly_language"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Assembly language</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#architecture">← All concepts</a>
+        <a class="next" href="pipelining.html">Next up: Pipelining →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
+    <script src="../js/asm.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

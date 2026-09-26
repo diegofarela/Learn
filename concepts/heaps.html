@@ -187,6 +187,40 @@
           that idea.
         </p>
 
+        <section class="mastery" aria-labelledby="mastery-heading">
+          <h2 id="mastery-heading">For mastery</h2>
+          <ul class="mastery-list">
+            <li>
+              <span class="mastery-label">Invariant</span>
+              Heap-order (parent ahead of children by priority) plus a complete
+              shape — usually an array with index arithmetic.
+            </li>
+            <li>
+              <span class="mastery-label">When / when not</span>
+              Use for
+              <a class="concept-link" href="priority-queues.html">priority queues</a>,
+              <a class="concept-link" href="shortest-paths.html">Dijkstra</a>,
+              heapsort. Not for fast arbitrary-key lookup (prefer
+              <a class="concept-link" href="hash-tables.html">hash tables</a> /
+              <a class="concept-link" href="bst.html">BSTs</a>).
+            </li>
+            <li>
+              <span class="mastery-label">Common failure</span>
+              Off-by-one child/parent indices; forgetting to sift after
+              insert/extract.
+            </li>
+            <li>
+              <span class="mastery-label">Proof shape</span>
+              Root is the extremum; each sift restores heap-order along one
+              O(log n) path.
+            </li>
+            <li>
+              <span class="mastery-label">Assumes</span>
+              Comparable priorities and the complete-binary-tree layout.
+            </li>
+          </ul>
+        </section>
+
         <h2>From the literature</h2>
         <figure class="verbatim">
           <blockquote cite="https://en.wikipedia.org/wiki/Binary_heap">
@@ -216,6 +250,7 @@
     </main>
 
     <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
     <script src="../js/heaps.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>

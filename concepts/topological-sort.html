@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Topological sort — Learn</title>
+    <meta
+      name="description"
+      content="Topological sort: step Kahn's algorithm on a small DAG."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#algorithms">Algorithms</a>
+      </p>
+      <h1>Topological sort</h1>
+      <p class="concept-meta">
+        <span class="tag">Algorithms</span>
+        <span>DAG · Kahn · indegree</span>
+        <span class="meta-size"
+          >order <strong id="topo-count">0</strong>/6</span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          A <strong>topological order</strong> of a directed acyclic
+          <a class="concept-link" href="graphs.html">graph</a>
+          lists every node before the nodes that depend on it. Kahn’s algorithm
+          repeatedly peels off indegree-zero nodes — the same frontier idea as
+          <a class="concept-link" href="bfs.html">BFS</a>, but driven by remaining
+          prerequisites.
+        </p>
+
+        <div class="topo-lab">
+          <div class="viz viz-stage" aria-labelledby="topo-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="topo-viz-title">DAG · Kahn’s algorithm</p>
+              <span class="sys-badge" id="topo-badge">ready</span>
+            </div>
+            <p class="viz-hint">
+              Step picks an indegree-0 node · edges to successors drop
+            </p>
+            <div class="topo-stage" role="presentation">
+              <svg id="topo-edges" class="topo-edges" aria-hidden="true"></svg>
+              <div
+                id="topo-nodes"
+                class="topo-nodes"
+                role="img"
+                aria-label="DAG nodes"
+              ></div>
+            </div>
+            <div class="topo-panels">
+              <div class="topo-panel">
+                <p class="topo-panel-title">Ready (indegree 0)</p>
+                <div id="topo-ready" class="topo-chips" role="list"></div>
+              </div>
+              <div class="topo-panel">
+                <p class="topo-panel-title">Order</p>
+                <div id="topo-order" class="topo-chips" role="list"></div>
+              </div>
+            </div>
+            <div class="viz-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-topo-action="step">
+                Step
+              </button>
+              <button type="button" class="viz-btn" data-topo-action="play">Play</button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-topo-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="topo-status" aria-live="polite">
+              Ready queue holds sources. Step to emit the next node in order.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="topo-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="topo-code-title">Executing</p>
+              <span class="code-panel-lang">Kahn · queue</span>
+            </div>
+            <pre class="code-panel-body" id="topo-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="topo-code-note">
+              Peel indegree-zero nodes until the DAG is drained.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Kahn sketch</h2>
+        <ul class="op-list">
+          <li>
+            <code>indegree[]</code>
+            <span>count incoming edges</span>
+            <span class="op-cost">prep</span>
+          </li>
+          <li>
+            <code>queue</code>
+            <span>all nodes with indegree 0</span>
+            <span class="op-cost">ready</span>
+          </li>
+          <li>
+            <code>emit v</code>
+            <span>append to order; decrement successors</span>
+            <span class="op-cost">peel</span>
+          </li>
+        </ul>
+
+        <h2>Related ideas</h2>
+        <ul>
+          <li>
+            <a class="concept-link" href="graphs.html">Graphs</a>
+            — DAGs are directed graphs without cycles
+          </li>
+          <li>
+            <a class="concept-link" href="bfs.html">Breadth-first search</a>
+            — Kahn uses a queue of ready nodes
+          </li>
+          <li>
+            <a class="concept-link" href="dfs.html">Depth-first search</a>
+            — finish-time order is another topo method
+          </li>
+          <li>
+            <a class="concept-link" href="network-flow.html">Network flow</a>
+            — another algorithm family on directed graphs
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Topological_sorting">
+            <p>
+              “In computer science, a topological sort or topological ordering of
+              a directed graph is a linear ordering of its vertices such that for
+              every directed edge uv from vertex u to vertex v, u comes before v
+              in the ordering. For instance, the vertices of the graph may
+              represent tasks to be performed, and the edges may represent
+              constraints that one task must be performed before another.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Topological_sorting"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Topological sorting</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#algorithms">← All concepts</a>
+        <a class="next" href="network-flow.html">Next up: Network flow →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
+    <script src="../js/topological-sort.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>I/O &amp; memory mapping — Learn</title>
+    <meta
+      name="description"
+      content="I/O & mmap: compare buffered read/write with memory-mapped pages."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#systems">Systems</a>
+      </p>
+      <h1>I/O &amp; memory mapping</h1>
+      <p class="concept-meta">
+        <span class="tag">Systems</span>
+        <span>
+          buffer I/O ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="mmap — map file bytes into the process address space as pages"
+            data-def="mmap — map file bytes into the process address space as pages"
+            >mmap</abbr
+          >
+        </span>
+        <span class="meta-size"
+          >path <strong id="io-path-label">buffer</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          Programs move file bytes with <strong>buffered I/O</strong>
+          (<code>read</code>/<code>write</code> into a user buffer) or with
+          <strong>mmap</strong>, which maps file pages into the address space so
+          loads/stores touch the file via the page cache. Related:
+          <a class="concept-link" href="virtual-memory.html">virtual memory</a>,
+          <a class="concept-link" href="syscalls.html">system calls</a>, and
+          <a class="concept-link" href="file-systems.html">file systems</a>.
+        </p>
+
+        <div class="io-lab">
+          <div class="viz viz-stage" aria-labelledby="io-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="io-viz-title">Buffer I/O vs mmap</p>
+              <label class="palette-control">
+                <span class="sr-only">I/O path</span>
+                <select id="io-mode" aria-label="I/O path">
+                  <option value="buffer" selected>Buffered read/write</option>
+                  <option value="mmap">mmap pages</option>
+                </select>
+              </label>
+            </div>
+            <p class="viz-hint">
+              Toggle the path · step through copy vs page mapping
+            </p>
+            <div class="io-stage" role="presentation">
+              <div class="io-stage-glow" aria-hidden="true"></div>
+              <div class="io-diagram" id="io-diagram" aria-live="polite"></div>
+            </div>
+            <div class="viz-controls io-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-io-action="step">
+                Step
+              </button>
+              <button type="button" class="viz-btn" data-io-action="play">Play</button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-io-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="io-status" aria-live="polite">
+              Buffered path: disk → kernel cache → copy into user buffer.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="io-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="io-code-title">Executing</p>
+              <span class="code-panel-lang">I/O path</span>
+            </div>
+            <pre class="code-panel-body" id="io-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="io-code-note">
+              Step to advance the active path.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Two ways to get file bytes</h2>
+        <ul class="op-list">
+          <li>
+            <code>read</code>
+            <span>kernel copies from page cache into your buffer</span>
+            <span class="op-cost">copy</span>
+          </li>
+          <li>
+            <code>write</code>
+            <span>copy out; later flush may write disk</span>
+            <span class="op-cost">copy</span>
+          </li>
+          <li>
+            <code>mmap</code>
+            <span>map file pages; fault fills from cache/disk</span>
+            <span class="op-cost">map</span>
+          </li>
+          <li>
+            <code>load/store</code>
+            <span>ordinary memory ops on the mapped region</span>
+            <span class="op-cost">MMU</span>
+          </li>
+        </ul>
+
+        <h2>Related ideas</h2>
+        <ul>
+          <li>
+            <a class="concept-link" href="virtual-memory.html">Virtual memory</a>
+            — mmap installs page-table entries for the file
+          </li>
+          <li>
+            <a class="concept-link" href="caching.html">Caching</a>
+            — page cache sits between disk and both paths
+          </li>
+          <li>
+            <a class="concept-link" href="syscalls.html">System calls</a>
+            — read/write/mmap are all syscalls
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Memory-mapped_file">
+            <p>
+              “A memory-mapped file is a segment of virtual memory that has been
+              assigned a direct byte-for-byte correlation with some portion of a
+              file or file-like resource. This resource is typically a file that
+              is physically present on disk, but can also be a device, shared
+              memory object, or other resource that the operating system can
+              reference through a file descriptor.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Memory-mapped_file"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Memory-mapped file</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#systems">← All concepts</a>
+        <a class="next" href="virtual-memory.html">Related: Virtual memory →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
+    <script src="../js/io-mmap.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

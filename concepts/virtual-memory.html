@@ -174,7 +174,48 @@
             <a class="concept-link" href="memory-pointers.html">Memory &amp; pointers</a>
             — pointers hold virtual addresses in user code
           </li>
+          <li>
+            <a class="concept-link" href="io-mmap.html">I/O &amp; memory mapping</a>
+            — mmap installs file-backed page mappings
+          </li>
+          <li>
+            <a class="concept-link" href="linking-loading.html">Linking &amp; loading</a>
+            — loaders map executable segments into the address space
+          </li>
         </ul>
+
+        <section class="mastery" aria-labelledby="mastery-heading">
+          <h2 id="mastery-heading">For mastery</h2>
+          <ul class="mastery-list">
+            <li>
+              <span class="mastery-label">Invariant</span>
+              Each process sees a virtual address space; VA→PA via page tables /
+              TLB; a fault loads or maps a page (or signals an error).
+            </li>
+            <li>
+              <span class="mastery-label">When / when not</span>
+              Use for isolation, large sparse spaces, and demand loading. Not
+              free — TLB misses and page faults are real costs (see
+              <a class="concept-link" href="caching.html">caching</a>).
+            </li>
+            <li>
+              <span class="mastery-label">Common failure</span>
+              Thrashing when the working set exceeds RAM; confusing virtual
+              with physical addresses in
+              <a class="concept-link" href="memory-pointers.html">pointers</a>.
+            </li>
+            <li>
+              <span class="mastery-label">Proof shape</span>
+              Translation + permission bits enforce isolation: one process
+              cannot name another’s physical pages without a mapping.
+            </li>
+            <li>
+              <span class="mastery-label">Assumes</span>
+              MMU/TLB hardware, an OS pager, and enough locality that paging
+              helps more than it hurts.
+            </li>
+          </ul>
+        </section>
 
         <h2>From the literature</h2>
         <figure class="verbatim">
@@ -206,6 +247,7 @@
     </main>
 
     <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
     <script src="../js/virtual-memory.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>

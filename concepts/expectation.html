@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Expectation — Learn</title>
+    <meta
+      name="description"
+      content="Expectation and linearity: sum of indicator variables on dice faces — E[X+Y]=E[X]+E[Y]."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#probability">Probability for CS</a>
+      </p>
+      <h1>Expectation</h1>
+      <p class="concept-meta">
+        <span class="tag">Probability for CS</span>
+        <span>
+          average outcome ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="E[X+Y]=E[X]+E[Y] always — even when X and Y are dependent"
+            data-def="E[X+Y]=E[X]+E[Y] always — even when X and Y are dependent"
+            >linearity</abbr
+          >
+        </span>
+        <span class="meta-size"
+          >E[S] = <strong id="exp-meta">3.5</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          <strong>Expectation</strong> is the probability-weighted average of a
+          random variable. <em>Linearity</em> says you can split a sum even when
+          terms depend on each other—the workhorse behind
+          <a class="concept-link" href="balls-bins.html">balls &amp; bins</a>
+          analyses and hashing load. Builds on
+          <a class="concept-link" href="probability-basics.html"
+            >probability basics</a
+          >.
+        </p>
+
+        <div class="exp-lab">
+          <div class="viz viz-stage" aria-labelledby="exp-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="exp-viz-title">Die = sum of indicators</p>
+              <span class="exp-badge" id="exp-badge">E[X]=3.5</span>
+            </div>
+            <p class="viz-hint">
+              Each face indicator I<sub>k</sub> · roll to see X = Σ k·I<sub>k</sub>
+            </p>
+            <div
+              id="exp-faces"
+              class="exp-faces"
+              role="img"
+              aria-label="Six die face indicators"
+            ></div>
+            <div class="exp-sum" id="exp-sum" aria-live="polite"></div>
+            <div class="viz-controls">
+              <button type="button" class="viz-btn viz-btn-primary" id="exp-roll">
+                Roll die
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" id="exp-reset">
+                Clear roll
+              </button>
+            </div>
+            <p class="viz-live" id="exp-status" aria-live="polite">
+              X = 1·I₁ + … + 6·I₆. E[X] = Σ k·(1/6) = 3.5 by linearity.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="exp-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="exp-code-title">Linearity</p>
+              <span class="code-panel-lang">math</span>
+            </div>
+            <pre class="code-panel-body" id="exp-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="exp-code-note">
+              Indicators are dependent (exactly one is 1) — linearity still
+              holds.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Definition</h2>
+        <p>
+          For a discrete X taking values x with probabilities p(x),
+          <code>E[X] = Σ x p(x)</code>. It is not “the most likely value”—it is
+          the center of mass of the distribution.
+        </p>
+
+        <h2>Linearity of expectation</h2>
+        <p>
+          Always <code>E[X+Y] = E[X]+E[Y]</code>, no independence required.
+          Write complicated counts as sums of indicators, take E of each, add.
+          That is how you get expected collisions without listing all pairs’
+          dependence structure.
+        </p>
+
+        <p>
+          Apply it in
+          <a class="concept-link" href="balls-bins.html">balls &amp; bins</a>
+          and
+          <a class="concept-link" href="hash-tables.html">hash tables</a>.
+        </p>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Expected_value">
+            <p>
+              “In probability theory, the expected value is a generalization of
+              the weighted average. Provided that it is finite, the expected
+              value can be interpreted as the long-run average of results from
+              independent repetitions of the same random experiment, as
+              formalized by the law of large numbers.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Expected_value"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Expected value</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#probability">← All concepts</a>
+        <a class="next" href="balls-bins.html">Next up: Balls &amp; bins →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
+    <script src="../js/expectation.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

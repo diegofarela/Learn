@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Floating point — Learn</title>
+    <meta
+      name="description"
+      content="Floating point: IEEE-754 sign, exponent, and mantissa bit fields with live decode."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#architecture">Computer architecture</a>
+      </p>
+      <h1>Floating point</h1>
+      <p class="concept-meta">
+        <span class="tag">Architecture</span>
+        <span>IEEE-754 · sign · exponent · mantissa</span>
+        <span class="meta-size"
+          >≈ <strong id="f754-meta">0.1</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          <strong>IEEE-754</strong> encodes reals as
+          <em>sign</em>, biased <em>exponent</em>, and
+          <em>significand</em> (mantissa) bits—not every decimal is exact.
+          Flip fields below and connect to
+          <a class="concept-link" href="binary-bits.html">binary &amp; bits</a>
+          and
+          <a class="concept-link" href="number-systems.html">number systems</a>.
+        </p>
+
+        <div class="f754-lab">
+          <div class="viz viz-stage" aria-labelledby="f754-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="f754-viz-title">IEEE-754 binary32</p>
+              <span class="sys-badge" id="f754-phase">0x3DCCCCCD</span>
+            </div>
+            <p class="viz-hint">
+              Click bits · presets for 1.0, 0.1, NaN, ∞
+            </p>
+            <div class="f754-stage" role="presentation">
+              <div class="f754-stage-glow" aria-hidden="true"></div>
+              <div class="f754-fields" id="f754-fields" aria-label="Bit fields">
+                <div class="f754-field is-sign">
+                  <span class="f754-field-l">S</span>
+                  <div class="f754-bits" id="f754-sign" role="group" aria-label="Sign bit"></div>
+                </div>
+                <div class="f754-field is-exp">
+                  <span class="f754-field-l">Exponent</span>
+                  <div class="f754-bits" id="f754-exp" role="group" aria-label="Exponent bits"></div>
+                </div>
+                <div class="f754-field is-mant">
+                  <span class="f754-field-l">Mantissa</span>
+                  <div class="f754-bits" id="f754-mant" role="group" aria-label="Mantissa bits"></div>
+                </div>
+              </div>
+              <p class="f754-decode" id="f754-decode">value = …</p>
+            </div>
+            <div class="viz-controls f754-controls">
+              <button type="button" class="viz-btn" data-f754-preset="1">1.0</button>
+              <button type="button" class="viz-btn" data-f754-preset="0.1">0.1</button>
+              <button type="button" class="viz-btn" data-f754-preset="neg">−2.5</button>
+              <button type="button" class="viz-btn" data-f754-preset="inf">+∞</button>
+              <button type="button" class="viz-btn" data-f754-preset="nan">NaN</button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-f754-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="f754-status" aria-live="polite">
+              binary32: 1 sign + 8 exponent + 23 mantissa bits.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="f754-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="f754-code-title">Decode</p>
+              <span class="code-panel-lang">IEEE-754</span>
+            </div>
+            <pre class="code-panel-body" id="f754-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="f754-code-note">
+              Bias for binary32 exponent is 127.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Fields</h2>
+        <ul class="op-list">
+          <li>
+            <code>sign</code>
+            <span>0 = positive, 1 = negative</span>
+            <span class="op-cost">1 bit</span>
+          </li>
+          <li>
+            <code>exponent</code>
+            <span>biased power of two (bias 127)</span>
+            <span class="op-cost">8 bits</span>
+          </li>
+          <li>
+            <code>mantissa</code>
+            <span>fraction bits; implicit leading 1 for normals</span>
+            <span class="op-cost">23 bits</span>
+          </li>
+        </ul>
+
+        <h2>Related ideas</h2>
+        <ul>
+          <li>
+            <a class="concept-link" href="binary-bits.html">Binary &amp; bits</a>
+            — flipping individual bits
+          </li>
+          <li>
+            <a class="concept-link" href="number-systems.html">Number systems</a>
+            — integers vs reals
+          </li>
+          <li>
+            <a class="concept-link" href="endianness-alignment.html">Endianness &amp; alignment</a>
+            — byte order of the 32-bit word
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/IEEE_754">
+            <p>
+              “The IEEE Standard for Floating-Point Arithmetic (IEEE 754) is a
+              technical standard for floating-point arithmetic established in
+              1985 by the Institute of Electrical and Electronics Engineers
+              (IEEE). The standard addressed many problems found in the diverse
+              floating-point implementations that made them difficult to use
+              reliably and portably.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/IEEE_754"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — IEEE 754</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#architecture">← All concepts</a>
+        <a class="next" href="endianness-alignment.html"
+          >Next up: Endianness &amp; alignment →</a
+        >
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
+    <script src="../js/floating-point.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

@@ -80,7 +80,11 @@
           unit. <code>COMMIT</code> makes them durable;
           <code>ROLLBACK</code> undoes them. ACID names the guarantees
           <a class="concept-link" href="relational.html">relational</a>
-          engines aim for—contrast with many
+          engines aim for—see
+          <a class="concept-link" href="isolation-levels.html">isolation levels</a>
+          and
+          <a class="concept-link" href="wal-replication.html">WAL &amp; replication</a>,
+          and contrast with many
           <a class="concept-link" href="nosql.html">NoSQL</a> trade-offs.
         </p>
 
@@ -159,6 +163,41 @@
           </li>
         </ul>
 
+        <section class="mastery" aria-labelledby="mastery-heading">
+          <h2 id="mastery-heading">For mastery</h2>
+          <ul class="mastery-list">
+            <li>
+              <span class="mastery-label">Invariant</span>
+              ACID: a txn is all-or-nothing; commit leaves a constraint-valid
+              state; effects survive crash after commit.
+            </li>
+            <li>
+              <span class="mastery-label">When / when not</span>
+              Use for multi-step updates that must not leave partial state.
+              Not every read needs a long transaction; distributed trade-offs
+              live under
+              <a class="concept-link" href="cap-theorem.html">CAP</a>
+              /
+              <a class="concept-link" href="consistency-models.html">consistency models</a>.
+            </li>
+            <li>
+              <span class="mastery-label">Common failure</span>
+              Assuming “serializable” without checking isolation level; long
+              transactions holding locks.
+            </li>
+            <li>
+              <span class="mastery-label">Proof shape</span>
+              Commit ⇒ effects durable and visible per isolation; rollback ⇒
+              as if the txn never ran.
+            </li>
+            <li>
+              <span class="mastery-label">Assumes</span>
+              The engine enforces the chosen isolation; typically one logical
+              database, not a partitioned multi-master world.
+            </li>
+          </ul>
+        </section>
+
         <h2>From the literature</h2>
         <figure class="verbatim">
           <blockquote cite="https://en.wikipedia.org/wiki/Database_transaction">
@@ -188,6 +227,7 @@
     </main>
 
     <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
     <script src="../js/transactions.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>

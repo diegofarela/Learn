@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>P vs NP — Learn</title>
+    <meta
+      name="description"
+      content="P vs NP: complexity map and an Independent Set ← Clique reduction sketch."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#theory">Theory of computation</a>
+      </p>
+      <h1>P vs NP</h1>
+      <p class="concept-meta">
+        <span class="tag">Theory</span>
+        <span>classes · reductions · hardness</span>
+        <span class="meta-size"
+          >focus <strong id="pnp-focus">map</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          <strong>P</strong> is problems solvable in polynomial time;
+          <strong>NP</strong> is problems whose yes-answers have short,
+          checkable certificates. Whether P = NP is open. We relate problems
+          with <em>reductions</em> — polynomial maps that preserve yes/no.
+          Growth rates from
+          <a class="concept-link" href="big-o.html">Big-O</a>
+          are the language of these classes; undecidability is a different
+          axis (
+          <a class="concept-link" href="decidability.html">decidability</a>).
+        </p>
+
+        <div class="pnp-lab">
+          <div class="viz viz-stage" aria-labelledby="pnp-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="pnp-viz-title">Map + reduction</p>
+              <span class="sys-badge" id="pnp-badge">map</span>
+            </div>
+            <p class="viz-hint">
+              Click a class · then step the Clique → Independent Set reduction
+            </p>
+            <div class="pnp-map" id="pnp-map" role="list" aria-label="Complexity classes"></div>
+            <div class="pnp-reduction" aria-labelledby="pnp-red-title">
+              <p class="pnp-red-title" id="pnp-red-title">
+                Reduction sketch: Independent Set ≤ₚ Clique
+              </p>
+              <p class="pnp-red-note">
+                Actually shown as Clique → IS via complement edges (same hardness family).
+              </p>
+              <div class="pnp-graphs">
+                <div class="pnp-graph-panel">
+                  <p class="pnp-graph-label">G (clique instance)</p>
+                  <div id="pnp-g" class="pnp-graph" role="img" aria-label="Graph G"></div>
+                </div>
+                <div class="pnp-arrow" aria-hidden="true">→ complement →</div>
+                <div class="pnp-graph-panel">
+                  <p class="pnp-graph-label">Ḡ (independent-set instance)</p>
+                  <div id="pnp-gc" class="pnp-graph" role="img" aria-label="Complement graph"></div>
+                </div>
+              </div>
+              <div
+                id="pnp-highlight"
+                class="pnp-highlight"
+                aria-live="polite"
+              ></div>
+            </div>
+            <div class="viz-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-pnp-action="step">
+                Step reduction
+              </button>
+              <button type="button" class="viz-btn" data-pnp-action="play">Play</button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-pnp-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="pnp-status" aria-live="polite">
+              P ⊆ NP. Click a region, or step the complement reduction.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="pnp-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="pnp-code-title">Executing</p>
+              <span class="code-panel-lang">reduction · poly</span>
+            </div>
+            <pre class="code-panel-body" id="pnp-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="pnp-code-note">
+              A set is a clique in G iff it is independent in the complement.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Classes at a glance</h2>
+        <ul class="op-list">
+          <li>
+            <code>P</code>
+            <span>decidable in poly time</span>
+            <span class="op-cost">easy?</span>
+          </li>
+          <li>
+            <code>NP</code>
+            <span>yes-certificates checkable in poly time</span>
+            <span class="op-cost">verify</span>
+          </li>
+          <li>
+            <code>NP-complete</code>
+            <span>hardest in NP under ≤ₚ</span>
+            <span class="op-cost">NPC</span>
+          </li>
+        </ul>
+
+        <h2>Related ideas</h2>
+        <ul>
+          <li>
+            <a class="concept-link" href="big-o.html">Big-O complexity</a>
+            — polynomial vs exponential growth
+          </li>
+          <li>
+            <a class="concept-link" href="decidability.html">Decidability</a>
+            — some problems are not even decidable
+          </li>
+          <li>
+            <a class="concept-link" href="graphs.html">Graphs</a>
+            — Clique and Independent Set live on graphs
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/P_versus_NP_problem">
+            <p>
+              “The P versus NP problem is a major unsolved problem in computer
+              science. It asks whether every problem whose solution can be
+              quickly verified can also be quickly solved. … The informal term
+              quickly, used above, means the existence of an algorithm solving
+              the task that runs in polynomial time.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/P_versus_NP_problem"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — P versus NP problem</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#theory">← All concepts</a>
+        <a class="next" href="finite-automata.html">Next up: Finite automata →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
+    <script src="../js/p-vs-np.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

@@ -150,6 +150,39 @@
           </li>
         </ul>
 
+        <section class="mastery" aria-labelledby="mastery-heading">
+          <h2 id="mastery-heading">For mastery</h2>
+          <ul class="mastery-list">
+            <li>
+              <span class="mastery-label">Invariant</span>
+              During a network partition you cannot keep both linearizable
+              consistency and full availability.
+            </li>
+            <li>
+              <span class="mastery-label">When / when not</span>
+              Use when designing distributed stores. Not an excuse to drop
+              consistency on a single node, and not the same “C” as ACID
+              <a class="concept-link" href="transactions.html">transactions</a>.
+            </li>
+            <li>
+              <span class="mastery-label">Common failure</span>
+              Reading CAP as “always pick any two”; conflating CAP-C with
+              weaker
+              <a class="concept-link" href="consistency-models.html">consistency models</a>.
+            </li>
+            <li>
+              <span class="mastery-label">Proof shape</span>
+              A partition splits nodes: answering on both sides without sync
+              yields stale/conflict (lose C) or refusing some clients (lose A).
+            </li>
+            <li>
+              <span class="mastery-label">Assumes</span>
+              Asynchronous network that can partition; “C” ≈ linearizability
+              in the classic statement.
+            </li>
+          </ul>
+        </section>
+
         <h2>From the literature</h2>
         <figure class="verbatim">
           <blockquote cite="https://en.wikipedia.org/wiki/CAP_theorem">
@@ -180,6 +213,7 @@
     </main>
 
     <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
     <script src="../js/cap-theorem.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Interrupts — Learn</title>
+    <meta
+      name="description"
+      content="Interrupts: a device IRQ pauses the CPU, the ISR runs, then control returns."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#systems">Systems</a>
+      </p>
+      <h1>Interrupts</h1>
+      <p class="concept-meta">
+        <span class="tag">Systems</span>
+        <span>
+          IRQ ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Interrupt Service Routine — kernel handler for a hardware interrupt"
+            data-def="Interrupt Service Routine — kernel handler for a hardware interrupt"
+            >ISR</abbr
+          >
+          · return
+        </span>
+        <span class="meta-size"
+          >phase <strong id="irq-phase-label">idle</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          An <strong>interrupt</strong> lets hardware pause the CPU when a
+          device needs attention—disk done, network packet, timer tick. The
+          CPU saves state, runs an
+          <em>ISR</em>, then returns to the interrupted work. Contrast
+          <a class="concept-link" href="syscalls.html">system calls</a>
+          (software-requested) and
+          <a class="concept-link" href="scheduling.html">CPU scheduling</a>
+          (timer IRQs enable preemption).
+        </p>
+
+        <div class="irq-lab">
+          <div class="viz viz-stage" aria-labelledby="irq-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="irq-viz-title">IRQ → ISR → return</p>
+              <span class="sys-badge" id="irq-badge">CPU running</span>
+            </div>
+            <p class="viz-hint">
+              Fire a device IRQ · watch the CPU pause, run the ISR, then resume
+            </p>
+            <div class="irq-stage" role="presentation">
+              <div class="irq-stage-glow" aria-hidden="true"></div>
+              <div class="irq-layout" id="irq-layout" aria-live="polite"></div>
+            </div>
+            <div class="viz-controls irq-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-irq-action="fire">
+                Fire IRQ
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-irq-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="irq-status" aria-live="polite">
+              CPU is running user work. Fire an IRQ from a device.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="irq-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="irq-code-title">Executing</p>
+              <span class="code-panel-lang">kernel · ISR</span>
+            </div>
+            <pre class="code-panel-body" id="irq-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="irq-code-note">
+              Fire IRQ — save state, handle device, return.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Interrupt path</h2>
+        <ul class="op-list">
+          <li>
+            <code>IRQ</code>
+            <span>device asserts an interrupt line</span>
+            <span class="op-cost">signal</span>
+          </li>
+          <li>
+            <code>pause</code>
+            <span>CPU finishes current instruction, saves PC/regs</span>
+            <span class="op-cost">save</span>
+          </li>
+          <li>
+            <code>ISR</code>
+            <span>kernel acknowledges device and handles event</span>
+            <span class="op-cost">handler</span>
+          </li>
+          <li>
+            <code>iret</code>
+            <span>restore state and resume interrupted code</span>
+            <span class="op-cost">return</span>
+          </li>
+        </ul>
+
+        <h2>Related ideas</h2>
+        <ul>
+          <li>
+            <a class="concept-link" href="syscalls.html">System calls</a>
+            — software path into the kernel
+          </li>
+          <li>
+            <a class="concept-link" href="scheduling.html">CPU scheduling</a>
+            — timer interrupts enable time-slicing
+          </li>
+          <li>
+            <a class="concept-link" href="os-processes.html">OS processes</a>
+            — preemption moves running → ready
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Interrupt">
+            <p>
+              “In digital computers, an interrupt (sometimes referred to as a
+              trap) is a request for the processor to interrupt currently
+              executing code (when permitted), so that the event can be processed
+              in a timely manner. If the request is accepted, the processor will
+              suspend its current activities, save its state, and execute a
+              function called an interrupt handler (or an interrupt service
+              routine, ISR) to deal with the event.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Interrupt"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Interrupt</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#systems">← All concepts</a>
+        <a class="next" href="syscalls.html">Related: System calls →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
+    <script src="../js/interrupts.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

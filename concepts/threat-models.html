@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Threat models — Learn</title>
+    <meta
+      name="description"
+      content="Threat models: checklist assets, adversaries, and entry points to see what needs defending."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#security">Security basics</a>
+      </p>
+      <h1>Threat models</h1>
+      <p class="concept-meta">
+        <span class="tag">Security</span>
+        <span>
+          assets · adversaries ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Where an attacker can interact with or observe the system"
+            data-def="Where an attacker can interact with or observe the system"
+            >entry points</abbr
+          >
+        </span>
+        <span class="meta-size"
+          >checked <strong id="tm-meta">0</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          A <strong>threat model</strong> asks: what do we protect, who might
+          attack, and how can they get in? Checking items below builds a
+          lightweight model for a toy web app—then map defenses via
+          <a class="concept-link" href="auth.html">auth</a>,
+          <a class="concept-link" href="encryption.html">encryption</a>, and
+          <a class="concept-link" href="web-vulnerabilities.html">web vulnerabilities</a>.
+        </p>
+
+        <div class="tm-lab">
+          <div class="viz viz-stage" aria-labelledby="tm-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="tm-viz-title">Model checklist</p>
+              <span class="sys-badge" id="tm-badge">empty</span>
+            </div>
+            <p class="viz-hint">
+              Toggle assets, adversaries, and entry points · watch the summary
+            </p>
+            <div class="tm-stage">
+              <div class="tm-stage-glow" aria-hidden="true"></div>
+              <div class="tm-cols" id="tm-cols">
+                <section class="tm-col" aria-labelledby="tm-assets-h">
+                  <h3 class="tm-col-title" id="tm-assets-h">Assets</h3>
+                  <ul class="tm-list" id="tm-assets"></ul>
+                </section>
+                <section class="tm-col" aria-labelledby="tm-adv-h">
+                  <h3 class="tm-col-title" id="tm-adv-h">Adversaries</h3>
+                  <ul class="tm-list" id="tm-adversaries"></ul>
+                </section>
+                <section class="tm-col" aria-labelledby="tm-entry-h">
+                  <h3 class="tm-col-title" id="tm-entry-h">Entry points</h3>
+                  <ul class="tm-list" id="tm-entries"></ul>
+                </section>
+              </div>
+              <p class="tm-summary" id="tm-summary">
+                Check items to outline what you must defend.
+              </p>
+            </div>
+            <div class="viz-controls tm-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-tm-action="sample">
+                Sample model
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-tm-action="clear">
+                Clear
+              </button>
+            </div>
+            <p class="viz-live" id="tm-status" aria-live="polite">
+              No items selected — start with what you care about protecting.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="tm-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="tm-code-title">Model sketch</p>
+              <span class="code-panel-lang">STRIDE-lite</span>
+            </div>
+            <pre class="code-panel-body" id="tm-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="tm-code-note">
+              Threat modeling is a conversation, not a checkbox ritual.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Ask first</h2>
+        <ul class="op-list">
+          <li>
+            <code>assets</code>
+            <span>data, keys, reputation, uptime</span>
+            <span class="op-cost">what</span>
+          </li>
+          <li>
+            <code>adversaries</code>
+            <span>script kiddie, insider, nation-state…</span>
+            <span class="op-cost">who</span>
+          </li>
+          <li>
+            <code>entry</code>
+            <span>forms, APIs, admin panels, supply chain</span>
+            <span class="op-cost">where</span>
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Threat_model">
+            <p>
+              “Threat modeling is a process by which potential threats, such as
+              structural vulnerabilities or the absence of appropriate
+              safeguards, can be identified and enumerated, and mitigations can
+              be prioritized.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Threat_model"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Threat model</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#security">← All concepts</a>
+        <a class="next" href="web-vulnerabilities.html">Related: Web vulnerabilities →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
+    <script src="../js/threat-models.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

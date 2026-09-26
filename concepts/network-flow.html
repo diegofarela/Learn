@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Network flow — Learn</title>
+    <meta
+      name="description"
+      content="Network flow: residual graph and Edmonds–Karp augmenting paths on a small network."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#algorithms">Algorithms</a>
+      </p>
+      <h1>Network flow</h1>
+      <p class="concept-meta">
+        <span class="tag">Algorithms</span>
+        <span>residual · augment · max-flow</span>
+        <span class="meta-size"
+          >flow <strong id="flow-val">0</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          In a flow network, each edge has a capacity. <strong>Max flow</strong>
+          pushes as much as possible from source <em>s</em> to sink <em>t</em>
+          without exceeding capacities. Ford–Fulkerson repeatedly finds an
+          <em>augmenting path</em> in the residual graph; Edmonds–Karp picks a
+          shortest path via
+          <a class="concept-link" href="bfs.html">BFS</a>. Related graph ideas:
+          <a class="concept-link" href="graphs.html">graphs</a>
+          and
+          <a class="concept-link" href="topological-sort.html">topological sort</a>.
+        </p>
+
+        <div class="flow-lab">
+          <div class="viz viz-stage" aria-labelledby="flow-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="flow-viz-title">Residual · Edmonds–Karp</p>
+              <span class="sys-badge" id="flow-badge">ready</span>
+            </div>
+            <p class="viz-hint">
+              Step finds a BFS augmenting path · labels show residual capacity
+            </p>
+            <div class="flow-stage" role="presentation">
+              <svg id="flow-edges" class="flow-edges" aria-hidden="true"></svg>
+              <div
+                id="flow-nodes"
+                class="flow-nodes"
+                role="img"
+                aria-label="Flow network"
+              ></div>
+            </div>
+            <p class="flow-path" id="flow-path" aria-live="polite">Path: —</p>
+            <div class="viz-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-flow-action="step">
+                Augment
+              </button>
+              <button type="button" class="viz-btn" data-flow-action="play">Play</button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-flow-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="flow-status" aria-live="polite">
+              Flow = 0. Step to find an s–t augmenting path.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="flow-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="flow-code-title">Executing</p>
+              <span class="code-panel-lang">EK · BFS</span>
+            </div>
+            <pre class="code-panel-body" id="flow-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="flow-code-note">
+              While an augmenting path exists, push bottleneck residual.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Core ideas</h2>
+        <ul class="op-list">
+          <li>
+            <code>residual</code>
+            <span>forward leftover + backward undo</span>
+            <span class="op-cost">G<sub>f</sub></span>
+          </li>
+          <li>
+            <code>augment</code>
+            <span>push min residual along an s–t path</span>
+            <span class="op-cost">+Δ</span>
+          </li>
+          <li>
+            <code>min cut</code>
+            <span>max flow = capacity of min s–t cut</span>
+            <span class="op-cost">=</span>
+          </li>
+        </ul>
+
+        <h2>Related ideas</h2>
+        <ul>
+          <li>
+            <a class="concept-link" href="graphs.html">Graphs</a>
+            — capacities live on directed edges
+          </li>
+          <li>
+            <a class="concept-link" href="bfs.html">BFS</a>
+            — Edmonds–Karp’s path finder
+          </li>
+          <li>
+            <a class="concept-link" href="topological-sort.html">Topological sort</a>
+            — another classic digraph algorithm
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Maximum_flow_problem">
+            <p>
+              “In optimization theory, maximum flow problems involve finding a
+              feasible flow through a flow network that obtains the maximum
+              possible flow rate. The maximum flow problem can be seen as a
+              special case of more complex network flow problems, such as the
+              circulation problem.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Maximum_flow_problem"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Maximum flow problem</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#algorithms">← All concepts</a>
+        <a class="next" href="online-algorithms.html">Next up: Online algorithms →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
+    <script src="../js/network-flow.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

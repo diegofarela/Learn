@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Type systems — Learn</title>
+    <meta
+      name="description"
+      content="Type systems: toggle static catch at compile time vs dynamic runtime type errors."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#software">Software engineering</a>
+      </p>
+      <h1>Type systems</h1>
+      <p class="concept-meta">
+        <span class="tag">Software</span>
+        <span>
+          static · dynamic ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Checking types before the program runs"
+            data-def="Checking types before the program runs"
+            >compile-time</abbr
+          >
+        </span>
+        <span class="meta-size"
+          ><strong id="tsys-meta">static</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          A <strong>type system</strong> classifies values and restricts which
+          operations are legal.
+          <em>Static</em> checkers catch mismatches before run;
+          <em>dynamic</em> languages often discover them only when that line
+          executes. Ties to
+          <a class="concept-link" href="variables-types.html">variables &amp; types</a>
+          and
+          <a class="concept-link" href="compilers.html">compilers</a>.
+        </p>
+
+        <div class="tsys-lab">
+          <div class="viz viz-stage" aria-labelledby="tsys-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="tsys-viz-title">When the error appears</p>
+              <label class="palette-control">
+                <span class="sr-only">Mode</span>
+                <select id="tsys-mode" aria-label="Static or dynamic">
+                  <option value="static" selected>Static</option>
+                  <option value="dynamic">Dynamic</option>
+                </select>
+              </label>
+            </div>
+            <p class="viz-hint">
+              Toggle static vs dynamic · run the buggy call
+            </p>
+            <div class="tsys-stage">
+              <div class="tsys-stage-glow" aria-hidden="true"></div>
+              <pre class="tsys-snippet" id="tsys-snippet" aria-hidden="true"></pre>
+              <div class="tsys-timeline" id="tsys-timeline" aria-label="Lifecycle">
+                <div class="tsys-phase" data-tsys-phase="edit">Edit</div>
+                <div class="tsys-phase" data-tsys-phase="check">Typecheck</div>
+                <div class="tsys-phase" data-tsys-phase="run">Run</div>
+                <div class="tsys-phase" data-tsys-phase="boom">Error?</div>
+              </div>
+              <p class="tsys-verdict" id="tsys-verdict">—</p>
+            </div>
+            <div class="viz-controls tsys-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-tsys-action="run">
+                Run example
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-tsys-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="tsys-status" aria-live="polite">
+              Static mode: a type error should appear at check time.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="tsys-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="tsys-code-title">Example</p>
+              <span class="code-panel-lang" id="tsys-code-lang">static</span>
+            </div>
+            <pre class="code-panel-body" id="tsys-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="tsys-code-note">
+              Same bug, different discovery time.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Trade-offs</h2>
+        <ul class="op-list">
+          <li>
+            <code>static</code>
+            <span>catch early · more upfront annotation / inference</span>
+            <span class="op-cost">before run</span>
+          </li>
+          <li>
+            <code>dynamic</code>
+            <span>flexible · errors surface on the hot path</span>
+            <span class="op-cost">at runtime</span>
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Type_system">
+            <p>
+              “In programming languages, a type system is a logical system
+              comprising a set of rules that assigns a property called a type to
+              every term. Usually the terms are various language constructs of a
+              computer program, such as variables, expressions, functions or
+              modules.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Type_system"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Type system</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#software">← All concepts</a>
+        <a class="next" href="variables-types.html">Related: Variables &amp; types →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
+    <script src="../js/type-systems.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

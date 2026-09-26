@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Consistent hashing — Learn</title>
+    <meta
+      name="description"
+      content="Consistent hashing: hash ring; add/remove nodes; keys remapped minimally."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#distributed">Distributed systems</a>
+      </p>
+      <h1>Consistent hashing</h1>
+      <p class="concept-meta">
+        <span class="tag">Distributed</span>
+        <span>ring · shards · minimal remap</span>
+        <span class="meta-size"
+          >nodes <strong id="chash-meta">3</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          <strong>Consistent hashing</strong> places nodes and keys on a ring
+          so adding or removing a node only remaps a small fraction of keys—unlike
+          <code>hash(key) % N</code>. It builds on
+          <a class="concept-link" href="hash-tables.html">hash tables</a>
+          /
+          <a class="concept-link" href="hashing-crypto.html">hashing</a>
+          and shows up in caches and
+          <a class="concept-link" href="nosql.html">sharded stores</a>.
+        </p>
+
+        <div class="chash-lab">
+          <div class="viz viz-stage" aria-labelledby="chash-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="chash-viz-title">Hash ring</p>
+              <span class="sys-badge" id="chash-phase">3 NODES</span>
+            </div>
+            <p class="viz-hint">
+              Add / remove a node · watch which keys move
+            </p>
+            <div class="chash-stage" role="presentation">
+              <div class="chash-stage-glow" aria-hidden="true"></div>
+              <div id="chash-ring" class="chash-ring" role="img" aria-label="Consistent hash ring"></div>
+              <div id="chash-keys" class="chash-keys" aria-label="Key assignments"></div>
+            </div>
+            <div class="viz-controls chash-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-chash-action="add">
+                Add node
+              </button>
+              <button type="button" class="viz-btn" data-chash-action="remove">
+                Remove node
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-chash-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="chash-status" aria-live="polite">
+              Keys map clockwise to the next node on the ring.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="chash-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="chash-code-title">Placement</p>
+              <span class="code-panel-lang">ring</span>
+            </div>
+            <pre class="code-panel-body" id="chash-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="chash-code-note">
+              Only keys in the affected arc remapped.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Ideas</h2>
+        <ul class="op-list">
+          <li>
+            <code>ring</code>
+            <span>hash space wraps; nodes own arcs</span>
+            <span class="op-cost">topology</span>
+          </li>
+          <li>
+            <code>lookup</code>
+            <span>walk clockwise from hash(key) to next node</span>
+            <span class="op-cost">O(log n)</span>
+          </li>
+          <li>
+            <code>rebalance</code>
+            <span>~1/N keys move when N changes</span>
+            <span class="op-cost">minimal</span>
+          </li>
+        </ul>
+
+        <h2>Related ideas</h2>
+        <ul>
+          <li>
+            <a class="concept-link" href="hash-tables.html">Hash tables</a>
+            — hashing for buckets
+          </li>
+          <li>
+            <a class="concept-link" href="hashing-crypto.html">Hashing &amp; crypto</a>
+            — hash functions as mixers
+          </li>
+          <li>
+            <a class="concept-link" href="caching.html">Caching</a>
+            — CDN / cache fleets often use consistent hashing
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Consistent_hashing">
+            <p>
+              “In computer science, consistent hashing is a special kind of
+              hashing technique such that when a hash table is resized, only
+              ⌈n/m⌉ keys need to be remapped on average, where n is the number
+              of keys, and m is the number of slots. In contrast, in most
+              traditional hash tables, a change in the number of array slots
+              causes nearly all keys to be remapped because the mapping between
+              the keys and the slots is defined by a modular operation.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Consistent_hashing"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Consistent hashing</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#distributed">← All concepts</a>
+        <a class="next" href="hash-tables.html">Related: Hash tables →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
+    <script src="../js/consistent-hashing.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

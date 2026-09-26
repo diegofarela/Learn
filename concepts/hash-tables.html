@@ -238,6 +238,44 @@
           </li>
         </ul>
 
+        <section class="mastery" aria-labelledby="mastery-heading">
+          <h2 id="mastery-heading">For mastery</h2>
+          <ul class="mastery-list">
+            <li>
+              <span class="mastery-label">Invariant</span>
+              Equal keys hash to the same bucket; collisions live in that
+              bucket’s chain/probe sequence; load factor stays bounded by
+              resizing.
+            </li>
+            <li>
+              <span class="mastery-label">When / when not</span>
+              Use for expected O(1) insert/lookup/delete in
+              <a class="concept-link" href="maps.html">maps</a> /
+              <a class="concept-link" href="sets.html">sets</a>.
+              Not for ordered traversal or adversarial keys without a solid
+              hash.
+            </li>
+            <li>
+              <span class="mastery-label">Common failure</span>
+              Bad hash or high load → long chains; mutating keys after insert;
+              confusing table hashes with
+              <a class="concept-link" href="hashing-crypto.html">cryptographic hashing</a>.
+            </li>
+            <li>
+              <span class="mastery-label">Proof shape</span>
+              With a good hash and resizing, average probe/chain length stays
+              O(1) — see
+              <a class="concept-link" href="amortized-analysis.html">amortized analysis</a>
+              for the resize cost argument.
+            </li>
+            <li>
+              <span class="mastery-label">Assumes</span>
+              Hash ≈ uniform over buckets; keys are hashable and stable while
+              stored.
+            </li>
+          </ul>
+        </section>
+
         <h2>From the literature</h2>
         <figure class="verbatim">
           <blockquote cite="https://en.wikipedia.org/wiki/Hash_table">
@@ -269,6 +307,7 @@
     </main>
 
     <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
     <script src="../js/hash-tables.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>

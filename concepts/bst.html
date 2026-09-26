@@ -198,6 +198,40 @@
           </li>
         </ul>
 
+        <section class="mastery" aria-labelledby="mastery-heading">
+          <h2 id="mastery-heading">For mastery</h2>
+          <ul class="mastery-list">
+            <li>
+              <span class="mastery-label">Invariant</span>
+              For every node: all keys in the left subtree are &lt; the node,
+              all in the right are &gt; (in-order walk is sorted).
+            </li>
+            <li>
+              <span class="mastery-label">When / when not</span>
+              Use as an ordered dictionary when you need predecessor/successor.
+              Not for guaranteed O(log n) without
+              <a class="concept-link" href="balanced-trees.html">balance</a>,
+              and not for “extremum at root” (
+              <a class="concept-link" href="heaps.html">heaps</a>).
+            </li>
+            <li>
+              <span class="mastery-label">Common failure</span>
+              Sorted inserts build a spine → O(n) search; insert/delete that
+              breaks the BST property.
+            </li>
+            <li>
+              <span class="mastery-label">Proof shape</span>
+              Search follows comparisons; correctness is induction on the BST
+              invariant — see
+              <a class="concept-link" href="induction-invariants.html">induction &amp; invariants</a>.
+            </li>
+            <li>
+              <span class="mastery-label">Assumes</span>
+              A total order on keys and a defined policy for duplicates.
+            </li>
+          </ul>
+        </section>
+
         <h2>From the literature</h2>
         <figure class="verbatim">
           <blockquote cite="https://en.wikipedia.org/wiki/Binary_search_tree">
@@ -228,6 +262,7 @@
     </main>
 
     <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
     <script src="../js/bst.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>

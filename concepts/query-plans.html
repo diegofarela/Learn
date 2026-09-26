@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Query plans — Learn</title>
+    <meta
+      name="description"
+      content="Query plans: turn SQL into an operator tree (scan, filter, join) and highlight cost intuition."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#databases">Databases</a>
+      </p>
+      <h1>Query plans</h1>
+      <p class="concept-meta">
+        <span class="tag">Databases</span>
+        <span>
+          scan · filter ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Join — combine rows from two inputs on a predicate"
+            data-def="Join — combine rows from two inputs on a predicate"
+            >join</abbr
+          >
+        </span>
+        <span class="meta-size"
+          >cost ~ <strong id="qp-cost-label">—</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          A <strong>query plan</strong> is the operator tree the optimizer
+          chooses to run your SQL—scans, filters, joins—with estimated costs.
+          Indexes change which plan wins. Related:
+          <a class="concept-link" href="sql.html">SQL</a>,
+          <a class="concept-link" href="indexes.html">indexes</a>, and
+          <a class="concept-link" href="relational.html">relational model</a>.
+        </p>
+
+        <div class="qp-lab">
+          <div class="viz viz-stage" aria-labelledby="qp-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="qp-viz-title">SQL → operator tree</p>
+              <label class="palette-control">
+                <span class="sr-only">Plan variant</span>
+                <select id="qp-plan" aria-label="Plan variant">
+                  <option value="scan" selected>Seq scan + filter + join</option>
+                  <option value="index">Index scan + nested loop</option>
+                </select>
+              </label>
+            </div>
+            <p class="viz-hint">
+              Pick a plan · step operators bottom-up · watch cost bars
+            </p>
+            <div class="qp-stage" role="presentation">
+              <div class="qp-stage-glow" aria-hidden="true"></div>
+              <div class="qp-tree" id="qp-tree" aria-live="polite"></div>
+            </div>
+            <div class="viz-controls qp-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-qp-action="step">
+                Step
+              </button>
+              <button type="button" class="viz-btn" data-qp-action="play">Play</button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-qp-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="qp-status" aria-live="polite">
+              Query: orders ⋈ customers WHERE city = 'NY'. Step the plan.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="qp-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="qp-code-title">SQL</p>
+              <span class="code-panel-lang">query</span>
+            </div>
+            <pre class="code-panel-body" id="qp-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="qp-code-note">
+              Operators execute bottom-up; cost is relative intuition.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Cost intuition</h2>
+        <ul class="op-list">
+          <li>
+            <code>Seq Scan</code>
+            <span>read every row — fine for small tables</span>
+            <span class="op-cost">O(n)</span>
+          </li>
+          <li>
+            <code>Index Scan</code>
+            <span>seek by key — wins with selective predicates</span>
+            <span class="op-cost">O(log n)</span>
+          </li>
+          <li>
+            <code>Filter</code>
+            <span>drop rows that fail WHERE</span>
+            <span class="op-cost">cheap</span>
+          </li>
+          <li>
+            <code>Join</code>
+            <span>nested loop / hash / merge — dominate big queries</span>
+            <span class="op-cost">dominant</span>
+          </li>
+        </ul>
+
+        <h2>Related ideas</h2>
+        <ul>
+          <li>
+            <a class="concept-link" href="sql.html">SQL</a>
+            — the language the planner compiles
+          </li>
+          <li>
+            <a class="concept-link" href="indexes.html">Indexes</a>
+            — unlock index scans and nested-loop joins
+          </li>
+          <li>
+            <a class="concept-link" href="big-o.html">Big-O complexity</a>
+            — same growth ideas, estimated by the optimizer
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Query_plan">
+            <p>
+              “A query plan (or query execution plan) is an ordered set of steps
+              used to access data in a SQL relational database management system.
+              This is a specific case of the relational model concept of access
+              plans. Since SQL is declarative, there are typically many
+              alternative ways to execute a given query, with widely varying
+              performance.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Query_plan"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Query plan</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#databases">← All concepts</a>
+        <a class="next" href="indexes.html">Related: Indexes →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
+    <script src="../js/query-plans.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

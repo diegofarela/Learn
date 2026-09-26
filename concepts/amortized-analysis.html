@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Amortized analysis — Learn</title>
+    <meta
+      name="description"
+      content="Amortized analysis: dynamic array resize with token / potential accounting."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#algorithms">Algorithms</a>
+      </p>
+      <h1>Amortized analysis</h1>
+      <p class="concept-meta">
+        <span class="tag">Algorithms</span>
+        <span>aggregate · accounting · potential</span>
+        <span class="meta-size"
+          >ops <strong id="am-ops">0</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          A single
+          <a class="concept-link" href="arrays.html">array</a>
+          append can be cheap — or copy the whole buffer when it doubles.
+          <strong>Amortized analysis</strong> spreads expensive rare steps over
+          a sequence so the average cost stays low. Related growth language:
+          <a class="concept-link" href="big-o.html">Big-O</a>.
+        </p>
+
+        <div class="am-lab">
+          <div class="viz viz-stage" aria-labelledby="am-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="am-viz-title">Dynamic array · tokens</p>
+              <span class="sys-badge" id="am-badge">ready</span>
+            </div>
+            <p class="viz-hint">
+              Each push pays 3 tokens · spare tokens fund the next doubling
+            </p>
+            <div class="am-stats" aria-live="polite">
+              <span>n=<strong id="am-n">0</strong></span>
+              <span>cap=<strong id="am-cap">1</strong></span>
+              <span>tokens=<strong id="am-tokens">0</strong></span>
+              <span>actual Σ=<strong id="am-actual">0</strong></span>
+              <span>amortized Σ=<strong id="am-amsum">0</strong></span>
+            </div>
+            <div id="am-slots" class="am-slots" role="list" aria-label="Array slots"></div>
+            <div class="am-bank" aria-labelledby="am-bank-title">
+              <p class="am-bank-title" id="am-bank-title">Token bank</p>
+              <div id="am-bank" class="am-bank-row" role="list"></div>
+            </div>
+            <div class="viz-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-am-action="push">
+                Push
+              </button>
+              <button type="button" class="viz-btn" data-am-action="burst">Push ×4</button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-am-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="am-status" aria-live="polite">
+              Empty array, capacity 1. Push to insert and pay tokens.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="am-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="am-code-title">Executing</p>
+              <span class="code-panel-lang">accounting · O(1)*</span>
+            </div>
+            <pre class="code-panel-body" id="am-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="am-code-note">
+              Amortized O(1) per push when capacity doubles.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Three viewpoints</h2>
+        <ul class="op-list">
+          <li>
+            <code>aggregate</code>
+            <span>total cost / number of ops</span>
+            <span class="op-cost">avg</span>
+          </li>
+          <li>
+            <code>accounting</code>
+            <span>overcharge cheap ops; bank pays for resizes</span>
+            <span class="op-cost">tokens</span>
+          </li>
+          <li>
+            <code>potential</code>
+            <span>Φ = 2n − cap (classic doubling potential)</span>
+            <span class="op-cost">Φ</span>
+          </li>
+        </ul>
+
+        <h2>Related ideas</h2>
+        <ul>
+          <li>
+            <a class="concept-link" href="big-o.html">Big-O complexity</a>
+            — amortized bounds are still asymptotic
+          </li>
+          <li>
+            <a class="concept-link" href="arrays.html">Arrays</a>
+            — contiguous buffers that grow
+          </li>
+          <li>
+            <a class="concept-link" href="p-vs-np.html">P vs NP</a>
+            — different lens on cost: classes vs sequences
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Amortized_analysis">
+            <p>
+              “In computer science, amortized analysis is a method for analyzing
+              a given algorithm's complexity, or how much of a resource,
+              especially time or memory, it takes to execute. The motivation for
+              amortized analysis is that looking at the worst-case run time per
+              operation, rather than per algorithm, can be too pessimistic.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Amortized_analysis"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Amortized analysis</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#algorithms">← All concepts</a>
+        <a class="next" href="topological-sort.html">Next up: Topological sort →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
+    <script src="../js/amortized-analysis.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

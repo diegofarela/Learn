@@ -80,10 +80,11 @@
           A <strong>pointer</strong> is a variable that stores a
           <em>memory address</em>—not the value itself.
           <code>&amp;x</code> takes the address of <code>x</code>;
-          <code>*p</code> follows that address to read or write. Contrast the
-          <a class="concept-link" href="call-stack.html">call stack</a>
-          (automatic locals) with the heap (dynamic allocations)—both are just
-          addressable slots.
+          <code>*p</code> follows that address to read or write. Names often
+          live in small
+          <a class="concept-link" href="call-stack.html">call-stack</a>
+          slots; bigger or longer-lived objects live on the heap—both are just
+          addressable memory (see Stack vs heap below).
         </p>
 
         <div class="mem-lab">
@@ -226,13 +227,75 @@
 
         <h2>Stack vs heap</h2>
         <p>
-          Locals often live on the
-          <a class="concept-link" href="call-stack.html">call stack</a>
-          (or a data-structure
-          <a class="concept-link" href="stack.html">stack</a>
-          in spirit): automatic lifetime, fixed frames. Heap memory is allocated
-          at runtime and reached only through pointers—flexible size, manual or
-          GC cleanup. Same address idea either way.
+          Two neighborhoods in the same city of addresses—not two different
+          kinds of RAM chip.
+        </p>
+        <ul class="op-list">
+          <li>
+            <code>stack slot</code>
+            <span
+              >space inside a
+              <a class="concept-link" href="call-stack.html">call-stack</a>
+              frame for a local name (or a small value). Appears when the
+              function is called; gone when it returns—like a sticky note on
+              your desk while you work.</span
+            >
+            <span class="op-cost">auto</span>
+          </li>
+          <li>
+            <code>heap cell</code>
+            <span
+              >a block reserved at runtime for data that outlives a single
+              line—objects, growable arrays. You reach it through a pointer
+              stored in a stack slot (or another heap object). Cleanup is
+              manual (<code>free</code>) or automatic
+              (<a class="concept-link" href="garbage-collection.html"
+                >garbage collection</a
+              >)—like a warehouse box you rented.</span
+            >
+            <span class="op-cost">dynamic</span>
+          </li>
+        </ul>
+        <p>
+          What keeps one allocation from overwriting another?
+        </p>
+        <ul class="op-list">
+          <li>
+            <code>allocator</code>
+            <span>tracks which ranges are owned; hands out non-overlapping blocks</span>
+            <span class="op-cost">ownership</span>
+          </li>
+          <li>
+            <code>size / capacity</code>
+            <span>each object knows how large its block is</span>
+            <span class="op-cost">metadata</span>
+          </li>
+          <li>
+            <code>bounds checks</code>
+            <span>safe languages refuse writes past the end</span>
+            <span class="op-cost">safe</span>
+          </li>
+          <li>
+            <code>no checks (C)</code>
+            <span>lying about size can smash neighbors—a buffer overflow</span>
+            <span class="op-cost">unsafe</span>
+          </li>
+        </ul>
+        <p>
+          An array append usually writes into spare room inside its own block
+          (<code>length</code> vs <code>capacity</code>); when full it asks for a
+          <em>larger</em> contiguous block and copies—not a linked-list chain.
+          See
+          <a class="concept-link" href="arrays.html">arrays</a>.
+          Unreachable heap cells are reusable after
+          <a class="concept-link" href="garbage-collection.html"
+            >garbage collection</a
+          >
+          (or <code>free</code>), which is what the faded “unbound” cell in
+          <a class="concept-link" href="variables-types.html"
+            >variables &amp; types</a
+          >
+          is hinting at.
         </p>
 
         <h2>From the literature</h2>
@@ -268,6 +331,7 @@
     </main>
 
     <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
     <script src="../js/memory-pointers.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>

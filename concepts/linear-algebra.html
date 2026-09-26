@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Linear algebra — Learn</title>
+    <meta
+      name="description"
+      content="Linear algebra: add, scale, and matrix-transform 2D vectors on a canvas."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#ml-basics">ML foundations</a>
+      </p>
+      <h1>Linear algebra</h1>
+      <p class="concept-meta">
+        <span class="tag">ML foundations</span>
+        <span>
+          vectors · matrices ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Linear map: scale, rotate, shear via matrix multiplication"
+            data-def="Linear map: scale, rotate, shear via matrix multiplication"
+            >transform</abbr
+          >
+        </span>
+        <span class="meta-size"
+          >∥v∥ <strong id="la-meta">—</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          <strong>Vectors</strong> are arrows (or lists of numbers);
+          <strong>matrices</strong> transform them—scale, rotate, shear. Drag
+          and tweak below; these ops underpin
+          <a class="concept-link" href="gradient-descent.html">gradient descent</a>
+          and model geometry in
+          <a class="concept-link" href="bias-variance.html">bias–variance</a>
+          fits.
+        </p>
+
+        <div class="la-lab">
+          <div class="viz viz-stage" aria-labelledby="la-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="la-viz-title">2D vectors</p>
+              <label class="palette-control">
+                <span class="sr-only">Operation</span>
+                <select id="la-op" aria-label="Vector operation">
+                  <option value="add" selected>Add u + v</option>
+                  <option value="scale">Scale v</option>
+                  <option value="matrix">Matrix · v</option>
+                </select>
+              </label>
+            </div>
+            <p class="viz-hint">
+              Drag vector tips · change op · watch the result
+            </p>
+            <div class="la-stage">
+              <div class="la-stage-glow" aria-hidden="true"></div>
+              <canvas id="la-canvas" width="480" height="280" aria-label="Vector canvas"></canvas>
+              <div class="la-sliders" id="la-sliders">
+                <label class="la-slider">
+                  <span>scale k</span>
+                  <input type="range" id="la-scale" min="-2" max="3" step="0.1" value="1.5" />
+                </label>
+                <label class="la-slider">
+                  <span>rotate °</span>
+                  <input type="range" id="la-rot" min="0" max="360" step="1" value="30" />
+                </label>
+              </div>
+            </div>
+            <div class="viz-controls la-controls">
+              <button type="button" class="viz-btn viz-btn-ghost" data-la-action="reset">
+                Reset vectors
+              </button>
+            </div>
+            <p class="viz-live" id="la-status" aria-live="polite">
+              Drag the tips of u (teal) and v (amber). Result in white.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="la-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="la-code-title">Numbers</p>
+              <span class="code-panel-lang">R²</span>
+            </div>
+            <pre class="code-panel-body" id="la-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="la-code-note">
+              Matrix columns say where basis vectors go.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Ops</h2>
+        <ul class="op-list">
+          <li>
+            <code>add</code>
+            <span>component-wise · parallelogram rule</span>
+            <span class="op-cost">u+v</span>
+          </li>
+          <li>
+            <code>scale</code>
+            <span>stretch / flip by scalar k</span>
+            <span class="op-cost">kv</span>
+          </li>
+          <li>
+            <code>matrix</code>
+            <span>linear map Av (here: rotation)</span>
+            <span class="op-cost">Av</span>
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Linear_algebra">
+            <p>
+              “Linear algebra is the branch of mathematics concerning linear
+              equations, linear maps, and their representations in vector spaces
+              and through matrices.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Linear_algebra"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Linear algebra</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#ml-basics">← All concepts</a>
+        <a class="next" href="gradient-descent.html">Related: Gradient descent →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
+    <script src="../js/linear-algebra.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

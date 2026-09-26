@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Balls &amp; bins — Learn</title>
+    <meta
+      name="description"
+      content="Balls and bins: throw balls into bins and watch the birthday collision probability curve."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#probability">Probability for CS</a>
+      </p>
+      <h1>Balls &amp; bins</h1>
+      <p class="concept-meta">
+        <span class="tag">Probability for CS</span>
+        <span>
+          collisions ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="With d days, ~√(2 d ln 2) people make P(shared birthday) ≈ 50%"
+            data-def="With d days, ~√(2 d ln 2) people make P(shared birthday) ≈ 50%"
+            >birthday paradox</abbr
+          >
+        </span>
+        <span class="meta-size"
+          >balls <strong id="bb-meta">10</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          Throw <strong>m balls</strong> independently into
+          <strong>n bins</strong>. Collisions appear surprisingly early—the
+          birthday paradox. Same math as hashing load and bloom filters; pair
+          with
+          <a class="concept-link" href="expectation.html">expectation</a>
+          and
+          <a class="concept-link" href="probability-basics.html"
+            >probability basics</a
+          >.
+        </p>
+
+        <div class="bb-lab">
+          <div class="viz viz-stage" aria-labelledby="bb-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="bb-viz-title">Throw &amp; curve</p>
+              <span class="bb-badge" id="bb-badge">m=10 n=365</span>
+            </div>
+            <p class="viz-hint">
+              Throw balls · watch bin loads · birthday P(collision) curve
+            </p>
+            <label class="bb-slider-label">
+              <span>bins n = <strong id="bb-n-val">24</strong></span>
+              <input
+                id="bb-n"
+                type="range"
+                min="6"
+                max="48"
+                value="24"
+                aria-valuemin="6"
+                aria-valuemax="48"
+                aria-valuenow="24"
+              />
+            </label>
+            <div
+              id="bb-bins"
+              class="bb-bins"
+              role="img"
+              aria-label="Bins with ball counts"
+            ></div>
+            <div class="viz-controls">
+              <button type="button" class="viz-btn viz-btn-primary" id="bb-throw">
+                Throw 1 ball
+              </button>
+              <button type="button" class="viz-btn" id="bb-throw5">
+                Throw 5
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" id="bb-reset">
+                Empty bins
+              </button>
+            </div>
+            <svg
+              id="bb-chart"
+              class="bb-chart"
+              viewBox="0 0 420 160"
+              xmlns="http://www.w3.org/2000/svg"
+              role="img"
+              aria-label="Birthday collision probability curve"
+            ></svg>
+            <p class="viz-live" id="bb-status" aria-live="polite">
+              Empty bins. P(≥1 collision) rises fast with m — birthday style.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="bb-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="bb-code-title">Collision prob</p>
+              <span class="code-panel-lang">math</span>
+            </div>
+            <pre class="code-panel-body" id="bb-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="bb-code-note">
+              P(collision) = 1 − n! / ((n−m)! n<sup>m</sup>) for m ≤ n.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Collisions</h2>
+        <p>
+          With m ≈ √n balls, a collision becomes likely. For n = 365, m = 23
+          already exceeds 50%—counterintuitive until you count pairs with
+          <a class="concept-link" href="combinatorics.html">C(m,2)</a>.
+        </p>
+
+        <h2>Expected load</h2>
+        <p>
+          Each bin’s load is Binomial(m, 1/n); expected load is m/n. Max load is
+          ~ log n / log log n with high probability when m = n—classic hashing
+          folklore.
+        </p>
+
+        <p>
+          See
+          <a class="concept-link" href="hash-tables.html">hash tables</a>,
+          <a class="concept-link" href="bloom-filters.html">bloom filters</a>,
+          <a class="concept-link" href="expectation.html">expectation</a>.
+        </p>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Birthday_problem">
+            <p>
+              “In probability theory, the birthday problem asks for the
+              probability that, in a set of n randomly chosen people, at least
+              two will share the same birthday. The birthday paradox is the
+              counterintuitive fact that only 23 people are needed for that
+              probability to exceed 50%.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Birthday_problem"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Birthday problem</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#probability">← All concepts</a>
+        <a class="next" href="../index.html#probability">More probability →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
+    <script src="../js/balls-bins.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

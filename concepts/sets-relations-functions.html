@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Sets, relations &amp; functions — Learn</title>
+    <meta
+      name="description"
+      content="Sets, binary relations, and functions: Venn membership and arrow diagrams that show when a relation is a function."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#discrete-math">Discrete math</a>
+      </p>
+      <h1>Sets, relations &amp; functions</h1>
+      <p class="concept-meta">
+        <span class="tag">Discrete math</span>
+        <span>
+          membership · ordered pairs ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="A relation where each domain element maps to exactly one codomain element"
+            data-def="A relation where each domain element maps to exactly one codomain element"
+            >function</abbr
+          >
+        </span>
+        <span class="meta-size"
+          >mode <strong id="srf-mode-label">relation</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          <strong>Sets</strong> collect distinct elements.
+          A <strong>relation</strong> is a set of ordered pairs; a
+          <strong>function</strong> is a relation where every domain element
+          has exactly one image. That language underpins
+          <a class="concept-link" href="sets.html">set ADTs</a>,
+          <a class="concept-link" href="maps.html">maps</a>, and
+          <a class="concept-link" href="graph-theory-math.html"
+            >graph theory</a
+          >.
+        </p>
+
+        <div class="srf-lab">
+          <div class="viz viz-stage" aria-labelledby="srf-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="srf-viz-title">Venn &amp; arrows</p>
+              <span class="srf-badge" id="srf-badge">relation</span>
+            </div>
+            <p class="viz-hint">
+              Toggle relation vs function · click pairs to add/remove edges
+            </p>
+            <div class="srf-toggle" role="group" aria-label="Diagram mode">
+              <button type="button" class="viz-btn is-selected" data-srf-mode="relation">
+                Relation
+              </button>
+              <button type="button" class="viz-btn" data-srf-mode="function">
+                Function
+              </button>
+              <button type="button" class="viz-btn" data-srf-mode="venn">
+                Venn
+              </button>
+            </div>
+            <svg
+              id="srf-svg"
+              class="srf-svg"
+              viewBox="0 0 440 260"
+              xmlns="http://www.w3.org/2000/svg"
+              role="img"
+              aria-label="Set and relation diagram"
+            ></svg>
+            <div class="viz-controls">
+              <button type="button" class="viz-btn viz-btn-ghost" id="srf-reset">
+                Reset pairs
+              </button>
+            </div>
+            <p class="viz-live" id="srf-status" aria-live="polite">
+              A relation may map one x to many y. Click an empty slot to add a
+              pair.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="srf-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="srf-code-title">Definition</p>
+              <span class="code-panel-lang">math</span>
+            </div>
+            <pre class="code-panel-body" id="srf-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="srf-code-note">
+              Watch whether each domain element has zero, one, or many arrows.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Sets</h2>
+        <p>
+          Membership is yes/no. Union, intersection, and difference build new
+          sets from old ones—the same algebra you see in the data-structure
+          <a class="concept-link" href="sets.html">Sets</a> lab.
+        </p>
+
+        <h2>Relations</h2>
+        <p>
+          A binary relation R ⊆ X × Y is any collection of pairs (x, y). No
+          uniqueness rule: one x may relate to several y, or to none.
+        </p>
+
+        <h2>Functions</h2>
+        <p>
+          f: X → Y requires every x ∈ X to have
+          <em>exactly one</em> y with (x, y) ∈ f. That is why hash maps and
+          mathematical functions feel the same: key → single value.
+        </p>
+
+        <p>
+          Next:
+          <a class="concept-link" href="combinatorics.html">combinatorics</a>
+          (counting pairs),
+          <a class="concept-link" href="induction-invariants.html"
+            >induction &amp; invariants</a
+          >.
+        </p>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Binary_relation">
+            <p>
+              “In mathematics, a binary relation associates some elements of
+              one set called the domain with some elements of another set
+              called the codomain. Precisely, a binary relation over sets X and
+              Y is a set of ordered pairs (x,y), where x is an element of X and
+              y is an element of Y.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Binary_relation"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Binary relation</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#discrete-math">← All concepts</a>
+        <a class="next" href="combinatorics.html">Next up: Combinatorics →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
+    <script src="../js/sets-relations-functions.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Endianness &amp; alignment — Learn</title>
+    <meta
+      name="description"
+      content="Endianness & alignment: int32 bytes in LE/BE and struct padding holes."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#architecture">Computer architecture</a>
+      </p>
+      <h1>Endianness &amp; alignment</h1>
+      <p class="concept-meta">
+        <span class="tag">Architecture</span>
+        <span>byte order · padding · structs</span>
+        <span class="meta-size"
+          ><strong id="endia-meta">LE</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          <strong>Endianness</strong> is the order of bytes in a multi-byte
+          word;
+          <strong>alignment</strong> inserts padding so fields sit on natural
+          boundaries. Both matter for
+          <a class="concept-link" href="memory-pointers.html">memory layouts</a>,
+          <a class="concept-link" href="tcp-udp.html">network byte order</a>
+          (big-endian), and
+          <a class="concept-link" href="floating-point.html">float</a>
+          bit patterns on the wire.
+        </p>
+
+        <div class="endia-lab">
+          <div class="viz viz-stage" aria-labelledby="endia-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="endia-viz-title">Bytes in memory</p>
+              <span class="sys-badge" id="endia-phase">LITTLE-ENDIAN</span>
+            </div>
+            <p class="viz-hint">
+              Toggle LE/BE for int32 · inspect struct padding holes
+            </p>
+            <div class="endia-stage" role="presentation">
+              <div class="endia-stage-glow" aria-hidden="true"></div>
+              <p class="endia-label">int32 value = <code id="endia-val">0x12345678</code></p>
+              <div
+                id="endia-bytes"
+                class="endia-bytes"
+                role="img"
+                aria-label="Four memory bytes"
+              ></div>
+              <p class="endia-label">struct { char a; int b; char c; }</p>
+              <div
+                id="endia-struct"
+                class="endia-struct"
+                role="img"
+                aria-label="Struct layout with padding"
+              ></div>
+            </div>
+            <div class="viz-controls endia-controls">
+              <button type="button" class="viz-btn" data-endia-endian="le">
+                Little-endian
+              </button>
+              <button type="button" class="viz-btn" data-endia-endian="be">
+                Big-endian
+              </button>
+              <button type="button" class="viz-btn" data-endia-action="next">
+                Next value
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-endia-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="endia-status" aria-live="polite">
+              Address 0 is the lowest address. LE stores the least-significant byte first.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="endia-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="endia-code-title">Layout</p>
+              <span class="code-panel-lang">memory</span>
+            </div>
+            <pre class="code-panel-body" id="endia-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="endia-code-note">
+              Padding keeps <code>int b</code> 4-byte aligned.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Ideas</h2>
+        <ul class="op-list">
+          <li>
+            <code>little-endian</code>
+            <span>LSB at the lowest address (x86, most ARM)</span>
+            <span class="op-cost">LE</span>
+          </li>
+          <li>
+            <code>big-endian</code>
+            <span>MSB first — classic “network order”</span>
+            <span class="op-cost">BE</span>
+          </li>
+          <li>
+            <code>alignment</code>
+            <span>compiler inserts padding between struct fields</span>
+            <span class="op-cost">pad</span>
+          </li>
+        </ul>
+
+        <h2>Related ideas</h2>
+        <ul>
+          <li>
+            <a class="concept-link" href="memory-pointers.html">Memory &amp; pointers</a>
+            — addresses of each byte
+          </li>
+          <li>
+            <a class="concept-link" href="tcp-udp.html">TCP &amp; UDP</a>
+            — network byte order is big-endian
+          </li>
+          <li>
+            <a class="concept-link" href="binary-bits.html">Binary &amp; bits</a>
+            — bits inside each byte
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Endianness">
+            <p>
+              “In computing, endianness is the order or sequence of bytes of a
+              word of digital data in computer memory. Endianness is primarily
+              expressed as big-endian (BE) or little-endian (LE).”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Endianness"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Endianness</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#architecture">← All concepts</a>
+        <a class="next" href="instruction-cycle.html"
+          >Related: Instruction cycle →</a
+        >
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
+    <script src="../js/endianness-alignment.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

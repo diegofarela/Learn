@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Induction &amp; invariants — Learn</title>
+    <meta
+      name="description"
+      content="Mathematical induction and loop invariants: step from base case through the inductive step for the sum 1..n."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#discrete-math">Discrete math</a>
+      </p>
+      <h1>Induction &amp; invariants</h1>
+      <p class="concept-meta">
+        <span class="tag">Discrete math</span>
+        <span>
+          base case · inductive step ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="A property that stays true before and after each step"
+            data-def="A property that stays true before and after each step"
+            >invariant</abbr
+          >
+        </span>
+        <span class="meta-size">n = <strong id="ind-n-label">5</strong></span>
+      </p>
+
+      <div class="concept-body">
+        <p>
+          <strong>Induction</strong> proves a claim for every natural number by
+          checking a
+          <em>base case</em>, then showing that if it holds for
+          <code>k</code> it holds for <code>k+1</code>. The same idea powers
+          <em>loop invariants</em> in algorithms—and pairs with counting in
+          <a class="concept-link" href="combinatorics.html">combinatorics</a>
+          and structure in
+          <a class="concept-link" href="sets-relations-functions.html"
+            >sets, relations &amp; functions</a
+          >.
+        </p>
+
+        <div class="ind-lab">
+          <div class="viz viz-stage" aria-labelledby="ind-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="ind-viz-title">Sum 1…n proof walk</p>
+              <span class="ind-badge" id="ind-badge">base</span>
+            </div>
+            <p class="viz-hint">
+              Step base → assume P(k) → prove P(k+1) · toggle invariant check
+            </p>
+            <label class="ind-slider-label">
+              <span>Target n</span>
+              <input
+                id="ind-n"
+                type="range"
+                min="1"
+                max="12"
+                value="5"
+                aria-valuemin="1"
+                aria-valuemax="12"
+                aria-valuenow="5"
+              />
+            </label>
+            <div class="ind-steps" id="ind-steps" role="list"></div>
+            <div class="ind-eq" id="ind-eq" aria-live="polite"></div>
+            <label class="ind-invariant">
+              <input type="checkbox" id="ind-inv-check" />
+              <span
+                >Invariant holds: partial sum =
+                <code>k(k+1)/2</code> after k terms</span
+              >
+            </label>
+            <div class="viz-controls">
+              <button type="button" class="viz-btn viz-btn-primary" id="ind-next">
+                Next step
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" id="ind-reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="ind-status" aria-live="polite">
+              Start at the base case: P(1) says 1 = 1·2/2.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="ind-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="ind-code-title">Proof sketch</p>
+              <span class="code-panel-lang">math · induction</span>
+            </div>
+            <pre class="code-panel-body" id="ind-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="ind-code-note">
+              Walk the steps — the active line tracks base, hypothesis, or
+              step.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Base case</h2>
+        <p>
+          Prove P(1) (or P(0)) directly. For
+          <code>Σ<sub>i=1</sub><sup>n</sup> i = n(n+1)/2</code>, the left side
+          at n=1 is 1 and the right side is 1 — done. Without a true base, the
+          chain never starts.
+        </p>
+
+        <h2>Inductive step</h2>
+        <p>
+          Assume P(k) (the
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Assume the statement holds for some k, then prove it for k+1"
+            data-def="Assume the statement holds for some k, then prove it for k+1"
+            >induction hypothesis</abbr
+          >). Add (k+1) to both sides and algebra shows P(k+1). Together with
+          the base, P(n) holds for every n ≥ 1.
+        </p>
+
+        <h2>Invariants in code</h2>
+        <p>
+          A loop invariant is a claim true before the loop and after each
+          iteration—induction in programming clothes. When the loop exits, the
+          invariant plus the exit condition give the postcondition you need.
+        </p>
+
+        <p>
+          Related:
+          <a class="concept-link" href="recursion.html">recursion</a>,
+          <a class="concept-link" href="modular-arithmetic.html"
+            >modular arithmetic</a
+          >,
+          <a class="concept-link" href="graph-theory-math.html"
+            >graph theory (math)</a
+          >.
+        </p>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Mathematical_induction">
+            <p>
+              “Mathematical induction is a method for proving that a statement
+              is true for every natural number, that is, that the infinitely
+              many cases P(0), P(1), P(2), P(3), … all hold. This is done by
+              first proving a simple case, then also showing that if we assume
+              the claim is true for a given case, then the next case is also
+              true.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Mathematical_induction"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Mathematical induction</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#discrete-math">← All concepts</a>
+        <a class="next" href="sets-relations-functions.html"
+          >Next up: Sets, relations &amp; functions →</a
+        >
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
+    <script src="../js/induction-invariants.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>TLS &amp; HTTPS — Learn</title>
+    <meta
+      name="description"
+      content="TLS & HTTPS: step through the handshake, padlock states, and HTTP vs HTTPS on the wire."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#networks">Networks</a>
+      </p>
+      <h1>TLS &amp; HTTPS</h1>
+      <p class="concept-meta">
+        <span class="tag">Networks</span>
+        <span>
+          handshake · padlock ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="HTTP over TLS — encrypted transport for web traffic"
+            data-def="HTTP over TLS — encrypted transport for web traffic"
+            >HTTPS</abbr
+          >
+        </span>
+        <span class="meta-size"
+          >step <strong id="tls-meta">0</strong>/5</span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          <strong>TLS</strong> encrypts a TCP connection after a handshake that
+          agrees on keys and authenticates the server.
+          <strong>HTTPS</strong> is just
+          <a class="concept-link" href="http.html">HTTP</a>
+          riding that tunnel—same methods and status codes, private on the wire.
+          Contrast plaintext HTTP below; related:
+          <a class="concept-link" href="encryption.html">encryption</a>,
+          <a class="concept-link" href="tcp-udp.html">TCP</a>,
+          <a class="concept-link" href="sockets.html">sockets</a>.
+        </p>
+
+        <div class="tls-lab">
+          <div class="viz viz-stage" aria-labelledby="tls-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="tls-viz-title">TLS handshake</p>
+              <label class="palette-control">
+                <span class="sr-only">Mode</span>
+                <select id="tls-mode" aria-label="HTTP or HTTPS">
+                  <option value="https" selected>HTTPS (TLS)</option>
+                  <option value="http">HTTP (plain)</option>
+                </select>
+              </label>
+            </div>
+            <p class="viz-hint">
+              Step the handshake · watch the padlock · compare plain HTTP
+            </p>
+            <div class="tls-stage" role="presentation">
+              <div class="tls-stage-glow" aria-hidden="true"></div>
+              <div class="tls-lock" id="tls-lock" aria-hidden="true">
+                <span class="tls-lock-icon" id="tls-lock-icon">open</span>
+                <span class="tls-lock-label" id="tls-lock-label">unlocked</span>
+              </div>
+              <div class="tls-nodes">
+                <div class="tls-node" id="tls-client">
+                  <span class="tls-node-label">Client</span>
+                  <span class="tls-node-sub">browser</span>
+                </div>
+                <div class="tls-wire" aria-hidden="true">
+                  <div class="tls-packet" id="tls-packet"></div>
+                </div>
+                <div class="tls-node" id="tls-server">
+                  <span class="tls-node-label">Server</span>
+                  <span class="tls-node-sub">origin</span>
+                </div>
+              </div>
+              <ol class="tls-steps" id="tls-steps" aria-label="Handshake steps">
+                <li data-tls-step="0">ClientHello</li>
+                <li data-tls-step="1">ServerHello + cert</li>
+                <li data-tls-step="2">Key exchange</li>
+                <li data-tls-step="3">Finished</li>
+                <li data-tls-step="4">Encrypted HTTP</li>
+              </ol>
+            </div>
+            <div class="viz-controls tls-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-tls-action="step">
+                Step
+              </button>
+              <button type="button" class="viz-btn" data-tls-action="play">Play</button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-tls-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="tls-status" aria-live="polite">
+              Ready — press Step to begin the TLS handshake.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="tls-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="tls-code-title">Wire log</p>
+              <span class="code-panel-lang" id="tls-code-lang">TLS 1.3</span>
+            </div>
+            <pre class="code-panel-body" id="tls-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="tls-code-note">
+              HTTPS = HTTP inside an encrypted TLS tunnel.
+            </p>
+          </aside>
+        </div>
+
+        <h2>HTTP vs HTTPS</h2>
+        <ul class="op-list">
+          <li>
+            <code>HTTP</code>
+            <span>plaintext on the wire — readable by anyone on path</span>
+            <span class="op-cost">clear</span>
+          </li>
+          <li>
+            <code>HTTPS</code>
+            <span>TLS first, then HTTP — confidentiality + integrity</span>
+            <span class="op-cost">locked</span>
+          </li>
+          <li>
+            <code>cert</code>
+            <span>binds the server’s public key to a hostname</span>
+            <span class="op-cost">trust</span>
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Transport_Layer_Security">
+            <p>
+              “Transport Layer Security (TLS) is a cryptographic protocol designed
+              to provide communications security over a computer network. The
+              protocol is widely used in applications such as email, instant
+              messaging, and voice over IP, but its use in securing HTTPS remains
+              the most publicly visible.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Transport_Layer_Security"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Transport Layer Security</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#networks">← All concepts</a>
+        <a class="next" href="http.html">Related: HTTP →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
+    <script src="../js/tls-https.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

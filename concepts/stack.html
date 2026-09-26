@@ -215,6 +215,38 @@
           first in, first out—same “list with rules,” opposite end for removal.
         </p>
 
+        <section class="mastery" aria-labelledby="mastery-heading">
+          <h2 id="mastery-heading">For mastery</h2>
+          <ul class="mastery-list">
+            <li>
+              <span class="mastery-label">Invariant</span>
+              Only the top is accessible: push/pop/peek hit one end.
+              LIFO — the last pushed item is the next popped.
+            </li>
+            <li>
+              <span class="mastery-label">When / when not</span>
+              Use for undo, matching delimiters, DFS frames, and the
+              <a class="concept-link" href="call-stack.html">call stack</a>.
+              Not when oldest-first fairness is the goal — use a
+              <a class="concept-link" href="queue.html">queue</a>.
+            </li>
+            <li>
+              <span class="mastery-label">Common failure</span>
+              Pop/peek on empty; treating middle elements as addressable;
+              confusing LIFO with FIFO.
+            </li>
+            <li>
+              <span class="mastery-label">Proof shape</span>
+              After any legal push/pop sequence, the remaining items are a
+              prefix of the push history (stack discipline).
+            </li>
+            <li>
+              <span class="mastery-label">Assumes</span>
+              A single logical top; no random access into the body of the stack.
+            </li>
+          </ul>
+        </section>
+
         <h2>From the literature</h2>
         <figure class="verbatim">
           <blockquote cite="https://en.wikipedia.org/wiki/Stack_(abstract_data_type)">
@@ -244,6 +276,7 @@
     </main>
 
     <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
     <script src="../js/stack.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>

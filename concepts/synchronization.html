@@ -163,6 +163,10 @@
             — simultaneous writers too
           </li>
           <li>
+            <a class="concept-link" href="memory-consistency.html">Memory consistency</a>
+            — what other cores may observe without barriers
+          </li>
+          <li>
             <a class="concept-link" href="deadlocks.html">Deadlocks</a>
             — circular lock waits
           </li>
@@ -171,6 +175,39 @@
             — preemption creates interleavings
           </li>
         </ul>
+
+        <section class="mastery" aria-labelledby="mastery-heading">
+          <h2 id="mastery-heading">For mastery</h2>
+          <ul class="mastery-list">
+            <li>
+              <span class="mastery-label">Invariant</span>
+              Critical sections appear atomic to other
+              <a class="concept-link" href="threads-processes.html">threads</a>:
+              mutual exclusion / happens-before via locks, atomics, or channels.
+            </li>
+            <li>
+              <span class="mastery-label">When / when not</span>
+              Use whenever shared mutable state is concurrent. Skip when data
+              is immutable or shared-nothing.
+            </li>
+            <li>
+              <span class="mastery-label">Common failure</span>
+              Data races; inconsistent lock order →
+              <a class="concept-link" href="deadlocks.html">deadlocks</a>;
+              over-synchronizing and killing throughput.
+            </li>
+            <li>
+              <span class="mastery-label">Proof shape</span>
+              If every shared access is covered by the same exclusion protocol,
+              interleavings cannot tear the invariant mid-update.
+            </li>
+            <li>
+              <span class="mastery-label">Assumes</span>
+              A memory model, correct acquire/release, and that progress is
+              possible (no permanent circular wait).
+            </li>
+          </ul>
+        </section>
 
         <h2>From the literature</h2>
         <figure class="verbatim">
@@ -202,6 +239,7 @@
     </main>
 
     <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
     <script src="../js/synchronization.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Bias–variance — Learn</title>
+    <meta
+      name="description"
+      content="Bias–variance: slide polynomial degree from underfit through a sweet spot to overfit."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#ml-basics">ML foundations</a>
+      </p>
+      <h1>Bias–variance</h1>
+      <p class="concept-meta">
+        <span class="tag">ML foundations</span>
+        <span>
+          underfit · overfit ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Error from overly simple assumptions vs sensitivity to sample noise"
+            data-def="Error from overly simple assumptions vs sensitivity to sample noise"
+            >tradeoff</abbr
+          >
+        </span>
+        <span class="meta-size"
+          >deg <strong id="bv-meta">1</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          <strong>Bias</strong> is error from a too-simple model (underfit);
+          <strong>variance</strong> is sensitivity to the particular sample
+          (overfit). Slide polynomial degree on noisy points to see the
+          tradeoff. Fits use ideas from
+          <a class="concept-link" href="linear-algebra.html">linear algebra</a>;
+          training often uses
+          <a class="concept-link" href="gradient-descent.html">gradient descent</a>.
+        </p>
+
+        <div class="bv-lab">
+          <div class="viz viz-stage" aria-labelledby="bv-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="bv-viz-title">Fit degree</p>
+              <span class="bv-phase" id="bv-phase">underfit</span>
+            </div>
+            <p class="viz-hint">
+              Drag degree · watch the curve hug noise or miss the trend
+            </p>
+            <div class="bv-stage">
+              <div class="bv-stage-glow" aria-hidden="true"></div>
+              <canvas id="bv-canvas" width="560" height="260" aria-label="Fit chart"></canvas>
+              <label class="bv-slider">
+                <span>degree</span>
+                <input type="range" id="bv-degree" min="0" max="9" step="1" value="1" />
+              </label>
+            </div>
+            <div class="viz-controls bv-controls">
+              <button type="button" class="viz-btn viz-btn-ghost" data-bv-action="reshuffle">
+                New sample
+              </button>
+            </div>
+            <p class="viz-live" id="bv-status" aria-live="polite">
+              Low degree — high bias, underfits the sine trend.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="bv-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="bv-code-title">Diagnosis</p>
+              <span class="code-panel-lang">poly fit</span>
+            </div>
+            <pre class="code-panel-body" id="bv-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="bv-code-note">
+              Aim for the sweet spot, not zero training error.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Tradeoff</h2>
+        <ul class="op-list">
+          <li>
+            <code>high bias</code>
+            <span>too simple · misses the pattern</span>
+            <span class="op-cost">underfit</span>
+          </li>
+          <li>
+            <code>high variance</code>
+            <span>too flexible · fits noise</span>
+            <span class="op-cost">overfit</span>
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Bias%E2%80%93variance_tradeoff">
+            <p>
+              “In statistics and machine learning, the bias–variance tradeoff
+              describes the relationship between a model's complexity, the
+              accuracy of its predictions, and how well it can make predictions
+              on previously unseen data that were not used to train the model.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Bias%E2%80%93variance_tradeoff"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Bias–variance tradeoff</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#ml-basics">← All concepts</a>
+        <a class="next" href="gradient-descent.html">Related: Gradient descent →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/bias-variance.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

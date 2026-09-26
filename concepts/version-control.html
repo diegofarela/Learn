@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Version control — Learn</title>
+    <meta
+      name="description"
+      content="Version control: walk a commit DAG and highlight branch / merge structure."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#software">Software engineering</a>
+      </p>
+      <h1>Version control</h1>
+      <p class="concept-meta">
+        <span class="tag">Software</span>
+        <span>
+          commits · branch ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Directed acyclic graph of snapshots"
+            data-def="Directed acyclic graph of snapshots"
+            >DAG</abbr
+          >
+        </span>
+        <span class="meta-size"
+          >focus <strong id="vc-meta">A</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          <strong>Version control</strong> stores snapshots (<em>commits</em>)
+          linked to parents—a DAG. Branches are movable labels; a merge commit
+          joins histories. Pair with
+          <a class="concept-link" href="testing.html">testing</a>
+          before integrating, and keep history readable.
+        </p>
+
+        <div class="vc-lab">
+          <div class="viz viz-stage" aria-labelledby="vc-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="vc-viz-title">Commit DAG</p>
+              <span class="vc-phase" id="vc-phase">main</span>
+            </div>
+            <p class="viz-hint">
+              Step through history · highlight branch tip and merge
+            </p>
+            <div class="vc-stage" role="img" aria-label="Commit graph">
+              <div class="vc-stage-glow" aria-hidden="true"></div>
+              <svg
+                id="vc-svg"
+                class="vc-svg"
+                viewBox="0 0 480 200"
+                xmlns="http://www.w3.org/2000/svg"
+              ></svg>
+            </div>
+            <div class="viz-controls vc-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-vc-action="step">
+                Step
+              </button>
+              <button type="button" class="viz-btn" data-vc-action="play">Play</button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-vc-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="vc-status" aria-live="polite">
+              Ready — press Step to walk commits from root to merge.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="vc-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="vc-code-title">Log</p>
+              <span class="code-panel-lang">git</span>
+            </div>
+            <pre class="code-panel-body" id="vc-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="vc-code-note">
+              Branches are pointers; commits are immutable nodes.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Vocabulary</h2>
+        <ul class="op-list">
+          <li>
+            <code>commit</code>
+            <span>immutable snapshot + parent link(s)</span>
+            <span class="op-cost">node</span>
+          </li>
+          <li>
+            <code>branch</code>
+            <span>label on a tip commit</span>
+            <span class="op-cost">ref</span>
+          </li>
+          <li>
+            <code>merge</code>
+            <span>commit with two parents joining lines</span>
+            <span class="op-cost">join</span>
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Version_control">
+            <p>
+              “In software engineering, version control (also known as revision
+              control, source control, or source code management) is a class of
+              systems responsible for managing changes to computer programs,
+              documents, large web sites, or other collections of information.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Version_control"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Version control</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#software">← All concepts</a>
+        <a class="next" href="testing.html">Related: Testing →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
+    <script src="../js/version-control.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

@@ -162,6 +162,41 @@
           reasonable—or when the language optimizes tail calls.
         </p>
 
+        <section class="mastery" aria-labelledby="mastery-heading">
+          <h2 id="mastery-heading">For mastery</h2>
+          <ul class="mastery-list">
+            <li>
+              <span class="mastery-label">Invariant</span>
+              Each call solves a strictly smaller instance; a base case returns
+              without recursing.
+            </li>
+            <li>
+              <span class="mastery-label">When / when not</span>
+              Use for tree-shaped problems (
+              <a class="concept-link" href="dfs.html">DFS</a>,
+              divide-and-conquer). Prefer a loop for flat iteration — recursion
+              costs a
+              <a class="concept-link" href="call-stack.html">call-stack</a>
+              frame per level.
+            </li>
+            <li>
+              <span class="mastery-label">Common failure</span>
+              Missing/wrong base case; no progress toward the base → infinite
+              recursion / stack overflow.
+            </li>
+            <li>
+              <span class="mastery-label">Proof shape</span>
+              Structural induction on problem size (or on the
+              <a class="concept-link" href="induction-invariants.html">inductive invariant</a>).
+            </li>
+            <li>
+              <span class="mastery-label">Assumes</span>
+              Finite depth (or TCO) and enough stack; inputs that shrink each
+              step.
+            </li>
+          </ul>
+        </section>
+
         <h2>From the literature</h2>
         <figure class="verbatim">
           <blockquote
@@ -194,6 +229,7 @@
     </main>
 
     <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
     <script src="../js/recursion.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>

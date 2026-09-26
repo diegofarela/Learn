@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>OAuth &amp; JWT — Learn</title>
+    <meta
+      name="description"
+      content="OAuth authorization-code flow steps plus a toy JWT header.payload.signature decode."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#security">Security basics</a>
+      </p>
+      <h1>OAuth &amp; JWT</h1>
+      <p class="concept-meta">
+        <span class="tag">Security</span>
+        <span>
+          auth code ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="JSON Web Token — compact signed claims"
+            data-def="JSON Web Token — compact signed claims"
+            >JWT</abbr
+          >
+          · bearer
+        </span>
+        <span class="meta-size"
+          >step <strong id="oj-meta">0</strong>/5</span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          <strong>OAuth 2</strong> lets an app get limited access without your
+          password—often via the authorization-code flow.
+          <strong>JWTs</strong> are a common token shape: three Base64url
+          parts (header.payload.signature). Builds on
+          <a class="concept-link" href="auth.html">authentication</a>; tokens
+          should ride
+          <a class="concept-link" href="tls-https.html">HTTPS</a>.
+        </p>
+
+        <div class="oj-lab">
+          <div class="viz viz-stage" aria-labelledby="oj-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="oj-viz-title">Auth code + JWT toy</p>
+              <span class="sys-badge" id="oj-badge">idle</span>
+            </div>
+            <p class="viz-hint">
+              Step the OAuth code flow · decode the toy JWT parts
+            </p>
+            <div class="oj-stage">
+              <div class="oj-stage-glow" aria-hidden="true"></div>
+              <ol class="oj-flow" id="oj-flow" aria-label="OAuth steps">
+                <li data-oj-step="0">App redirects to IdP</li>
+                <li data-oj-step="1">User consents</li>
+                <li data-oj-step="2">IdP returns auth code</li>
+                <li data-oj-step="3">App exchanges code → tokens</li>
+                <li data-oj-step="4">API call with Bearer JWT</li>
+              </ol>
+              <div class="oj-jwt" id="oj-jwt" aria-label="Toy JWT">
+                <button type="button" class="oj-part oj-header" data-oj-part="header">
+                  header
+                </button>
+                <span class="oj-dot" aria-hidden="true">.</span>
+                <button type="button" class="oj-part oj-payload" data-oj-part="payload">
+                  payload
+                </button>
+                <span class="oj-dot" aria-hidden="true">.</span>
+                <button type="button" class="oj-part oj-sig" data-oj-part="sig">
+                  signature
+                </button>
+              </div>
+              <pre class="oj-decode" id="oj-decode" aria-live="polite"></pre>
+            </div>
+            <div class="viz-controls oj-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-oj-action="step">
+                Step
+              </button>
+              <button type="button" class="viz-btn" data-oj-action="play">Play</button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-oj-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="oj-status" aria-live="polite">
+              Ready — press Step to start the authorization-code flow.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="oj-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="oj-code-title">Flow log</p>
+              <span class="code-panel-lang">OAuth 2 · JWT</span>
+            </div>
+            <pre class="code-panel-body" id="oj-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="oj-code-note">
+              Toy decode only — not a real signature check.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Pieces</h2>
+        <ul class="op-list">
+          <li>
+            <code>auth code</code>
+            <span>short-lived; exchanged server-side for tokens</span>
+            <span class="op-cost">grant</span>
+          </li>
+          <li>
+            <code>JWT</code>
+            <span>header.payload.sig — claims are readable; sig proves issuer</span>
+            <span class="op-cost">token</span>
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/OAuth">
+            <p>
+              “OAuth is an open standard for access delegation, commonly used as
+              a way for internet users to grant websites or applications access
+              to their information on other websites but without giving them the
+              passwords.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/OAuth"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — OAuth</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#security">← All concepts</a>
+        <a class="next" href="auth.html">Related: Authentication →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
+    <script src="../js/oauth-jwt.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

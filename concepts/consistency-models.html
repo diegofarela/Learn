@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Consistency models — Learn</title>
+    <meta
+      name="description"
+      content="Consistency models: timeline of reads and writes under linearizability vs eventual consistency."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#distributed">Distributed systems</a>
+      </p>
+      <h1>Consistency models</h1>
+      <p class="concept-meta">
+        <span class="tag">Distributed</span>
+        <span>linearizability · eventual</span>
+        <span class="meta-size"
+          ><strong id="cmod-meta">linearizable</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          A <strong>consistency model</strong> says which read/write
+          histories are legal.
+          <em>Linearizability</em> makes the system look like one copy;
+          <em>eventual</em> consistency allows stale reads until replicas
+          catch up—trade-offs also framed by
+          <a class="concept-link" href="cap-theorem.html">CAP</a>
+          and enforced by
+          <a class="concept-link" href="consensus-raft.html">consensus</a>.
+        </p>
+
+        <div class="cmod-lab">
+          <div class="viz viz-stage" aria-labelledby="cmod-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="cmod-viz-title">Read/write timeline</p>
+              <span class="sys-badge" id="cmod-phase">LINEARIZABLE</span>
+            </div>
+            <p class="viz-hint">
+              Toggle model · step ops on replicas R1 / R2
+            </p>
+            <div class="cmod-stage" role="presentation">
+              <div class="cmod-stage-glow" aria-hidden="true"></div>
+              <div id="cmod-timeline" class="cmod-timeline" aria-live="polite"></div>
+            </div>
+            <div class="viz-controls cmod-controls">
+              <button type="button" class="viz-btn" data-cmod-model="lin">
+                Linearizable
+              </button>
+              <button type="button" class="viz-btn" data-cmod-model="eventual">
+                Eventual
+              </button>
+              <button type="button" class="viz-btn viz-btn-primary" data-cmod-action="step">
+                Step
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-cmod-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="cmod-status" aria-live="polite">
+              Linearizable: every read sees the latest completed write.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="cmod-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="cmod-code-title">History</p>
+              <span class="code-panel-lang">ops</span>
+            </div>
+            <pre class="code-panel-body" id="cmod-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="cmod-code-note">
+              Same client ops; different models allow different read results.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Models</h2>
+        <ul class="op-list">
+          <li>
+            <code>linearizable</code>
+            <span>ops appear instant at a single real-time point</span>
+            <span class="op-cost">strong</span>
+          </li>
+          <li>
+            <code>eventual</code>
+            <span>replicas converge; reads may be stale meanwhile</span>
+            <span class="op-cost">AP-ish</span>
+          </li>
+        </ul>
+
+        <h2>Related ideas</h2>
+        <ul>
+          <li>
+            <a class="concept-link" href="cap-theorem.html">CAP theorem</a>
+            — C vs A under partition
+          </li>
+          <li>
+            <a class="concept-link" href="consensus-raft.html">Consensus (Raft)</a>
+            — how strong consistency is often built
+          </li>
+          <li>
+            <a class="concept-link" href="logical-clocks.html">Logical clocks</a>
+            — ordering without synchronized wall clocks
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Consistency_model">
+            <p>
+              “In computer science, a consistency model specifies a contract
+              between the programmer and a system, wherein the system guarantees
+              that if the programmer follows the rules, memory will be consistent
+              and the results of reading, writing, or updating memory will be
+              predictable.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Consistency_model"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Consistency model</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#distributed">← All concepts</a>
+        <a class="next" href="logical-clocks.html">Next up: Logical clocks →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
+    <script src="../js/consistency-models.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

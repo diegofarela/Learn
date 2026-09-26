@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Decidability — Learn</title>
+    <meta
+      name="description"
+      content="Decidability and the halting problem: finite tracers vs claims of infinite loops."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#theory">Theory of computation</a>
+      </p>
+      <h1>Decidability</h1>
+      <p class="concept-meta">
+        <span class="tag">Theory</span>
+        <span>halting · undecidable · postcard</span>
+        <span class="meta-size"
+          >trace <strong id="dec-ticks">0</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          Some yes/no questions about programs have <strong>no algorithm</strong>
+          that always answers correctly and finishes. The classic example is the
+          <em>halting problem</em>: will this program stop, or loop forever?
+          You can simulate for a while — but “forever” is not something a
+          finite tracer can certify. Related hardness ideas live in
+          <a class="concept-link" href="p-vs-np.html">P vs NP</a>.
+        </p>
+
+        <div class="dec-lab">
+          <div class="viz viz-stage" aria-labelledby="dec-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="dec-viz-title">Halting postcard</p>
+              <span class="sys-badge" id="dec-badge">idle</span>
+            </div>
+            <p class="viz-hint">
+              Pick a program · run a bounded tracer · “loops forever?” stays open
+            </p>
+            <div class="dec-pick" role="group" aria-label="Sample programs">
+              <button type="button" class="viz-btn is-selected" data-dec-prog="halt">
+                Halt soon
+              </button>
+              <button type="button" class="viz-btn" data-dec-prog="loop">
+                Infinite loop
+              </button>
+              <button type="button" class="viz-btn" data-dec-prog="maybe">
+                Slow halt
+              </button>
+            </div>
+            <div class="dec-postcard" id="dec-postcard">
+              <div class="dec-card-face">
+                <p class="dec-card-label">Program P</p>
+                <pre class="dec-card-code" id="dec-src"></pre>
+              </div>
+              <div class="dec-card-face dec-card-claim">
+                <p class="dec-card-label">Oracle claim</p>
+                <p class="dec-claim" id="dec-claim">Does P halt on ε?</p>
+                <p class="dec-verdict" id="dec-verdict">—</p>
+              </div>
+            </div>
+            <div class="dec-trace" aria-labelledby="dec-trace-title">
+              <p class="dec-trace-title" id="dec-trace-title">
+                Finite tracer (budget <span id="dec-budget">12</span> steps)
+              </p>
+              <div id="dec-log" class="dec-log" role="log" aria-live="polite"></div>
+            </div>
+            <div class="viz-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-dec-action="step">
+                Trace step
+              </button>
+              <button type="button" class="viz-btn" data-dec-action="run">Run budget</button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-dec-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="dec-status" aria-live="polite">
+              Tracer can prove “halts” if it stops in time — never prove “loops forever.”
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="dec-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="dec-code-title">Executing</p>
+              <span class="code-panel-lang">intuition · HALT</span>
+            </div>
+            <pre class="code-panel-body" id="dec-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="dec-code-note">
+              A perfect HALT oracle cannot exist for all programs.
+            </p>
+          </aside>
+        </div>
+
+        <h2>What “undecidable” means</h2>
+        <ul class="op-list">
+          <li>
+            <code>simulate</code>
+            <span>run for k steps — may see a halt</span>
+            <span class="op-cost">semi</span>
+          </li>
+          <li>
+            <code>forever?</code>
+            <span>no finite witness that a loop never ends</span>
+            <span class="op-cost">open</span>
+          </li>
+          <li>
+            <code>HALT</code>
+            <span>no total algorithm for all P, x</span>
+            <span class="op-cost">∅</span>
+          </li>
+        </ul>
+
+        <h2>Related ideas</h2>
+        <ul>
+          <li>
+            <a class="concept-link" href="finite-automata.html">Finite automata</a>
+            — decidable membership for regular languages
+          </li>
+          <li>
+            <a class="concept-link" href="p-vs-np.html">P vs NP</a>
+            — hardness inside the decidable world
+          </li>
+          <li>
+            <a class="concept-link" href="recursion.html">Recursion</a>
+            — self-reference is the fuel of diagonal arguments
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Halting_problem">
+            <p>
+              “In computability theory, the halting problem is the problem of
+              determining, from a description of an arbitrary computer program
+              and an input, whether the program will finish running, or continue
+              to run forever. The halting problem is undecidable, meaning that
+              no general algorithm exists that solves the halting problem for
+              all possible program-input pairs.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Halting_problem"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Halting problem</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#theory">← All concepts</a>
+        <a class="next" href="p-vs-np.html">Next up: P vs NP →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
+    <script src="../js/decidability.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

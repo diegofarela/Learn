@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>RPC — Learn</title>
+    <meta
+      name="description"
+      content="RPC: stub → network → skeleton call sequence contrasted with REST resource links."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#networks">Networks</a>
+      </p>
+      <h1>RPC</h1>
+      <p class="concept-meta">
+        <span class="tag">Networks</span>
+        <span>
+          stub · skeleton ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Remote Procedure Call — invoke a function on another machine"
+            data-def="Remote Procedure Call — invoke a function on another machine"
+            >RPC</abbr
+          >
+        </span>
+        <span class="meta-size"
+          >step <strong id="rpc-meta">0</strong>/5</span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          <strong>RPC</strong> makes a remote call look local: a client
+          <em>stub</em> marshals arguments, the network carries the message, and
+          a server <em>skeleton</em> unmarshals and runs the real procedure.
+          Contrast resource-oriented
+          <a class="concept-link" href="rest-apis.html">REST APIs</a>
+          (verbs on URLs) and the bytes underneath via
+          <a class="concept-link" href="http.html">HTTP</a>
+          or
+          <a class="concept-link" href="sockets.html">sockets</a>.
+        </p>
+
+        <div class="rpc-lab">
+          <div class="viz viz-stage" aria-labelledby="rpc-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="rpc-viz-title">Call sequence</p>
+              <label class="palette-control">
+                <span class="sr-only">Style</span>
+                <select id="rpc-style" aria-label="RPC or REST">
+                  <option value="rpc" selected>RPC</option>
+                  <option value="rest">REST</option>
+                </select>
+              </label>
+            </div>
+            <p class="viz-hint">
+              Step stub → network → skeleton · flip to REST for contrast
+            </p>
+            <div class="rpc-stage" role="presentation">
+              <div class="rpc-stage-glow" aria-hidden="true"></div>
+              <div class="rpc-flow" id="rpc-flow">
+                <div class="rpc-box" data-rpc-node="client">
+                  <span class="rpc-box-label">Client</span>
+                  <span class="rpc-box-sub" id="rpc-client-sub">add(2, 3)</span>
+                </div>
+                <div class="rpc-arrow" data-rpc-edge="stub" aria-hidden="true">→</div>
+                <div class="rpc-box" data-rpc-node="stub">
+                  <span class="rpc-box-label" id="rpc-mid-label">Stub</span>
+                  <span class="rpc-box-sub" id="rpc-mid-sub">marshal</span>
+                </div>
+                <div class="rpc-arrow" data-rpc-edge="net" aria-hidden="true">→</div>
+                <div class="rpc-box" data-rpc-node="net">
+                  <span class="rpc-box-label">Network</span>
+                  <span class="rpc-box-sub">bytes</span>
+                </div>
+                <div class="rpc-arrow" data-rpc-edge="skel" aria-hidden="true">→</div>
+                <div class="rpc-box" data-rpc-node="skel">
+                  <span class="rpc-box-label" id="rpc-skel-label">Skeleton</span>
+                  <span class="rpc-box-sub" id="rpc-skel-sub">unmarshal</span>
+                </div>
+                <div class="rpc-arrow" data-rpc-edge="impl" aria-hidden="true">→</div>
+                <div class="rpc-box" data-rpc-node="impl">
+                  <span class="rpc-box-label">Impl</span>
+                  <span class="rpc-box-sub" id="rpc-impl-sub">return 5</span>
+                </div>
+              </div>
+            </div>
+            <div class="viz-controls rpc-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-rpc-action="step">
+                Step
+              </button>
+              <button type="button" class="viz-btn" data-rpc-action="play">Play</button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-rpc-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="rpc-status" aria-live="polite">
+              Ready — press Step to invoke the remote procedure.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="rpc-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="rpc-code-title">Call log</p>
+              <span class="code-panel-lang" id="rpc-code-lang">RPC</span>
+            </div>
+            <pre class="code-panel-body" id="rpc-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="rpc-code-note">
+              Stubs hide the network; the call still fails if the network does.
+            </p>
+          </aside>
+        </div>
+
+        <h2>RPC vs REST</h2>
+        <ul class="op-list">
+          <li>
+            <code>RPC</code>
+            <span>procedure name + args · often binary codecs</span>
+            <span class="op-cost">call</span>
+          </li>
+          <li>
+            <code>REST</code>
+            <span>resource URL + HTTP verb · self-describing links</span>
+            <span class="op-cost">resource</span>
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Remote_procedure_call">
+            <p>
+              “In distributed computing, a remote procedure call (RPC) is when a
+              computer program causes a procedure (subroutine) to execute in a
+              different address space (commonly on another computer on a shared
+              network), which is written as if it were a normal (local) procedure
+              call, without the programmer explicitly writing the details for the
+              remote interaction.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Remote_procedure_call"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Remote procedure call</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#networks">← All concepts</a>
+        <a class="next" href="rest-apis.html">Related: REST APIs →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
+    <script src="../js/rpc.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

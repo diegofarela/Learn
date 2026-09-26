@@ -202,9 +202,47 @@
         <p>
           See how this plays out in
           <a class="concept-link" href="searching.html">searching</a>
-          (linear vs binary) and
-          <a class="concept-link" href="sorting.html">sorting</a>.
+          (linear vs binary),
+          <a class="concept-link" href="sorting.html">sorting</a>,
+          <a class="concept-link" href="amortized-analysis.html">amortized analysis</a>
+          (average over a sequence), and
+          <a class="concept-link" href="p-vs-np.html">P vs NP</a>
+          (polynomial classes).
         </p>
+
+        <section class="mastery" aria-labelledby="mastery-heading">
+          <h2 id="mastery-heading">For mastery</h2>
+          <ul class="mastery-list">
+            <li>
+              <span class="mastery-label">Definition to lock</span>
+              f(n) = O(g(n)) means ∃ c, n₀ such that for all n ≥ n₀,
+              0 ≤ f(n) ≤ c·g(n) — an asymptotic upper bound.
+            </li>
+            <li>
+              <span class="mastery-label">When / when not</span>
+              Use to compare growth of
+              <a class="concept-link" href="searching.html">search</a> /
+              <a class="concept-link" href="sorting.html">sort</a>
+              algorithms. Not a stopwatch for small n, and not a license to
+              ignore constants when they dominate practice.
+            </li>
+            <li>
+              <span class="mastery-label">Common failure</span>
+              Mixing O / Θ / Ω; treating a loose O as exact; conflating worst
+              and average case.
+            </li>
+            <li>
+              <span class="mastery-label">Proof shape</span>
+              Exhibit concrete c and n₀ (or take limits) that witness the
+              inequality.
+            </li>
+            <li>
+              <span class="mastery-label">Assumes</span>
+              A cost model (ops, RAM) and the large-n regime; often worst-case
+              unless stated.
+            </li>
+          </ul>
+        </section>
 
         <h2>From the literature</h2>
         <figure class="verbatim">
@@ -236,6 +274,7 @@
     </main>
 
     <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
     <script src="../js/big-o.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>

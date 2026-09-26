@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Memory consistency — Learn</title>
+    <meta
+      name="description"
+      content="Memory consistency: two cores write and read — allowed outcomes under sequential consistency vs a weak model."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#systems">Systems</a>
+      </p>
+      <h1>Memory consistency</h1>
+      <p class="concept-meta">
+        <span class="tag">Systems</span>
+        <span>
+          SC vs weak ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Sequential consistency — all cores see one global order of memory ops"
+            data-def="Sequential consistency — all cores see one global order of memory ops"
+            >SC</abbr
+          >
+        </span>
+        <span class="meta-size"
+          >model <strong id="mc-model-label">SC</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          A <strong>memory consistency model</strong> says which orders of
+          loads and stores other cores are allowed to observe. Under
+          <em>sequential consistency</em>, there is one global interleaving.
+          Weaker models (store buffers, reordering) allow extra outcomes.
+          Related:
+          <a class="concept-link" href="synchronization.html">synchronization</a>,
+          <a class="concept-link" href="concurrency.html">concurrency</a>, and
+          <a class="concept-link" href="memory-pointers.html">memory &amp; pointers</a>.
+        </p>
+
+        <div class="mc-lab">
+          <div class="viz viz-stage" aria-labelledby="mc-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="mc-viz-title">Two cores · litmus test</p>
+              <label class="palette-control">
+                <span class="sr-only">Consistency model</span>
+                <select id="mc-model" aria-label="Consistency model">
+                  <option value="sc" selected>Sequential consistency</option>
+                  <option value="weak">Weak (store buffer)</option>
+                </select>
+              </label>
+            </div>
+            <p class="viz-hint">
+              Both cores write then read the other’s flag · see allowed (r1, r2)
+            </p>
+            <div class="mc-stage" role="presentation">
+              <div class="mc-stage-glow" aria-hidden="true"></div>
+              <div class="mc-cores" id="mc-cores" aria-live="polite"></div>
+              <div class="mc-outcomes" id="mc-outcomes" aria-label="Allowed outcomes"></div>
+            </div>
+            <div class="viz-controls mc-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-mc-action="run">
+                Run litmus
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-mc-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="mc-status" aria-live="polite">
+              Pick a model, then run. Under SC, (0,0) is impossible.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="mc-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="mc-code-title">Litmus</p>
+              <span class="code-panel-lang">pseudocode</span>
+            </div>
+            <pre class="code-panel-body" id="mc-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="mc-code-note">
+              Initially x = y = 0. Each core stores then loads.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Classic store→load litmus</h2>
+        <ul class="op-list">
+          <li>
+            <code>(0,1)</code>
+            <span>Core0 wrote first in the global order</span>
+            <span class="op-cost">SC ✓</span>
+          </li>
+          <li>
+            <code>(1,0)</code>
+            <span>Core1 wrote first</span>
+            <span class="op-cost">SC ✓</span>
+          </li>
+          <li>
+            <code>(1,1)</code>
+            <span>Both saw each other’s stores</span>
+            <span class="op-cost">SC ✓</span>
+          </li>
+          <li>
+            <code>(0,0)</code>
+            <span>Both missed — needs store buffering / reorder</span>
+            <span class="op-cost">weak only</span>
+          </li>
+        </ul>
+
+        <h2>Related ideas</h2>
+        <ul>
+          <li>
+            <a class="concept-link" href="synchronization.html">Synchronization</a>
+            — locks and barriers restore stronger order
+          </li>
+          <li>
+            <a class="concept-link" href="concurrency.html">Concurrency</a>
+            — shared-memory races need a model
+          </li>
+          <li>
+            <a class="concept-link" href="parallelism.html">Parallelism</a>
+            — multicore execution makes this real
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Consistency_model">
+            <p>
+              “In computer science, a consistency model specifies a contract
+              between the programmer and a system, wherein the system guarantees
+              that if the programmer follows the rules, memory will be
+              consistent and the results of reading, writing, or updating memory
+              will be predictable.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Consistency_model"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Consistency model</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#systems">← All concepts</a>
+        <a class="next" href="synchronization.html">Related: Synchronization →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
+    <script src="../js/memory-consistency.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

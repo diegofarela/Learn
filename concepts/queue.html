@@ -218,6 +218,41 @@
           ends.
         </p>
 
+        <section class="mastery" aria-labelledby="mastery-heading">
+          <h2 id="mastery-heading">For mastery</h2>
+          <ul class="mastery-list">
+            <li>
+              <span class="mastery-label">Invariant</span>
+              FIFO: enqueue at the rear, dequeue at the front; order of arrival
+              is order of departure.
+            </li>
+            <li>
+              <span class="mastery-label">When / when not</span>
+              Use for
+              <a class="concept-link" href="bfs.html">BFS</a>, buffering, and
+              fair scheduling. Not for LIFO undo (use a
+              <a class="concept-link" href="stack.html">stack</a>) or
+              priority service (use a
+              <a class="concept-link" href="heaps.html">heap</a> /
+              <a class="concept-link" href="priority-queues.html">priority queue</a>).
+            </li>
+            <li>
+              <span class="mastery-label">Common failure</span>
+              Mixing up front and rear; circular-buffer wrap bugs; dequeue on
+              empty.
+            </li>
+            <li>
+              <span class="mastery-label">Proof shape</span>
+              Induction on operations: the front is always the earliest still
+              enqueued item.
+            </li>
+            <li>
+              <span class="mastery-label">Assumes</span>
+              Plain FIFO — no priority reordering or stealing from the middle.
+            </li>
+          </ul>
+        </section>
+
         <h2>From the literature</h2>
         <figure class="verbatim">
           <blockquote cite="https://en.wikipedia.org/wiki/Queue_(abstract_data_type)">
@@ -248,6 +283,7 @@
     </main>
 
     <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
     <script src="../js/queue.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>

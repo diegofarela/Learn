@@ -80,6 +80,8 @@
           <strong>type</strong> of that value says what you can do with it—add
           numbers, concatenate strings, call methods. Below: mutate the object
           in place vs rebind the name to a new value, and a tiny type tree.
+          How languages catch mismatches early vs late:
+          <a class="concept-link" href="type-systems.html">type systems</a>.
         </p>
 
         <div class="vt-lab">
@@ -89,11 +91,17 @@
               <span class="vt-readout" id="vt-mode" aria-live="polite">idle</span>
             </div>
             <p class="viz-hint">
-              Mutate changes the object · Rebind points the name at something new
+              Left = name slots (bindings) · right = value cells · arrows connect them
             </p>
             <div class="vt-stage" role="presentation">
               <div class="vt-stage-glow" aria-hidden="true"></div>
-              <div class="vt-slots" id="vt-slots"></div>
+              <div class="vt-map" id="vt-map" aria-live="polite" aria-label="Name to memory bindings">
+                <div class="vt-col-label vt-col-label--names">name slots</div>
+                <div class="vt-col-label vt-col-label--mem">value cells</div>
+                <div class="vt-rows" id="vt-rows"></div>
+                <div class="vt-orphans" id="vt-orphans" hidden></div>
+              </div>
+              <p class="vt-action-tag" id="vt-action-tag" aria-hidden="true"></p>
               <div class="vt-types" id="vt-types" aria-label="Simple type diagram">
                 <button type="button" class="vt-type" data-vt-type="number">number</button>
                 <button type="button" class="vt-type" data-vt-type="string">string</button>
@@ -134,10 +142,29 @@
 
         <h2>Name, slot, value</h2>
         <p>
-          Binding a name does not copy the universe—it attaches a label to a
-          value in memory. Primitive values often behave like copies when you
-          assign; objects are shared until you rebind. Related:
+          A variable is a <strong>name</strong> attached to a
+          <strong>value</strong> sitting in a memory slot. Creating the binding
+          does not duplicate everything—only the name points at the value.
+          Assigning a primitive (number, string, boolean) usually copies the
+          value; assigning an object shares that same object until you rebind
+          the name.
+        </p>
+
+        <h2>Where the name lives</h2>
+        <p>
+          The diagram’s left column is not “just a label in the textbook.” The
+          runtime really stores that binding in a small slot—often inside the
+          current function’s
+          <a class="concept-link" href="call-stack.html">call-stack frame</a>
+          (think: a sticky note on your desk that says “items → that box”). The
+          right column is the <em>value</em>—for objects and arrays, usually a
+          separate block on the <strong>heap</strong> (a warehouse of boxes the
+          program reserved). The arrow is the connection: desk note → warehouse
+          box. Rebind rewrites the note; mutate opens the same box and changes
+          what’s inside. More on addresses and this split:
           <a class="concept-link" href="memory-pointers.html">memory &amp; pointers</a>.
+          How arrays grow without stomping neighbors:
+          <a class="concept-link" href="arrays.html">arrays</a>.
         </p>
 
         <h2>Mutate vs rebind</h2>
@@ -153,6 +180,25 @@
             <span class="op-cost">new binding</span>
           </li>
         </ul>
+        <p>
+          <strong>Rebind</strong> (<code>x = 7</code>) updates
+          <code>x</code>’s name slot to a new value or pointer. The old data
+          sticks around only if something else still points at it; otherwise it
+          can be collected (see
+          <a class="concept-link" href="garbage-collection.html"
+            >garbage collection</a
+          >). The faded <em>unbound</em> cell in the lab is a teaching prop—in a
+          real runtime that memory is not left sacred forever; once unreachable,
+          the GC (or <code>free</code>) can reuse it.
+        </p>
+        <p>
+          <strong>Mutate</strong> an array (<code>items.push(3)</code>) usually
+          does <em>not</em> grow like a
+          <a class="concept-link" href="linked-lists.html">linked list</a>.
+          Most languages use a dynamic array: spare room in the same block, or a
+          bigger block + copy when full. Details:
+          <a class="concept-link" href="arrays.html">arrays</a>.
+        </p>
 
         <h2>From the literature</h2>
         <figure class="verbatim">
@@ -184,6 +230,7 @@
     </main>
 
     <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
     <script src="../js/variables-types.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>

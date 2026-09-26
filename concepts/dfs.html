@@ -216,6 +216,40 @@
           or recursive structure matter more.
         </p>
 
+        <section class="mastery" aria-labelledby="mastery-heading">
+          <h2 id="mastery-heading">For mastery</h2>
+          <ul class="mastery-list">
+            <li>
+              <span class="mastery-label">Invariant</span>
+              Explore along one path via a
+              <a class="concept-link" href="stack.html">stack</a>
+              /
+              <a class="concept-link" href="recursion.html">recursion</a>
+              until backtrack; each vertex gets discovery/finish times.
+            </li>
+            <li>
+              <span class="mastery-label">When / when not</span>
+              Use for connectivity, cycles, topo order, path existence. Not when
+              fewest edges from the start is the goal (
+              <a class="concept-link" href="bfs.html">BFS</a>).
+            </li>
+            <li>
+              <span class="mastery-label">Common failure</span>
+              Not marking visited on cyclic graphs → nontermination; swapping
+              stack for queue and expecting BFS distances.
+            </li>
+            <li>
+              <span class="mastery-label">Proof shape</span>
+              The DFS forest spans every reachable vertex; edge types follow
+              discovery/finish order.
+            </li>
+            <li>
+              <span class="mastery-label">Assumes</span>
+              A finite graph and a fixed adjacency iteration order.
+            </li>
+          </ul>
+        </section>
+
         <h2>From the literature</h2>
         <figure class="verbatim">
           <blockquote cite="https://en.wikipedia.org/wiki/Depth-first_search">
@@ -249,6 +283,7 @@
     </main>
 
     <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
     <script src="../js/dfs.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Graph theory (math) — Learn</title>
+    <meta
+      name="description"
+      content="Graph theory for math: paths, cuts, and connected components on a small undirected graph."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#discrete-math">Discrete math</a>
+      </p>
+      <h1>Graph theory (math)</h1>
+      <p class="concept-meta">
+        <span class="tag">Discrete math</span>
+        <span>
+          path · cut ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Maximal sets of vertices reachable from each other"
+            data-def="Maximal sets of vertices reachable from each other"
+            >components</abbr
+          >
+        </span>
+        <span class="meta-size"
+          >view <strong id="gtm-meta">path</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          Math <strong>graph theory</strong> studies vertices and edges as
+          proofs about connectivity—not just as a
+          <a class="concept-link" href="graphs.html">data structure</a>.
+          Paths, cuts, and components feed
+          <a class="concept-link" href="bfs.html">BFS</a>,
+          <a class="concept-link" href="dfs.html">DFS</a>,
+          <a class="concept-link" href="mst.html">MSTs</a>, and
+          <a class="concept-link" href="union-find.html">union-find</a>.
+        </p>
+
+        <div class="gtm-lab">
+          <div class="viz viz-stage" aria-labelledby="gtm-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="gtm-viz-title">Small graph</p>
+              <span class="gtm-badge" id="gtm-badge">path A→F</span>
+            </div>
+            <p class="viz-hint">
+              Switch path / cut / components · watch highlights on G=(V,E)
+            </p>
+            <div class="gtm-toggle" role="group" aria-label="Highlight mode">
+              <button type="button" class="viz-btn is-selected" data-gtm-mode="path">
+                Path
+              </button>
+              <button type="button" class="viz-btn" data-gtm-mode="cut">
+                Cut
+              </button>
+              <button type="button" class="viz-btn" data-gtm-mode="components">
+                Components
+              </button>
+            </div>
+            <svg
+              id="gtm-svg"
+              class="gtm-svg"
+              viewBox="0 0 420 260"
+              xmlns="http://www.w3.org/2000/svg"
+              role="img"
+              aria-label="Undirected graph with path cut and components"
+            ></svg>
+            <p class="viz-live" id="gtm-status" aria-live="polite">
+              Path A–B–D–F connects A to F. Length 3 edges.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="gtm-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="gtm-code-title">Definitions</p>
+              <span class="code-panel-lang">math</span>
+            </div>
+            <pre class="code-panel-body" id="gtm-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="gtm-code-note">
+              Connectivity is an equivalence relation on V.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Paths</h2>
+        <p>
+          A path is a walk with no repeated vertices. Distance is the fewest
+          edges in a path—what BFS computes on unweighted graphs.
+        </p>
+
+        <h2>Cuts</h2>
+        <p>
+          A cut partitions V into S and V−S; the cut-set is edges with one end
+          in each side. Min-cuts appear in network flow and cluster boundaries.
+        </p>
+
+        <h2>Connected components</h2>
+        <p>
+          In an undirected graph, components are the maximal connected
+          subgraphs. Removing a bridge can split one component into two—prove
+          it with
+          <a class="concept-link" href="induction-invariants.html"
+            >induction</a
+          >
+          on edges.
+        </p>
+
+        <p>
+          Implementation side:
+          <a class="concept-link" href="graphs.html">Graphs</a>
+          ADT,
+          <a class="concept-link" href="shortest-paths.html">shortest paths</a>.
+        </p>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Graph_theory">
+            <p>
+              “In mathematics and computer science, graph theory is the study of
+              graphs, which are mathematical structures used to model pairwise
+              relations between objects. A graph in this context is made up of
+              vertices which are connected by edges. A distinction is made
+              between undirected graphs, where edges link two vertices
+              symmetrically, and directed graphs, where edges link two vertices
+              asymmetrically.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Graph_theory"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Graph theory</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#discrete-math">← All concepts</a>
+        <a class="next" href="probability-basics.html"
+          >Next up: Probability basics →</a
+        >
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
+    <script src="../js/graph-theory-math.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

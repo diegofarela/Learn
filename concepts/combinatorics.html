@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Combinatorics — Learn</title>
+    <meta
+      name="description"
+      content="Combinatorics: count without listing. Interactive n-choose-k with sliders and Pascal’s identity."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#discrete-math">Discrete math</a>
+      </p>
+      <h1>Combinatorics</h1>
+      <p class="concept-meta">
+        <span class="tag">Discrete math</span>
+        <span>
+          counting ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Number of ways to choose k items from n when order does not matter"
+            data-def="Number of ways to choose k items from n when order does not matter"
+            >n choose k</abbr
+          >
+          · permutations
+        </span>
+        <span class="meta-size"
+          >C(<span id="comb-meta-n">8</span>,<span id="comb-meta-k">3</span>) =
+          <strong id="comb-meta-val">56</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          <strong>Combinatorics</strong> counts arrangements without listing
+          them. Binomial coefficients
+          <code>C(n,k)</code> answer “how many subsets of size k?”—central to
+          <a class="concept-link" href="probability-basics.html"
+            >probability</a
+          >,
+          <a class="concept-link" href="balls-bins.html">balls &amp; bins</a>,
+          and
+          <a class="concept-link" href="sets-relations-functions.html"
+            >set theory</a
+          >.
+        </p>
+
+        <div class="comb-lab">
+          <div class="viz viz-stage" aria-labelledby="comb-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="comb-viz-title">n choose k</p>
+              <span class="comb-badge" id="comb-badge">C(8,3)=56</span>
+            </div>
+            <p class="viz-hint">
+              Drag n and k · watch selected subset chips and the formula
+            </p>
+            <label class="comb-slider-label">
+              <span>n = <strong id="comb-n-val">8</strong></span>
+              <input
+                id="comb-n"
+                type="range"
+                min="1"
+                max="16"
+                value="8"
+                aria-valuemin="1"
+                aria-valuemax="16"
+                aria-valuenow="8"
+              />
+            </label>
+            <label class="comb-slider-label">
+              <span>k = <strong id="comb-k-val">3</strong></span>
+              <input
+                id="comb-k"
+                type="range"
+                min="0"
+                max="8"
+                value="3"
+                aria-valuemin="0"
+                aria-valuemax="8"
+                aria-valuenow="3"
+              />
+            </label>
+            <div
+              id="comb-universe"
+              class="comb-universe"
+              role="img"
+              aria-label="Universe of n items with k highlighted"
+            ></div>
+            <p class="comb-formula" id="comb-formula" aria-live="polite"></p>
+            <p class="viz-live" id="comb-status" aria-live="polite">
+              C(8,3) = 8! / (3!·5!) = 56 ways to pick 3 from 8.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="comb-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="comb-code-title">Identities</p>
+              <span class="code-panel-lang">math</span>
+            </div>
+            <pre class="code-panel-body" id="comb-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="comb-code-note">
+              Pascal: C(n,k) = C(n−1,k−1) + C(n−1,k).
+            </p>
+          </aside>
+        </div>
+
+        <h2>Permutations vs combinations</h2>
+        <p>
+          Order matters for permutations (<code>P(n,k) = n!/(n−k)!</code>).
+          Combinations ignore order—same k-subset counted once. Always ask:
+          does rearranging change the outcome?
+        </p>
+
+        <h2>Binomial theorem</h2>
+        <p>
+          <code>(x+y)<sup>n</sup> = Σ C(n,k) x<sup>n−k</sup> y<sup>k</sup></code>.
+          The coefficients are exactly the choose numbers you’re sliding.
+        </p>
+
+        <p>
+          See also
+          <a class="concept-link" href="modular-arithmetic.html"
+            >modular arithmetic</a
+          >
+          (binomial coeffs mod p) and
+          <a class="concept-link" href="expectation.html">expectation</a>.
+        </p>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Combinatorics">
+            <p>
+              “Combinatorics is an area of mathematics primarily concerned with
+              counting, both as a means and as an end to obtaining results, and
+              certain properties of finite structures. It is closely related to
+              many other areas of mathematics and has many applications ranging
+              from logic to statistical physics and from evolutionary biology
+              to computer science.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Combinatorics"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Combinatorics</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#discrete-math">← All concepts</a>
+        <a class="next" href="modular-arithmetic.html"
+          >Next up: Modular arithmetic →</a
+        >
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
+    <script src="../js/combinatorics.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

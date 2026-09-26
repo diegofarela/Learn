@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Finite automata — Learn</title>
+    <meta
+      name="description"
+      content="Finite automata: step a DFA through an input string and watch accept vs reject."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#theory">Theory of computation</a>
+      </p>
+      <h1>Finite automata</h1>
+      <p class="concept-meta">
+        <span class="tag">Theory</span>
+        <span>states · alphabet · accept / reject</span>
+        <span class="meta-size"
+          >char <strong id="fa-pos">0</strong>/<span id="fa-len">0</span></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          A <strong>deterministic finite automaton (DFA)</strong> reads one
+          symbol at a time and moves between a finite set of states. If it ends
+          in an accepting state, the string is in the language. Related:
+          <a class="concept-link" href="regex.html">regular expressions</a>
+          describe the same class of languages, and
+          <a class="concept-link" href="compilers.html">compilers</a>
+          use automata-like scanners in the lexer.
+        </p>
+
+        <div class="fa-lab">
+          <div class="viz viz-stage" aria-labelledby="fa-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="fa-viz-title">DFA · ends with <code>ab</code></p>
+              <span class="sys-badge" id="fa-badge">ready</span>
+            </div>
+            <p class="viz-hint">
+              Step consumes one character · green = accept, rose = reject
+            </p>
+            <label class="fa-input-label">
+              <span class="fa-field-label">input string</span>
+              <input
+                id="fa-input"
+                type="text"
+                value="aabab"
+                autocomplete="off"
+                spellcheck="false"
+                aria-label="Input string over alphabet a, b"
+              />
+            </label>
+            <div
+              id="fa-tape"
+              class="fa-tape"
+              role="list"
+              aria-label="Input tape"
+            ></div>
+            <div class="fa-stage" role="presentation">
+              <svg id="fa-edges" class="fa-edges" aria-hidden="true"></svg>
+              <div
+                id="fa-nodes"
+                class="fa-nodes"
+                role="img"
+                aria-label="DFA states"
+              ></div>
+            </div>
+            <div class="viz-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-fa-action="step">
+                Step
+              </button>
+              <button type="button" class="viz-btn" data-fa-action="play">Play</button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-fa-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="fa-status" aria-live="polite">
+              Ready at q₀. Step to read the next symbol.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="fa-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="fa-code-title">Executing</p>
+              <span class="code-panel-lang">DFA · δ</span>
+            </div>
+            <pre class="code-panel-body" id="fa-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="fa-code-note">
+              Transition function δ lights up as the machine advances.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Pieces of a DFA</h2>
+        <ul class="op-list">
+          <li>
+            <code>Q</code>
+            <span>finite set of states</span>
+            <span class="op-cost">memory</span>
+          </li>
+          <li>
+            <code>Σ</code>
+            <span>alphabet of input symbols</span>
+            <span class="op-cost">chars</span>
+          </li>
+          <li>
+            <code>δ(q, a)</code>
+            <span>next state from q on symbol a</span>
+            <span class="op-cost">edge</span>
+          </li>
+          <li>
+            <code>F ⊆ Q</code>
+            <span>accepting states (double circle)</span>
+            <span class="op-cost">yes</span>
+          </li>
+        </ul>
+
+        <h2>Related ideas</h2>
+        <ul>
+          <li>
+            <a class="concept-link" href="regex.html">Regular expressions</a>
+            — same power as finite automata
+          </li>
+          <li>
+            <a class="concept-link" href="cfgs.html">Context-free grammars</a>
+            — next step up the Chomsky hierarchy
+          </li>
+          <li>
+            <a class="concept-link" href="compilers.html">Compilers</a>
+            — lexers are often DFAs under the hood
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Finite-state_machine">
+            <p>
+              “A finite-state machine (FSM) or finite-state automaton (FSA,
+              plural: automata), finite automaton, or simply a state machine, is
+              a mathematical model of computation. It is an abstract machine
+              that can be in exactly one of a finite number of states at any
+              given time.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Finite-state_machine"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Finite-state machine</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#theory">← All concepts</a>
+        <a class="next" href="cfgs.html">Next up: Context-free grammars →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
+    <script src="../js/finite-automata.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

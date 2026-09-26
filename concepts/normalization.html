@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Normalization — Learn</title>
+    <meta
+      name="description"
+      content="Normalization: transform a denormalized table through 1NF, 2NF, and 3NF."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#databases">Databases</a>
+      </p>
+      <h1>Normalization</h1>
+      <p class="concept-meta">
+        <span class="tag">Databases</span>
+        <span>
+          1NF → 2NF →
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Third normal form — no transitive dependencies on non-key attributes"
+            data-def="Third normal form — no transitive dependencies on non-key attributes"
+            >3NF</abbr
+          >
+        </span>
+        <span class="meta-size"
+          >form <strong id="nf-form-label">raw</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          <strong>Normalization</strong> reshapes tables to reduce redundancy
+          and update anomalies—atomic columns (1NF), full dependence on the key
+          (2NF), no transitive deps (3NF). Related:
+          <a class="concept-link" href="relational.html">relational model</a>
+          and
+          <a class="concept-link" href="sql.html">SQL</a>.
+        </p>
+
+        <div class="nf-lab">
+          <div class="viz viz-stage" aria-labelledby="nf-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="nf-viz-title">Denormalized → 3NF</p>
+              <span class="sys-badge" id="nf-badge">raw table</span>
+            </div>
+            <p class="viz-hint">
+              Step through 1NF, 2NF, 3NF · watch columns split into relations
+            </p>
+            <div class="nf-stage" role="presentation">
+              <div class="nf-stage-glow" aria-hidden="true"></div>
+              <div class="nf-tables" id="nf-tables" aria-live="polite"></div>
+            </div>
+            <div class="viz-controls nf-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-nf-action="step">
+                Next form
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-nf-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="nf-status" aria-live="polite">
+              One wide table: repeating groups and redundant course data.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="nf-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="nf-code-title">Rules</p>
+              <span class="code-panel-lang">normal forms</span>
+            </div>
+            <pre class="code-panel-body" id="nf-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="nf-code-note">
+              Advance to apply the next normal-form rule.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Normal forms (quick)</h2>
+        <ul class="op-list">
+          <li>
+            <code>1NF</code>
+            <span>atomic values; no repeating groups</span>
+            <span class="op-cost">atoms</span>
+          </li>
+          <li>
+            <code>2NF</code>
+            <span>non-key attrs depend on the whole key</span>
+            <span class="op-cost">full key</span>
+          </li>
+          <li>
+            <code>3NF</code>
+            <span>non-key attrs don’t depend on other non-keys</span>
+            <span class="op-cost">no transit</span>
+          </li>
+        </ul>
+
+        <h2>Related ideas</h2>
+        <ul>
+          <li>
+            <a class="concept-link" href="relational.html">Relational model</a>
+            — keys and relations are the substrate
+          </li>
+          <li>
+            <a class="concept-link" href="sql.html">SQL</a>
+            — JOINs reassemble normalized tables
+          </li>
+          <li>
+            <a class="concept-link" href="indexes.html">Indexes</a>
+            — keys still need fast lookup after the split
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Database_normalization">
+            <p>
+              “Database normalization is the process of structuring a relational
+              database in accordance with a series of so-called normal forms in
+              order to reduce data redundancy and improve data integrity.
+              It was first proposed by British computer scientist Edgar F. Codd
+              as part of his relational model.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Database_normalization"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Database normalization</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#databases">← All concepts</a>
+        <a class="next" href="relational.html">Related: Relational model →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
+    <script src="../js/normalization.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Gradient descent — Learn</title>
+    <meta
+      name="description"
+      content="Gradient descent: watch a ball roll downhill on a 1D loss curve toward a minimum."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#ml-basics">ML foundations</a>
+      </p>
+      <h1>Gradient descent</h1>
+      <p class="concept-meta">
+        <span class="tag">ML foundations</span>
+        <span>
+          loss · step size ·
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Direction of steepest ascent; we step the opposite way"
+            data-def="Direction of steepest ascent; we step the opposite way"
+            >gradient</abbr
+          >
+        </span>
+        <span class="meta-size"
+          >x <strong id="gd-meta">—</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          <strong>Gradient descent</strong> minimizes a loss by repeatedly
+          stepping opposite the slope. Tune the learning rate below—too large
+          and you overshoot; too small and you crawl. Uses
+          <a class="concept-link" href="linear-algebra.html">vector / calculus</a>
+          ideas; interacts with
+          <a class="concept-link" href="bias-variance.html">bias–variance</a>
+          when fitting models.
+        </p>
+
+        <div class="gd-lab">
+          <div class="viz viz-stage" aria-labelledby="gd-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="gd-viz-title">Ball on a loss curve</p>
+              <span class="gd-phase" id="gd-phase">idle</span>
+            </div>
+            <p class="viz-hint">
+              Play steps · drag start x · adjust learning rate η
+            </p>
+            <div class="gd-stage">
+              <div class="gd-stage-glow" aria-hidden="true"></div>
+              <canvas id="gd-canvas" width="560" height="240" aria-label="Loss curve"></canvas>
+              <label class="gd-slider">
+                <span>η <strong id="gd-eta-label">0.15</strong></span>
+                <input type="range" id="gd-eta" min="0.02" max="0.45" step="0.01" value="0.15" />
+              </label>
+            </div>
+            <div class="viz-controls gd-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-gd-action="step">
+                Step
+              </button>
+              <button type="button" class="viz-btn" data-gd-action="play">Play</button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-gd-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="gd-status" aria-live="polite">
+              Ready — step downhill: x ← x − η · f′(x).
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="gd-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="gd-code-title">Update</p>
+              <span class="code-panel-lang">1D</span>
+            </div>
+            <pre class="code-panel-body" id="gd-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="gd-code-note">
+              Follow the negative gradient.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Recipe</h2>
+        <ul class="op-list">
+          <li>
+            <code>loss f(x)</code>
+            <span>scalar to minimize</span>
+            <span class="op-cost">objective</span>
+          </li>
+          <li>
+            <code>x ← x − η f′</code>
+            <span>step opposite the slope</span>
+            <span class="op-cost">update</span>
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Gradient_descent">
+            <p>
+              “Gradient descent is a method for unconstrained mathematical
+              optimization. It is a first-order iterative algorithm for finding
+              a local minimum of a differentiable multivariate function.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Gradient_descent"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Gradient descent</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#ml-basics">← All concepts</a>
+        <a class="next" href="bias-variance.html">Related: Bias–variance →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/gradient-descent.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

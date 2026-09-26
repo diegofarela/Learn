@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Context-free grammars — Learn</title>
+    <meta
+      name="description"
+      content="Context-free grammars: derive a short string and watch the parse tree grow."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#theory">Theory of computation</a>
+      </p>
+      <h1>Context-free grammars</h1>
+      <p class="concept-meta">
+        <span class="tag">Theory</span>
+        <span>productions · derivation · parse tree</span>
+        <span class="meta-size"
+          >step <strong id="cfg-step">0</strong>/<span id="cfg-total">0</span></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          A <strong>context-free grammar (CFG)</strong> rewrites a nonterminal
+          no matter what surrounds it. Derivations build nested structure —
+          the same idea a
+          <a class="concept-link" href="compilers.html">parser</a>
+          turns into an AST. Regular languages need only
+          <a class="concept-link" href="finite-automata.html">finite automata</a>;
+          CFGs sit one level higher.
+        </p>
+
+        <div class="cfg-lab">
+          <div class="viz viz-stage" aria-labelledby="cfg-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="cfg-viz-title">Derive <code>()()</code></p>
+              <span class="sys-badge" id="cfg-badge">ready</span>
+            </div>
+            <p class="viz-hint">
+              Grammar for balanced parens · step the leftmost derivation
+            </p>
+            <div class="cfg-rules" aria-label="Grammar productions">
+              <code>S → ( S ) S</code>
+              <code>S → ε</code>
+            </div>
+            <p class="cfg-sentential" id="cfg-sentential" aria-live="polite">
+              S
+            </p>
+            <div
+              id="cfg-tree"
+              class="cfg-tree"
+              role="img"
+              aria-label="Parse tree"
+            ></div>
+            <div class="viz-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-cfg-action="step">
+                Step
+              </button>
+              <button type="button" class="viz-btn" data-cfg-action="play">Play</button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-cfg-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="cfg-status" aria-live="polite">
+              Start from S. Step to expand the leftmost nonterminal.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="cfg-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="cfg-code-title">Executing</p>
+              <span class="code-panel-lang">CFG · derive</span>
+            </div>
+            <pre class="code-panel-body" id="cfg-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="cfg-code-note">
+              Leftmost derivation toward the string ()().
+            </p>
+          </aside>
+        </div>
+
+        <h2>Grammar pieces</h2>
+        <ul class="op-list">
+          <li>
+            <code>N</code>
+            <span>nonterminals (here just S)</span>
+            <span class="op-cost">vars</span>
+          </li>
+          <li>
+            <code>Σ</code>
+            <span>terminals — ( and )</span>
+            <span class="op-cost">leaves</span>
+          </li>
+          <li>
+            <code>P</code>
+            <span>productions A → α</span>
+            <span class="op-cost">rules</span>
+          </li>
+          <li>
+            <code>S</code>
+            <span>start symbol</span>
+            <span class="op-cost">root</span>
+          </li>
+        </ul>
+
+        <h2>Related ideas</h2>
+        <ul>
+          <li>
+            <a class="concept-link" href="compilers.html">Compilers</a>
+            — parsing builds a tree from a CFG
+          </li>
+          <li>
+            <a class="concept-link" href="finite-automata.html">Finite automata</a>
+            — regular languages are a strict subset
+          </li>
+          <li>
+            <a class="concept-link" href="recursion.html">Recursion</a>
+            — nested structure mirrors recursive rules
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Context-free_grammar">
+            <p>
+              “In formal language theory, a context-free grammar (CFG) is a
+              formal grammar whose production rules can be applied to a
+              nonterminal symbol regardless of its context. In particular, in a
+              context-free grammar, each production rule is of the form A → α
+              where A is a single nonterminal symbol, and α is a string of
+              terminals and/or nonterminals (α can be empty).”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Context-free_grammar"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Context-free grammar</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#theory">← All concepts</a>
+        <a class="next" href="decidability.html">Next up: Decidability →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
+    <script src="../js/cfgs.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

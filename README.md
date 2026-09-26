@@ -1,6 +1,8 @@
 # Learn
 
-Public site for organizing and visualizing computer science concepts in 3D.
+Public site for organizing and visualizing computer science concepts.
+Interactive atlas spanning foundations through MS-prep topics (discrete math,
+theory, architecture, distributed systems, ML basics, and more).
 This folder is its own git repository.
 
 ## Structure

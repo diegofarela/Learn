@@ -193,6 +193,39 @@
           </li>
         </ul>
 
+        <section class="mastery" aria-labelledby="mastery-heading">
+          <h2 id="mastery-heading">For mastery</h2>
+          <ul class="mastery-list">
+            <li>
+              <span class="mastery-label">Invariant</span>
+              Tentative distances only improve by relaxation; once Dijkstra
+              settles a node (nonnegative weights), its distance is final.
+            </li>
+            <li>
+              <span class="mastery-label">When / when not</span>
+              Use Dijkstra for nonnegative weights;
+              <a class="concept-link" href="bfs.html">BFS</a>
+              if unweighted; Bellman–Ford if negatives (no neg cycle).
+            </li>
+            <li>
+              <span class="mastery-label">Common failure</span>
+              Running Dijkstra with negative edges; forgetting to decrease-key /
+              re-relax when a better path appears.
+            </li>
+            <li>
+              <span class="mastery-label">Proof shape</span>
+              Dijkstra: extract-min from the
+              <a class="concept-link" href="heaps.html">heap</a>
+              settles an optimal dist under nonnegative weights.
+            </li>
+            <li>
+              <span class="mastery-label">Assumes</span>
+              Nonnegative weights for Dijkstra; or no negative cycle for
+              Bellman–Ford.
+            </li>
+          </ul>
+        </section>
+
         <h2>From the literature</h2>
         <figure class="verbatim">
           <blockquote cite="https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm">
@@ -222,6 +255,7 @@
     </main>
 
     <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
     <script src="../js/shortest-paths.js"></script>
     <script src="../js/dev-tools.js"></script>
   </body>

@@ -101,7 +101,6 @@
       }
       if (wireB) {
         wireB.classList.toggle("is-hot", gate !== "NOT" && B === 1);
-        wireB.style.opacity = gate === "NOT" ? "0" : "1";
       }
       if (wireY) wireY.classList.toggle("is-hot", y === 1);
     }

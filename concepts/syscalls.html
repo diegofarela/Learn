@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>System calls — Learn</title>
+    <meta
+      name="description"
+      content="System calls: watch a user→kernel mode transition on read() and write()."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#systems">Systems</a>
+      </p>
+      <h1>System calls</h1>
+      <p class="concept-meta">
+        <span class="tag">Systems</span>
+        <span>
+          user →
+          <abbr
+            class="term"
+            tabindex="0"
+            title="Kernel mode — privileged CPU mode where the OS runs"
+            data-def="Kernel mode — privileged CPU mode where the OS runs"
+            >kernel</abbr
+          >
+          · trap
+        </span>
+        <span class="meta-size"
+          >mode <strong id="sc-mode-label">user</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          A <strong>system call</strong> is how user code asks the OS for
+          privileged work—open a file, read bytes, write to a socket. The CPU
+          traps into <em>kernel mode</em>, the kernel runs the handler, then
+          returns. Related:
+          <a class="concept-link" href="os-processes.html">OS processes</a>,
+          <a class="concept-link" href="interrupts.html">interrupts</a>, and
+          <a class="concept-link" href="file-systems.html">file systems</a>.
+        </p>
+
+        <div class="sc-lab">
+          <div class="viz viz-stage" aria-labelledby="sc-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="sc-viz-title">User → kernel transition</p>
+              <span class="sys-badge" id="sc-badge">user mode</span>
+            </div>
+            <p class="viz-hint">
+              Call read() or write() · watch the trap into the kernel and return
+            </p>
+            <div class="sc-stage" role="presentation">
+              <div class="sc-stage-glow" aria-hidden="true"></div>
+              <div class="sc-layers" id="sc-layers" aria-live="polite"></div>
+            </div>
+            <div class="viz-controls sc-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-sc-action="read">
+                read()
+              </button>
+              <button type="button" class="viz-btn" data-sc-action="write">
+                write()
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-sc-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="sc-status" aria-live="polite">
+              App runs in user mode. Invoke a syscall to trap into the kernel.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="sc-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="sc-code-title">Executing</p>
+              <span class="code-panel-lang">C · syscall</span>
+            </div>
+            <pre class="code-panel-body" id="sc-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="sc-code-note">
+              Press read() or write() — the trap path highlights.
+            </p>
+          </aside>
+        </div>
+
+        <h2>What happens on a syscall</h2>
+        <ul class="op-list">
+          <li>
+            <code>user</code>
+            <span>app runs with unprivileged CPU mode</span>
+            <span class="op-cost">ring 3</span>
+          </li>
+          <li>
+            <code>trap</code>
+            <span>syscall instruction switches to kernel</span>
+            <span class="op-cost">entry</span>
+          </li>
+          <li>
+            <code>handler</code>
+            <span>kernel validates args and does the work</span>
+            <span class="op-cost">sys_*</span>
+          </li>
+          <li>
+            <code>return</code>
+            <span>restore user mode and resume the app</span>
+            <span class="op-cost">exit</span>
+          </li>
+        </ul>
+
+        <h2>Related ideas</h2>
+        <ul>
+          <li>
+            <a class="concept-link" href="interrupts.html">Interrupts</a>
+            — hardware also enters the kernel via a similar path
+          </li>
+          <li>
+            <a class="concept-link" href="os-processes.html">OS processes</a>
+            — each process has its own user address space
+          </li>
+          <li>
+            <a class="concept-link" href="io-mmap.html">I/O &amp; memory mapping</a>
+            — how read/write and mmap move data
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/System_call">
+            <p>
+              “In computing, a system call (commonly abbreviated to syscall) is
+              the programmatic way in which a computer program requests a service
+              from the operating system on which it is executed. This may
+              include hardware-related services (for example, accessing a hard
+              disk drive), creation and execution of new processes, and
+              communication with integral kernel services such as process
+              scheduling.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/System_call"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — System call</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#systems">← All concepts</a>
+        <a class="next" href="interrupts.html">Next up: Interrupts →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
+    <script src="../js/syscalls.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

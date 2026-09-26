@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Instruction cycle — Learn</title>
+    <meta name="description" content="Instruction cycle: animate fetch → decode → execute → writeback on a live CPU datapath." />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#architecture">Computer architecture</a>
+      </p>
+      <h1>Instruction cycle</h1>
+      <p class="concept-meta">
+        <span class="tag">Architecture</span>
+        <span>fetch · decode · execute · writeback</span>
+        <span class="meta-size">phase <strong id="icycle-meta">fetch</strong></span>
+      </p>
+
+      <div class="concept-body">
+        <p>
+          The CPU repeatedly <strong>fetches</strong> an instruction, <strong>decodes</strong> it, <strong>executes</strong> it, then <strong>writes back</strong> results. Overlap those stages and you get
+          <a class="concept-link" href="pipelining.html">pipelining</a>—and the same idea of
+          stepping work shows up in
+          <a class="concept-link" href="os-processes.html">OS process</a>
+          state machines.
+        </p>
+
+        <div class="icycle-lab">
+          <div class="viz viz-stage" aria-labelledby="icycle-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="icycle-viz-title">Fetch–decode–execute–writeback</p>
+              <span class="sys-badge" id="icycle-phase">FETCH</span>
+            </div>
+            <p class="viz-hint">
+              Step or play · watch PC, IR, and the active stage light up
+            </p>
+            <div class="icycle-stage" role="presentation">
+              <div class="icycle-stage-glow" aria-hidden="true"></div>
+              <div class="icycle-regs" id="icycle-regs" aria-label="CPU registers"></div>
+              <div class="icycle-flow" id="icycle-flow" role="img" aria-label="Instruction cycle stages"></div>
+            </div>
+            <div class="viz-controls icycle-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-icycle-action="step">
+                Step
+              </button>
+              <button type="button" class="viz-btn" data-icycle-action="play">
+                Play
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-icycle-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="icycle-status" aria-live="polite">
+              PC points at the next instruction. Step to fetch it into the IR.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="icycle-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="icycle-code-title">Datapath</p>
+              <span class="code-panel-lang">CPU · cycle</span>
+            </div>
+            <pre class="code-panel-body" id="icycle-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="icycle-code-note">
+              Each step advances one stage of the classic instruction cycle.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Stages</h2>
+        <ul class="op-list">
+          <li>
+            <code>fetch</code>
+            <span>read instruction at PC into IR; advance PC</span>
+            <span class="op-cost">mem</span>
+          </li>
+          <li>
+            <code>decode</code>
+            <span>control unit interprets opcode and operands</span>
+            <span class="op-cost">CU</span>
+          </li>
+          <li>
+            <code>execute</code>
+            <span>ALU / memory / branch does the work</span>
+            <span class="op-cost">ALU</span>
+          </li>
+          <li>
+            <code>writeback</code>
+            <span>store result into a register (or memory)</span>
+            <span class="op-cost">regs</span>
+          </li>
+        </ul>
+
+        <h2>Related ideas</h2>
+        <ul>
+          <li>
+            <a class="concept-link" href="pipelining.html">Pipelining</a>
+            — overlap stages across instructions
+          </li>
+          <li>
+            <a class="concept-link" href="assembly-basics.html">Assembly basics</a>
+            — the instructions being fetched
+          </li>
+          <li>
+            <a class="concept-link" href="os-processes.html">OS processes</a>
+            — who owns the PC while running
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Instruction_cycle">
+            <p>
+              “The instruction cycle (also known as the fetch–decode–execute cycle, or simply the fetch–execute cycle) is the cycle that the central processing unit (CPU) follows from boot-up until the computer has shut down in order to process instructions. It is composed of three main stages: the fetch stage, the decode stage, and the execute stage.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Instruction_cycle"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Instruction cycle</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#architecture">← All concepts</a>
+        <a class="next" href="assembly-basics.html">Next up: Assembly basics →</a>
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
+    <script src="../js/icycle.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>

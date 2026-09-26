@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
+          var theme =
+            mode === "light" || mode === "dark"
+              ? mode
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+          document.documentElement.style.colorScheme = theme;
+        } catch (err) {}
+      })();
+    </script>
+    <title>Failures &amp; timeouts — Learn</title>
+    <meta
+      name="description"
+      content="Failures & timeouts: crash, partition, timeout fire, and retry in a tiny cluster."
+    />
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script src="../js/env.js"></script>
+    <script src="../js/catalog.js"></script>
+  </head>
+  <body>
+    <div class="page-atmosphere page-atmosphere-concept" aria-hidden="true"></div>
+    <header class="site-header">
+      <div class="nav-inner">
+        <a class="brand" href="../index.html">Learn</a>
+        <label class="theme-control">
+          <span class="sr-only">Theme</span>
+          <select id="theme-mode" aria-label="Color theme">
+            <option value="dark" selected>Dark</option>
+            <option value="light">Light</option>
+            <option value="auto">Auto</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="concept-wide">
+      <p class="crumb">
+        <a href="../index.html">Concepts</a>
+        <span aria-hidden="true"> · </span>
+        <a href="../index.html#distributed">Distributed systems</a>
+      </p>
+      <h1>Failures &amp; timeouts</h1>
+      <p class="concept-meta">
+        <span class="tag">Distributed</span>
+        <span>crash · partition · timeout · retry</span>
+        <span class="meta-size"
+          ><strong id="fail-meta">idle</strong></span
+        >
+      </p>
+
+      <div class="concept-body">
+        <p>
+          In a network you cannot tell a slow node from a dead one—so you set a
+          <strong>timeout</strong>, then <strong>retry</strong> or fail over.
+          That pairs with
+          <a class="concept-link" href="cap-theorem.html">CAP</a>
+          trade-offs,
+          <a class="concept-link" href="idempotency-retries.html">idempotent retries</a>,
+          and reliable transport ideas in
+          <a class="concept-link" href="tcp-udp.html">TCP</a>.
+        </p>
+
+        <div class="fail-lab">
+          <div class="viz viz-stage" aria-labelledby="fail-viz-title">
+            <div class="viz-stage-header">
+              <p class="viz-title" id="fail-viz-title">Client → replicas</p>
+              <span class="sys-badge" id="fail-phase">IDLE</span>
+            </div>
+            <p class="viz-hint">
+              Crash a node or cut the link · watch the timeout, then retry
+            </p>
+            <div class="fail-stage" role="presentation">
+              <div class="fail-stage-glow" aria-hidden="true"></div>
+              <div class="fail-topo" id="fail-topo" aria-label="Cluster topology"></div>
+              <div class="fail-timer" id="fail-timer" aria-hidden="true">
+                <div class="fail-timer-bar" id="fail-timer-bar"></div>
+              </div>
+            </div>
+            <div class="viz-controls fail-controls">
+              <button type="button" class="viz-btn viz-btn-primary" data-fail-action="request">
+                Send request
+              </button>
+              <button type="button" class="viz-btn" data-fail-action="crash">
+                Crash A
+              </button>
+              <button type="button" class="viz-btn" data-fail-action="partition">
+                Partition
+              </button>
+              <button type="button" class="viz-btn" data-fail-action="heal">
+                Heal
+              </button>
+              <button type="button" class="viz-btn viz-btn-ghost" data-fail-action="reset">
+                Reset
+              </button>
+            </div>
+            <p class="viz-live" id="fail-status" aria-live="polite">
+              Healthy cluster. Send a request from the client to node A.
+            </p>
+          </div>
+
+          <aside class="code-panel" aria-labelledby="fail-code-title">
+            <div class="code-panel-header">
+              <p class="code-panel-title" id="fail-code-title">Timeline</p>
+              <span class="code-panel-lang">rpc</span>
+            </div>
+            <pre class="code-panel-body" id="fail-code" aria-live="polite"></pre>
+            <p class="code-panel-note" id="fail-code-note">
+              Timeout ≈ detection; retry needs idempotency for safety.
+            </p>
+          </aside>
+        </div>
+
+        <h2>Patterns</h2>
+        <ul class="op-list">
+          <li>
+            <code>crash</code>
+            <span>process stops; no reply ever comes</span>
+            <span class="op-cost">fail-stop</span>
+          </li>
+          <li>
+            <code>partition</code>
+            <span>messages drop between subsets of nodes</span>
+            <span class="op-cost">split</span>
+          </li>
+          <li>
+            <code>timeout</code>
+            <span>client gives up waiting and may retry</span>
+            <span class="op-cost">detect</span>
+          </li>
+        </ul>
+
+        <h2>Related ideas</h2>
+        <ul>
+          <li>
+            <a class="concept-link" href="cap-theorem.html">CAP theorem</a>
+            — what you keep under partition
+          </li>
+          <li>
+            <a class="concept-link" href="idempotency-retries.html">Idempotency &amp; retries</a>
+            — safe duplicate requests
+          </li>
+          <li>
+            <a class="concept-link" href="consensus-raft.html">Consensus (Raft)</a>
+            — agree despite crashes
+          </li>
+          <li>
+            <a class="concept-link" href="tcp-udp.html">TCP &amp; UDP</a>
+            — retransmission timers on the wire
+          </li>
+        </ul>
+
+        <h2>From the literature</h2>
+        <figure class="verbatim">
+          <blockquote cite="https://en.wikipedia.org/wiki/Fallacies_of_distributed_computing">
+            <p>
+              “The fallacies of distributed computing are a set of assertions
+              describing false assumptions that programmers new to distributed
+              applications invariably make. The fallacies are: The network is
+              reliable; Latency is zero; Bandwidth is infinite; The network is
+              secure; Topology doesn't change; There is one administrator; Transport
+              cost is zero; The network is homogeneous.”
+            </p>
+          </blockquote>
+          <figcaption class="source">
+            Verbatim from
+            <a
+              href="https://en.wikipedia.org/wiki/Fallacies_of_distributed_computing"
+              rel="noopener noreferrer"
+              target="_blank"
+              >Wikipedia — Fallacies of distributed computing</a
+            >
+          </figcaption>
+        </figure>
+      </div>
+
+      <nav class="concept-nav" aria-label="Concept navigation">
+        <a href="../index.html#distributed">← All concepts</a>
+        <a class="next" href="consistency-models.html"
+          >Next up: Consistency models →</a
+        >
+      </nav>
+    </main>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/side-nav.js"></script>
+    <script src="../js/failures-timeouts.js"></script>
+    <script src="../js/dev-tools.js"></script>
+  </body>
+</html>
