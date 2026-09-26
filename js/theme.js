@@ -21,9 +21,9 @@
 
   function read() {
     try {
-      return localStorage.getItem(KEY) || "auto";
+      return localStorage.getItem(KEY) || "dark";
     } catch (err) {
-      return "auto";
+      return "dark";
     }
   }
 

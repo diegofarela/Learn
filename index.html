@@ -6,7 +6,7 @@
     <script>
       (function () {
         try {
-          var mode = localStorage.getItem("learnThemeModeV1") || "auto";
+          var mode = localStorage.getItem("learnThemeModeV1") || "dark";
           var theme =
             mode === "light" || mode === "dark"
               ? mode
@@ -42,9 +42,9 @@
         <label class="theme-control">
           <span class="sr-only">Theme</span>
           <select id="theme-mode" aria-label="Color theme">
-            <option value="auto">Auto</option>
+            <option value="dark" selected>Dark</option>
             <option value="light">Light</option>
-            <option value="dark">Dark</option>
+            <option value="auto">Auto</option>
           </select>
         </label>
       </div>

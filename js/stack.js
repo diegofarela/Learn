@@ -80,6 +80,28 @@
     var lastX = 0;
     var lastY = 0;
     var lineEls = {};
+    var PALETTE_KEY = "learnStackPaletteV1";
+    var PALETTES = ["ocean", "ember", "mint", "ink", "light"];
+    var paletteSelect = document.getElementById("stack-palette");
+
+    function readPalette() {
+      try {
+        var saved = localStorage.getItem(PALETTE_KEY);
+        if (PALETTES.indexOf(saved) !== -1) return saved;
+      } catch (err) {}
+      return "ocean";
+    }
+
+    function applyPalette(id) {
+      var next = PALETTES.indexOf(id) !== -1 ? id : "ocean";
+      root.dataset.palette = next;
+      if (paletteSelect) paletteSelect.value = next;
+      try {
+        localStorage.setItem(PALETTE_KEY, next);
+      } catch (err) {
+        console.warn("[learn-stack] Could not save palette", err);
+      }
+    }
 
     function applyTilt() {
       root.style.transform =
@@ -399,8 +421,8 @@
         var dy = e.clientY - lastY;
         lastX = e.clientX;
         lastY = e.clientY;
-        rotY += dx * 0.4;
-        rotX = Math.max(12, Math.min(48, rotX - dy * 0.3));
+        rotY += dx * 0.65;
+        rotX = Math.max(-18, Math.min(68, rotX - dy * 0.55));
         applyTilt();
       });
       function endDrag(e) {
@@ -414,7 +436,14 @@
       stage.addEventListener("pointercancel", endDrag);
     }
 
+    if (paletteSelect) {
+      paletteSelect.addEventListener("change", function () {
+        applyPalette(paletteSelect.value);
+      });
+    }
+
     renderCode();
+    applyPalette(readPalette());
     paint();
     clearHighlight();
     setStatus("Three blocks ready. Pop the top—watch it leap off.");
