@@ -108,6 +108,27 @@
           walk those connections layer by layer or deep-first.
         </p>
 
+        <section class="when-useful" aria-labelledby="when-useful-heading">
+          <h2 id="when-useful-heading">When this is useful</h2>
+          <ul>
+            <li>
+              Reach for this when relationships are the data—social links,
+              dependencies, roads, call graphs, recommendation edges.
+            </li>
+            <li>
+              Needed whenever connectivity, paths, or cycles matter more than a
+              single parent hierarchy (trees are a special case).
+            </li>
+            <li>
+              Pair with
+              <a class="concept-link" href="bfs.html">BFS</a>
+              /
+              <a class="concept-link" href="dfs.html">DFS</a>
+              (and later shortest paths / MSTs) once the model is a graph.
+            </li>
+          </ul>
+        </section>
+
         <div class="graph-lab">
           <div class="viz viz-stage" aria-labelledby="graph-viz-title">
             <div class="viz-stage-header">

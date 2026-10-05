@@ -99,6 +99,26 @@
           is the same idea with only keys—no payload values.
         </p>
 
+        <section class="when-useful" aria-labelledby="when-useful-heading">
+          <h2 id="when-useful-heading">When this is useful</h2>
+          <ul>
+            <li>
+              Reach for this when you need keyed lookup with a payload—configs,
+              caches, object fields by name, counts by id.
+            </li>
+            <li>
+              Needed whenever “get / put / delete by key” is the API and order
+              rarely matters.
+            </li>
+            <li>
+              Prefer a tree-backed map when you need sorted keys or range
+              scans; prefer a
+              <a class="concept-link" href="sets.html">set</a>
+              when there is no value to store.
+            </li>
+          </ul>
+        </section>
+
         <div class="map-lab">
           <div class="viz viz-stage" aria-labelledby="map-viz-title">
             <div class="viz-stage-header">

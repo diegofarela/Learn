@@ -96,6 +96,25 @@
           (or trees) so membership stays near constant time.
         </p>
 
+        <section class="when-useful" aria-labelledby="when-useful-heading">
+          <h2 id="when-useful-heading">When this is useful</h2>
+          <ul>
+            <li>
+              Reach for this when membership is the whole problem—dedupe,
+              visited flags, “have we seen this id?”
+            </li>
+            <li>
+              Needed for fast union / intersection / difference of collections
+              without caring about order or payloads.
+            </li>
+            <li>
+              Use a
+              <a class="concept-link" href="maps.html">map</a>
+              instead when each key must carry a value, not just presence.
+            </li>
+          </ul>
+        </section>
+
         <div class="set-lab">
           <div class="viz viz-stage" aria-labelledby="set-viz-title">
             <div class="viz-stage-header">

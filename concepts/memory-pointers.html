@@ -102,6 +102,26 @@
           pages; a pointer still just holds one of those addresses.
         </p>
 
+        <section class="when-useful" aria-labelledby="when-useful-heading">
+          <h2 id="when-useful-heading">When this is useful</h2>
+          <ul>
+            <li>
+              Reach for this when you need to share or update data in place
+              without copying—linked structures, buffers, APIs that take
+              addresses.
+            </li>
+            <li>
+              Needed to prevent lifetime bugs: null deref, use-after-free,
+              dangling pointers, and confusing stack vs heap ownership.
+            </li>
+            <li>
+              Use it whenever “who owns this memory?” matters—manual free,
+              <a class="concept-link" href="garbage-collection.html">GC</a>,
+              or passing large objects efficiently.
+            </li>
+          </ul>
+        </section>
+
         <div class="mem-lab">
           <div class="viz viz-stage" aria-labelledby="mem-viz-title">
             <div class="viz-stage-header">

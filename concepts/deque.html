@@ -91,6 +91,28 @@
           (add one end, remove the other).
         </p>
 
+        <section class="when-useful" aria-labelledby="when-useful-heading">
+          <h2 id="when-useful-heading">When this is useful</h2>
+          <ul>
+            <li>
+              Reach for this when you need efficient insert and remove at
+              <em>both</em> ends—sliding windows, work stealing, undo/redo
+              pairs.
+            </li>
+            <li>
+              Needed when a plain
+              <a class="concept-link" href="queue.html">queue</a>
+              or
+              <a class="concept-link" href="stack.html">stack</a>
+              is almost right, but one extra end-operation keeps showing up.
+            </li>
+            <li>
+              Skip it when a single-ended discipline is enough—simpler
+              structures are clearer.
+            </li>
+          </ul>
+        </section>
+
         <div class="deque-lab">
           <div class="viz viz-stage" aria-labelledby="deque-viz-title">
             <div class="viz-stage-header">

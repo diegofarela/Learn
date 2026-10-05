@@ -81,6 +81,26 @@
           (the priority tree—not the memory-allocation heap).
         </p>
 
+        <section class="when-useful" aria-labelledby="when-useful-heading">
+          <h2 id="when-useful-heading">When this is useful</h2>
+          <ul>
+            <li>
+              Reach for this when the next item must be the highest priority—
+              not the oldest—jobs, interrupts, A*/Dijkstra frontiers.
+            </li>
+            <li>
+              Needed whenever urgency or score decides order and a FIFO
+              <a class="concept-link" href="queue.html">queue</a>
+              would be wrong.
+            </li>
+            <li>
+              Learn the
+              <a class="concept-link" href="heaps.html">heap</a>
+              when you need the usual O(log n) implementation under this ADT.
+            </li>
+          </ul>
+        </section>
+
         <div class="pq-lab">
           <div class="viz viz-stage" aria-labelledby="pq-viz-title">
             <div class="viz-stage-header">

@@ -88,6 +88,24 @@
           <a class="concept-link" href="priority-queues.html">priority queues</a>.
         </p>
 
+        <section class="when-useful" aria-labelledby="when-useful-heading">
+          <h2 id="when-useful-heading">When this is useful</h2>
+          <ul>
+            <li>
+              Reach for this when you always need the current min (or max) in
+              log time—schedulers, Dijkstra, event loops, top-k.
+            </li>
+            <li>
+              Needed as the usual engine behind a
+              <a class="concept-link" href="priority-queues.html">priority queue</a>.
+            </li>
+            <li>
+              Not when you need arbitrary key lookup or sorted full traversal—
+              use a map / BST family instead.
+            </li>
+          </ul>
+        </section>
+
         <div class="heap-lab">
           <div class="viz viz-stage" aria-labelledby="heap-viz-title">
             <div class="viz-stage-header">

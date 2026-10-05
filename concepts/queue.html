@@ -96,6 +96,27 @@
           >.
         </p>
 
+        <section class="when-useful" aria-labelledby="when-useful-heading">
+          <h2 id="when-useful-heading">When this is useful</h2>
+          <ul>
+            <li>
+              Reach for this when work must stay in arrival order—task queues,
+              BFS layers, print/job pipelines, request buffering.
+            </li>
+            <li>
+              Needed whenever producers add at the back and consumers take from
+              the front without reshuffling.
+            </li>
+            <li>
+              Prefer a
+              <a class="concept-link" href="stack.html">stack</a>
+              for LIFO, or a
+              <a class="concept-link" href="priority-queues.html">priority queue</a>
+              when urgency—not arrival—decides who goes next.
+            </li>
+          </ul>
+        </section>
+
         <div class="queue-lab">
           <div class="viz viz-stage" aria-labelledby="queue-viz-title">
             <div class="viz-stage-header">

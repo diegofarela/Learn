@@ -96,6 +96,26 @@
           <em>k</em>-th item costs a walk.
         </p>
 
+        <section class="when-useful" aria-labelledby="when-useful-heading">
+          <h2 id="when-useful-heading">When this is useful</h2>
+          <ul>
+            <li>
+              Reach for this when you need cheap insert/delete at the front (or
+              known nodes) without shifting a whole
+              <a class="concept-link" href="arrays.html">array</a>.
+            </li>
+            <li>
+              Needed as the chaining backbone inside
+              <a class="concept-link" href="hash-tables.html">hash tables</a>,
+              adjacency lists, and free-list style allocators.
+            </li>
+            <li>
+              Skip it when you need fast index access or cache-friendly scans—
+              walk cost and pointer chasing dominate there.
+            </li>
+          </ul>
+        </section>
+
         <div class="ll-lab">
           <div class="viz viz-stage" aria-labelledby="ll-viz-title">
             <div class="viz-stage-header">

@@ -98,6 +98,26 @@
           <a class="concept-link" href="sets.html">sets</a>.
         </p>
 
+        <section class="when-useful" aria-labelledby="when-useful-heading">
+          <h2 id="when-useful-heading">When this is useful</h2>
+          <ul>
+            <li>
+              Reach for this when you need a tiny membership check and can
+              tolerate rare false positives—caches, URL filters, “probably
+              seen.”
+            </li>
+            <li>
+              Needed when storing every key in a full
+              <a class="concept-link" href="sets.html">set</a>
+              / hash table is too expensive in memory.
+            </li>
+            <li>
+              Skip it when false positives are unacceptable or you must delete
+              freely—use an exact set instead.
+            </li>
+          </ul>
+        </section>
+
         <div class="bloom-lab">
           <div class="viz viz-stage" aria-labelledby="bloom-viz-title">
             <div class="viz-stage-header">

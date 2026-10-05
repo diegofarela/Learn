@@ -11917,6 +11917,37 @@ button.vm-page {
   }
 }
 
+/* —— When this is useful —— */
+.when-useful {
+  margin: 0.85rem 0 1.35rem;
+  padding: 0.15rem 0 0.15rem 0.85rem;
+  border-left: 3px solid color-mix(in srgb, var(--accent) 55%, transparent);
+}
+
+.when-useful > h2 {
+  margin: 0 0 0.45rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.when-useful ul {
+  list-style: disc;
+  margin: 0;
+  padding-left: 1.15rem;
+}
+
+.when-useful li {
+  margin: 0 0 0.4rem;
+  padding: 0;
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.when-useful li:last-child {
+  margin-bottom: 0;
+}
+
 /* ?? MS mastery checklist ?? */
 .mastery {
   margin: 1.75rem 0 1.35rem;

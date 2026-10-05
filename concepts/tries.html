@@ -83,6 +83,25 @@
           then collect everything below.
         </p>
 
+        <section class="when-useful" aria-labelledby="when-useful-heading">
+          <h2 id="when-useful-heading">When this is useful</h2>
+          <ul>
+            <li>
+              Reach for this when the query is a <em>prefix</em>—autocomplete,
+              spell-check dictionaries, IP/routing prefixes, shared namespaces.
+            </li>
+            <li>
+              Needed when many strings share beginnings and you want to share
+              that storage and search path instead of hashing each whole key.
+            </li>
+            <li>
+              Prefer a
+              <a class="concept-link" href="hash-tables.html">hash table</a>
+              for exact whole-key lookup with no prefix work.
+            </li>
+          </ul>
+        </section>
+
         <div class="trie-lab">
           <div class="viz viz-stage" aria-labelledby="trie-viz-title">
             <div class="viz-stage-header">

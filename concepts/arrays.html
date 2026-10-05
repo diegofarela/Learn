@@ -115,6 +115,26 @@
           <a class="concept-link" href="memory-pointers.html">memory &amp; pointers</a>.
         </p>
 
+        <section class="when-useful" aria-labelledby="when-useful-heading">
+          <h2 id="when-useful-heading">When this is useful</h2>
+          <ul>
+            <li>
+              Reach for this when you need the most efficient random access by
+              index—buffers, tables, pixels, and most “list” backends.
+            </li>
+            <li>
+              Needed when locality matters: scanning contiguous memory stays
+              cache-friendly compared to pointer-chasing structures.
+            </li>
+            <li>
+              Prefer a
+              <a class="concept-link" href="linked-lists.html">linked list</a>
+              instead when you must insert/delete often in the middle without
+              shifting, or size is unknown and contiguous resize is painful.
+            </li>
+          </ul>
+        </section>
+
         <div class="array-lab">
           <div class="viz viz-stage" aria-labelledby="array-viz-title">
             <div class="viz-stage-header">

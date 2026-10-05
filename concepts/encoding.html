@@ -91,6 +91,24 @@
           <a class="concept-link" href="number-systems.html">number systems</a>.
         </p>
 
+        <section class="when-useful" aria-labelledby="when-useful-heading">
+          <h2 id="when-useful-heading">When this is useful</h2>
+          <ul>
+            <li>
+              Reach for this when text breaks across systems—mojibake, emoji
+              length surprises, or “string length ≠ byte length.”
+            </li>
+            <li>
+              Needed to size buffers, parse network/file formats, and pick the
+              right encoding (UTF-8 vs legacy) without corrupting data.
+            </li>
+            <li>
+              Use it whenever you slice, count, or hash “characters” and must
+              know whether you mean code points or bytes.
+            </li>
+          </ul>
+        </section>
+
         <div class="enc-lab">
           <div class="viz viz-stage" aria-labelledby="enc-viz-title">
             <div class="viz-stage-header">

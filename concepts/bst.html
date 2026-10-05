@@ -92,6 +92,26 @@
           <a class="concept-link" href="recursion.html">recursion</a>.
         </p>
 
+        <section class="when-useful" aria-labelledby="when-useful-heading">
+          <h2 id="when-useful-heading">When this is useful</h2>
+          <ul>
+            <li>
+              Reach for this when you need ordered keys with efficient search,
+              insert, and in-order traversal—not just hash lookup.
+            </li>
+            <li>
+              Needed for range queries (“all keys between a and b”) that hash
+              tables cannot answer without scanning everything.
+            </li>
+            <li>
+              Prefer a
+              <a class="concept-link" href="balanced-trees.html">balanced tree</a>
+              when inputs can be sorted or adversarial—plain BSTs can skew to
+              O(n) height.
+            </li>
+          </ul>
+        </section>
+
         <div class="bst-lab">
           <div class="viz viz-stage" aria-labelledby="bst-viz-title">
             <div class="viz-stage-header">

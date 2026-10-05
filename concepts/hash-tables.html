@@ -107,6 +107,27 @@
           hanging off that index.
         </p>
 
+        <section class="when-useful" aria-labelledby="when-useful-heading">
+          <h2 id="when-useful-heading">When this is useful</h2>
+          <ul>
+            <li>
+              Reach for this when you need the most efficient average-case
+              insert, lookup, and delete by key—caches, indexes, symbol tables.
+            </li>
+            <li>
+              Needed whenever a
+              <a class="concept-link" href="maps.html">map</a>
+              or
+              <a class="concept-link" href="sets.html">set</a>
+              must stay near O(1) as it grows.
+            </li>
+            <li>
+              Not when you need sorted order or range queries—use a tree-backed
+              map / BST family instead.
+            </li>
+          </ul>
+        </section>
+
         <div class="hash-lab">
           <div class="viz viz-stage" aria-labelledby="hash-viz-title">
             <div class="viz-stage-header">

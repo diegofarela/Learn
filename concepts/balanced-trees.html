@@ -97,6 +97,26 @@
           >.
         </p>
 
+        <section class="when-useful" aria-labelledby="when-useful-heading">
+          <h2 id="when-useful-heading">When this is useful</h2>
+          <ul>
+            <li>
+              Reach for this when a
+              <a class="concept-link" href="bst.html">BST</a>
+              must stay fast even if keys arrive sorted or adversarially.
+            </li>
+            <li>
+              Needed for language standard libraries and databases that promise
+              logarithmic search/insert under all insert orders (AVL, red-black,
+              B-trees).
+            </li>
+            <li>
+              Prefer a plain hash map when you only need unordered key lookup
+              and can tolerate hash collisions instead of tree balance.
+            </li>
+          </ul>
+        </section>
+
         <div class="avl-lab">
           <div class="viz viz-stage" aria-labelledby="avl-viz-title">
             <div class="viz-stage-header">
