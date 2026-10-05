@@ -103,18 +103,16 @@
           <h2 id="when-useful-heading">When this is useful</h2>
           <ul>
             <li>
-              Reach for this when you need to reason about flags, masks, or
-              packing several yes/no facts into one byte.
+              Building a permissions system where each flag is a bit in one
+              integer (read/write/admin).
             </li>
             <li>
-              Needed whenever you debug “wrong number” bugs that actually come
-              from bit width, sign bits, or shifting.
+              Debugging why a color, IP, or packed header looks wrong in a hex
+              dump.
             </li>
             <li>
-              Use it as the base layer before
-              <a class="concept-link" href="boolean-logic.html">Boolean logic</a>,
-              <a class="concept-link" href="number-systems.html">number systems</a>,
-              and low-level performance tricks.
+              Writing low-level code that packs booleans into bytes to save
+              space in a mobile or IoT payload.
             </li>
           </ul>
         </section>
