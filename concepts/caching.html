@@ -102,6 +102,21 @@
           <a class="concept-link" href="memory-pointers.html">memory &amp; pointers</a>.
         </p>
 
+        <section class="when-useful" aria-labelledby="when-useful-heading">
+          <h2 id="when-useful-heading">When this is useful</h2>
+          <ul>
+            <li>
+              CDN edge caches for images, Redis for session data, browser HTTP cache.
+            </li>
+            <li>
+              Speeding a product page that hits the DB on every refresh.
+            </li>
+            <li>
+              Invalidation design when an admin edits a price that must show immediately.
+            </li>
+          </ul>
+        </section>
+
         <div class="cache-lab">
           <div class="viz viz-stage" aria-labelledby="cache-viz-title">
             <div class="viz-stage-header">

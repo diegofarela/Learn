@@ -93,6 +93,21 @@
           (representation without secrecy) for the full picture.
         </p>
 
+        <section class="when-useful" aria-labelledby="when-useful-heading">
+          <h2 id="when-useful-heading">When this is useful</h2>
+          <ul>
+            <li>
+              Storing password hashes (with salt/pepper), integrity checks, and API HMAC signatures.
+            </li>
+            <li>
+              Content-addressed storage (git-like) and cache keys from payloads.
+            </li>
+            <li>
+              Not for encryption&mdash;hashes don’t hide data, they fingerprint it.
+            </li>
+          </ul>
+        </section>
+
         <div class="hcrypto-lab">
           <div class="viz viz-stage" aria-labelledby="hcrypto-viz-title">
             <div class="viz-stage-header">

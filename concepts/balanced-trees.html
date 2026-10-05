@@ -101,18 +101,13 @@
           <h2 id="when-useful-heading">When this is useful</h2>
           <ul>
             <li>
-              Reach for this when a
-              <a class="concept-link" href="bst.html">BST</a>
-              must stay fast even if keys arrive sorted or adversarially.
+              Language standard maps/sets (TreeMap, std::map) that stay fast even if keys arrive sorted.
             </li>
             <li>
-              Needed for language standard libraries and databases that promise
-              logarithmic search/insert under all insert orders (AVL, red-black,
-              B-trees).
+              Database indexes and file-system catalogs that must guarantee log-time lookup under load.
             </li>
             <li>
-              Prefer a plain hash map when you only need unordered key lookup
-              and can tolerate hash collisions instead of tree balance.
+              Skip the complexity when a hash map is enough for an unordered cache in your API.
             </li>
           </ul>
         </section>

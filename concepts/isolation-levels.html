@@ -87,6 +87,21 @@
           <a class="concept-link" href="concurrency.html">concurrency</a>.
         </p>
 
+        <section class="when-useful" aria-labelledby="when-useful-heading">
+          <h2 id="when-useful-heading">When this is useful</h2>
+          <ul>
+            <li>
+              Preventing phantom reads in a booking system under concurrent clicks.
+            </li>
+            <li>
+              Tuning Postgres/MySQL isolation when inventory looks wrong under load.
+            </li>
+            <li>
+              Balancing correctness vs throughput for a high-traffic checkout.
+            </li>
+          </ul>
+        </section>
+
         <div class="iso-lab">
           <div class="viz viz-stage" aria-labelledby="iso-viz-title">
             <div class="viz-stage-header">

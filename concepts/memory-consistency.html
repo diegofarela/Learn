@@ -89,6 +89,21 @@
           <a class="concept-link" href="memory-pointers.html">memory &amp; pointers</a>.
         </p>
 
+        <section class="when-useful" aria-labelledby="when-useful-heading">
+          <h2 id="when-useful-heading">When this is useful</h2>
+          <ul>
+            <li>
+              Lock-free structures and atomics in a high-frequency trading or game engine.
+            </li>
+            <li>
+              Preventing “I wrote ready=true before the payload” bugs on multicore CPUs.
+            </li>
+            <li>
+              Reading CPU memory models when porting concurrent C++/Rust code.
+            </li>
+          </ul>
+        </section>
+
         <div class="mc-lab">
           <div class="viz viz-stage" aria-labelledby="mc-viz-title">
             <div class="viz-stage-header">

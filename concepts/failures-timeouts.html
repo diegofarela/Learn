@@ -85,6 +85,21 @@
           <a class="concept-link" href="tcp-udp.html">TCP</a>.
         </p>
 
+        <section class="when-useful" aria-labelledby="when-useful-heading">
+          <h2 id="when-useful-heading">When this is useful</h2>
+          <ul>
+            <li>
+              Mobile apps and microservices that must degrade when a dependency hangs.
+            </li>
+            <li>
+              Circuit breakers and deadlines so one slow DB doesn’t wedge the site.
+            </li>
+            <li>
+              SRE playbooks: what users see when a region or dependency dies.
+            </li>
+          </ul>
+        </section>
+
         <div class="fail-lab">
           <div class="viz viz-stage" aria-labelledby="fail-viz-title">
             <div class="viz-stage-header">

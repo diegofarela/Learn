@@ -119,18 +119,13 @@
           <h2 id="when-useful-heading">When this is useful</h2>
           <ul>
             <li>
-              Reach for this when you need the most efficient random access by
-              index—buffers, tables, pixels, and most “list” backends.
+              Storing a playlist, shopping-cart line items, or chat message list with fast “item at index i.”
             </li>
             <li>
-              Needed when locality matters: scanning contiguous memory stays
-              cache-friendly compared to pointer-chasing structures.
+              Backing an image strip, spreadsheet row, or scoreboard where order and random access matter.
             </li>
             <li>
-              Prefer a
-              <a class="concept-link" href="linked-lists.html">linked list</a>
-              instead when you must insert/delete often in the middle without
-              shifting, or size is unknown and contiguous resize is painful.
+              Prefer a linked list when you constantly insert in the middle of a huge timeline&mdash;not for typical app lists.
             </li>
           </ul>
         </section>

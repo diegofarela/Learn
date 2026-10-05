@@ -87,6 +87,21 @@
           for recurrences such as <code>T(n) = 2T(n/2) + O(n)</code>.
         </p>
 
+        <section class="when-useful" aria-labelledby="when-useful-heading">
+          <h2 id="when-useful-heading">When this is useful</h2>
+          <ul>
+            <li>
+              Building map-reduce style analytics: split logs by day, solve, merge totals.
+            </li>
+            <li>
+              Efficient sort/search features that split the problem in half each step.
+            </li>
+            <li>
+              Large file processing (video encode chunks, parallel PDF pages) then combine results.
+            </li>
+          </ul>
+        </section>
+
         <div class="dc-lab">
           <div class="viz viz-stage" aria-labelledby="dc-viz-title">
             <div class="viz-stage-header">

@@ -106,18 +106,13 @@
           <h2 id="when-useful-heading">When this is useful</h2>
           <ul>
             <li>
-              Reach for this when you need to share or update data in place
-              without copying—linked structures, buffers, APIs that take
-              addresses.
+              Building a photo editor buffer or game entity list where you update data in place, not by copying.
             </li>
             <li>
-              Needed to prevent lifetime bugs: null deref, use-after-free,
-              dangling pointers, and confusing stack vs heap ownership.
+              Preventing crashes from dangling references when a screen closes but a callback still fires.
             </li>
             <li>
-              Use it whenever “who owns this memory?” matters—manual free,
-              <a class="concept-link" href="garbage-collection.html">GC</a>,
-              or passing large objects efficiently.
+              Passing large video/audio blobs to a library without cloning them every call.
             </li>
           </ul>
         </section>

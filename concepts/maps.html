@@ -103,18 +103,13 @@
           <h2 id="when-useful-heading">When this is useful</h2>
           <ul>
             <li>
-              Reach for this when you need keyed lookup with a payload—configs,
-              caches, object fields by name, counts by id.
+              A settings dictionary, i18n string table, or product-id&rarr;price lookup in checkout.
             </li>
             <li>
-              Needed whenever “get / put / delete by key” is the API and order
-              rarely matters.
+              Counting votes, views, or emoji reactions keyed by post id.
             </li>
             <li>
-              Prefer a tree-backed map when you need sorted keys or range
-              scans; prefer a
-              <a class="concept-link" href="sets.html">set</a>
-              when there is no value to store.
+              Prefer a sorted map when an admin screen must page keys in alphabetical order.
             </li>
           </ul>
         </section>

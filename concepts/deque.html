@@ -95,20 +95,13 @@
           <h2 id="when-useful-heading">When this is useful</h2>
           <ul>
             <li>
-              Reach for this when you need efficient insert and remove at
-              <em>both</em> ends—sliding windows, work stealing, undo/redo
-              pairs.
+              A sliding-window of the last N keystrokes for a search-as-you-type box.
             </li>
             <li>
-              Needed when a plain
-              <a class="concept-link" href="queue.html">queue</a>
-              or
-              <a class="concept-link" href="stack.html">stack</a>
-              is almost right, but one extra end-operation keeps showing up.
+              A work-stealing pool or undo/redo where both ends of the history matter.
             </li>
             <li>
-              Skip it when a single-ended discipline is enough—simpler
-              structures are clearer.
+              A music player that can skip forward and dip into recent history without rebuilding the list.
             </li>
           </ul>
         </section>

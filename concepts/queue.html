@@ -100,19 +100,13 @@
           <h2 id="when-useful-heading">When this is useful</h2>
           <ul>
             <li>
-              Reach for this when work must stay in arrival order—task queues,
-              BFS layers, print/job pipelines, request buffering.
+              Building a job queue for email sends, image thumbnails, or “print later” in an office app.
             </li>
             <li>
-              Needed whenever producers add at the back and consumers take from
-              the front without reshuffling.
+              Driving BFS-style “next layer of friends” or notification fan-out in arrival order.
             </li>
             <li>
-              Prefer a
-              <a class="concept-link" href="stack.html">stack</a>
-              for LIFO, or a
-              <a class="concept-link" href="priority-queues.html">priority queue</a>
-              when urgency—not arrival—decides who goes next.
+              Buffering chat messages or clickstream events so workers process oldest first.
             </li>
           </ul>
         </section>

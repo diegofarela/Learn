@@ -102,18 +102,13 @@
           <h2 id="when-useful-heading">When this is useful</h2>
           <ul>
             <li>
-              Reach for this when you need a tiny membership check and can
-              tolerate rare false positives—caches, URL filters, “probably
-              seen.”
+              A CDN or browser check: “have we probably seen this URL?” before a heavy disk lookup.
             </li>
             <li>
-              Needed when storing every key in a full
-              <a class="concept-link" href="sets.html">set</a>
-              / hash table is too expensive in memory.
+              A signup service that cheaply rejects usernames that almost certainly already exist.
             </li>
             <li>
-              Skip it when false positives are unacceptable or you must delete
-              freely—use an exact set instead.
+              Skip it when a false “maybe yes” is unacceptable&mdash;use an exact database unique index.
             </li>
           </ul>
         </section>

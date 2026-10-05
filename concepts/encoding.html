@@ -95,16 +95,13 @@
           <h2 id="when-useful-heading">When this is useful</h2>
           <ul>
             <li>
-              Reach for this when text breaks across systems—mojibake, emoji
-              length surprises, or “string length ≠ byte length.”
+              Shipping a chat or comment feature that must handle emoji and non-English text without mojibake.
             </li>
             <li>
-              Needed to size buffers, parse network/file formats, and pick the
-              right encoding (UTF-8 vs legacy) without corrupting data.
+              Sizing a database column or HTTP body when “length” might mean bytes vs characters.
             </li>
             <li>
-              Use it whenever you slice, count, or hash “characters” and must
-              know whether you mean code points or bytes.
+              Parsing CSV/JSON uploads where the file encoding differs from what your server expects.
             </li>
           </ul>
         </section>

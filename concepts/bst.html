@@ -96,18 +96,13 @@
           <h2 id="when-useful-heading">When this is useful</h2>
           <ul>
             <li>
-              Reach for this when you need ordered keys with efficient search,
-              insert, and in-order traversal—not just hash lookup.
+              An in-memory index for “orders by date” with fast insert and range “last 7 days.”
             </li>
             <li>
-              Needed for range queries (“all keys between a and b”) that hash
-              tables cannot answer without scanning everything.
+              Autocomplete of sorted SKUs or usernames when you also need ordered scans.
             </li>
             <li>
-              Prefer a
-              <a class="concept-link" href="balanced-trees.html">balanced tree</a>
-              when inputs can be sorted or adversarial—plain BSTs can skew to
-              O(n) height.
+              Prefer a hash map for pure id&rarr;row lookup with no ordering (most REST caches).
             </li>
           </ul>
         </section>

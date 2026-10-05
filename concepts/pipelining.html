@@ -96,6 +96,21 @@
           <a class="concept-link" href="scheduling.html">CPU scheduling</a>.
         </p>
 
+        <section class="when-useful" aria-labelledby="when-useful-heading">
+          <h2 id="when-useful-heading">When this is useful</h2>
+          <ul>
+            <li>
+              Why CPUs (and some GPUs/network stacks) overlap work for throughput.
+            </li>
+            <li>
+              Designing multi-stage media pipelines: decode &rarr; filter &rarr; encode.
+            </li>
+            <li>
+              Diagnosing hazards/stalls when performance counters look weird.
+            </li>
+          </ul>
+        </section>
+
         <div class="pipe-lab">
           <div class="viz viz-stage" aria-labelledby="pipe-viz-title">
             <div class="viz-stage-header">

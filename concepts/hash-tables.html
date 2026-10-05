@@ -111,19 +111,13 @@
           <h2 id="when-useful-heading">When this is useful</h2>
           <ul>
             <li>
-              Reach for this when you need the most efficient average-case
-              insert, lookup, and delete by key—caches, indexes, symbol tables.
+              Caching logged-in sessions or API responses by user id in a backend service.
             </li>
             <li>
-              Needed whenever a
-              <a class="concept-link" href="maps.html">map</a>
-              or
-              <a class="concept-link" href="sets.html">set</a>
-              must stay near O(1) as it grows.
+              Building a shopping-cart lookup, username&rarr;profile map, or in-memory feature-flag store.
             </li>
             <li>
-              Not when you need sorted order or range queries—use a tree-backed
-              map / BST family instead.
+              Not when you need “all keys from A–M sorted”&mdash;use a tree-backed map for that admin UI.
             </li>
           </ul>
         </section>

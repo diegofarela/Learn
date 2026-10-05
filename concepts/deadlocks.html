@@ -84,6 +84,21 @@
           <a class="concept-link" href="threads-processes.html">threads</a>.
         </p>
 
+        <section class="when-useful" aria-labelledby="when-useful-heading">
+          <h2 id="when-useful-heading">When this is useful</h2>
+          <ul>
+            <li>
+              Diagnosing two DB transactions each waiting on the other’s row lock.
+            </li>
+            <li>
+              Designing lock order conventions so checkout never wedges the store.
+            </li>
+            <li>
+              Timeouts and deadlock detection in a job queue admin panel.
+            </li>
+          </ul>
+        </section>
+
         <div class="dl-lab">
           <div class="viz viz-stage" aria-labelledby="dl-viz-title">
             <div class="viz-stage-header">

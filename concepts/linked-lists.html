@@ -100,18 +100,13 @@
           <h2 id="when-useful-heading">When this is useful</h2>
           <ul>
             <li>
-              Reach for this when you need cheap insert/delete at the front (or
-              known nodes) without shifting a whole
-              <a class="concept-link" href="arrays.html">array</a>.
+              Implementing an undo history or browser-like back/forward chain where you splice nodes often.
             </li>
             <li>
-              Needed as the chaining backbone inside
-              <a class="concept-link" href="hash-tables.html">hash tables</a>,
-              adjacency lists, and free-list style allocators.
+              Building the collision chains inside a hash map, or adjacency lists for a social graph.
             </li>
             <li>
-              Skip it when you need fast index access or cache-friendly scans—
-              walk cost and pointer chasing dominate there.
+              Skip it for a typical React list or mobile feed&mdash;arrays (or virtualized arrays) win for scrolling and indexing.
             </li>
           </ul>
         </section>

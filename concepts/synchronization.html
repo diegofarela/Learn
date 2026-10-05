@@ -86,6 +86,21 @@
           <a class="concept-link" href="deadlocks.html">deadlocks</a>.
         </p>
 
+        <section class="when-useful" aria-labelledby="when-useful-heading">
+          <h2 id="when-useful-heading">When this is useful</h2>
+          <ul>
+            <li>
+              Locks around a shared bank-balance update in a payments service.
+            </li>
+            <li>
+              Coordinating multiple workers writing to one cache or file.
+            </li>
+            <li>
+              Skip heavy locking when each request owns private data (embarrassingly parallel).
+            </li>
+          </ul>
+        </section>
+
         <div class="sync-lab">
           <div class="viz viz-stage" aria-labelledby="sync-viz-title">
             <div class="viz-stage-header">
